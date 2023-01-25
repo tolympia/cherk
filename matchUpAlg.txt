@@ -1,0 +1,17 @@
+Algorithim for matchUp function:
+- input is lists of Teacher objects and Exam objects
+- result is a map where the keys are exams and the values are lists of teachers that could proctor them
+1. Create a list of Teacher objects
+    - also make a list (canidates) which is a clone of the teacher list 
+2. Create a list of Exam objects
+    - get the date/time of each exam
+    - get the department of each exam
+3. remove all the teachers from canidates that are in the same departemnt as the given exam
+4. use a for loop to go through all the remaining teachers in canidates 
+    - get teachers free blocks and convert to actual times
+    - check if times teachers are free match times of exams 
+        - if yes, add the given exam to the map as a key, and this teacher will be added to the value list 
+        - if not, go to the next teacher and repeat the same process
+
+We can use helper methods to make lists of Teacher and Exam objects 
+Write the resulting map to a csv file
