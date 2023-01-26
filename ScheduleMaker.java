@@ -6,10 +6,33 @@ public class ScheduleMaker {
 
   public static void main(String[] args) throws FileNotFoundException {
     File f = new File(args[0]);
-    scanFile(f);
+
+    File f2 = new File(args[1]);
+
+    ArrayList<Object> examObjects = new ArrayList<Object>();
+    ArrayList<Object> teacherObjects = new ArrayList<Object>();
+
+    generateListOfObjects(f, examObjects, "exam");
+    generateListOfObjects(f2, teacherObjects, "teacher");
+
+
+    for (int i = 0; i < examObjects.size(); i++){
+
+      System.out.println(examObjects.get(i));
+
+    }
+
+
+    for (int i = 0; i < teacherObjects.size(); i++){
+
+      System.out.println(teacherObjects.get(i));
+
+    }
+
+
   }
 
-  public static void generateListOfObjects(File f) throws FileNotFoundException {
+  public static void generateListOfObjects(File f, ArrayList<Object> arr, String s) throws FileNotFoundException {
     Scanner fileScan = new Scanner(f);
     fileScan.nextLine();
 
@@ -42,8 +65,22 @@ public class ScheduleMaker {
           i = nextComma;
         }
       }
-      System.out.println(instanceVarValues);
+
+      if (s.equals("exam")){
+
+          arr.add(new APExam(instanceVarValues));
+
+      }
+
+      else if (s.equals("teacher")){
+
+        arr.add(new Teacher(instanceVarValues));
+
+      }
+
+      //System.out.println(instanceVarValues);
     }
+    //return arrOfInstances;
   }
 
   public static String testerTimeConverter(String block, int date) {
