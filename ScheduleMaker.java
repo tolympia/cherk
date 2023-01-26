@@ -1,5 +1,10 @@
+import java.io.*;
+import java.lang.*;
+import java.util.*;
+
+
 public class ScheduleMaker{
-    public static void main(String[] args){
+    public static void main(String[] args) throws FileNotFoundException{
         
     }
 
@@ -36,4 +41,16 @@ public class ScheduleMaker{
         System.out.println(timeToRet);
         return timeToRet;
     }
+
+    public static ArrayList<String> getColumns(File f) throws FileNotFoundException {
+    Scanner fileScan = new Scanner(f); //new scanner
+
+    String[] firstLineArr = fileScan.nextLine().split(","); //assumes first line is header, grabs it and splits it by comma
+
+    ArrayList<String> headers = new ArrayList<>(Arrays.asList(firstLineArr));//make firstLineArr an array list
+
+    fileScan.close();
+
+    return headers;
+  }
 }
