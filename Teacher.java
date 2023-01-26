@@ -15,7 +15,7 @@ public class Teacher extends ScheduleMaker {
         this("Mr. Accetta","A,B", "History, Math", "1"); 
     }
 
-    public APExam (String name, List<String> department, List<String> freePeriods, int examsProctored) {
+    public Teacher (String name, List<String> department, List<String> freePeriods, int examsProctored) {
         this.name = name; 
         this.department = department; 
         this.freePeriods = freePeriods; 
