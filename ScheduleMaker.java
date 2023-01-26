@@ -18,10 +18,11 @@ public class ScheduleMaker{
         while (fileScan.hasNextLine()){
 
             String line = fileScan.nextLine();
+            //String line = "Mr. Accetta,\"History; Math\",\"A;B;C\"";
 
             ArrayList<ArrayList<String>> instanceVarValues = new ArrayList<ArrayList<String>>();
 
-            System.out.println(line);
+            //System.out.println(line);
 
             for (int i = 0; i < line.length() - 1; i++){
 
@@ -29,7 +30,7 @@ public class ScheduleMaker{
 
                      instanceVarValues.add(new ArrayList<String>(Arrays.asList(line.substring(0, line.indexOf(",")))));
 
-                     i = line.indexOf(",");
+                     i = line.indexOf(",") + 1;
 
                 }
 
@@ -38,12 +39,12 @@ public class ScheduleMaker{
                     instanceVarValues.add(
                         new ArrayList<String>(
                             Arrays.asList(
-                                line.substring(i + 1, nextQuote).split(";")
+                                line.substring(i + 1, nextQuote).split(",")
                                 )
                                 )
                                 );
 
-                System.out.println(line.substring(i + 1, nextQuote));
+                //System.out.println(line.substring(i + 1, nextQuote));
 
                 i = nextQuote + 1;
                 //i = line.indexOf(",", i + 1);
@@ -51,7 +52,7 @@ public class ScheduleMaker{
                 }
 
                 else{
-                    instanceVarValues.add(new ArrayList<String>(Arrays.asList(line.substring(i+1, line.indexOf(",", i + 1)))));
+                    instanceVarValues.add(new ArrayList<String>(Arrays.asList(line.substring(i, line.indexOf(",", i + 1)))));
                     i = line.indexOf(",", i + 1);
                 }
 
