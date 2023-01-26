@@ -64,4 +64,14 @@ public class APExam extends ScheduleMaker {
     public void setDepartment(String newDepartment) {
         department = newDepartment; 
     }
-}
+
+    public String toString() {
+        String toRet  = ""; //to return 
+        toRet += "Name: " + name + "\n"; 
+        toRet += "Date: " + date + "\n";
+        toRet += "Start time: " + startTime + "\n";
+        toRet += "End time: " + endTime + "\n";
+        toRet += "Department: " + department + "\n";
+        return toRet; 
+    }
+}   
