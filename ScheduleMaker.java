@@ -6,7 +6,7 @@ import java.util.*;
 public class ScheduleMaker{
     public static void main(String[] args) throws FileNotFoundException{
 
-        File f = new File("TeacherFreesSample.csv");
+        File f = new File("APScheduleSample.csv");
         scanFile(f);
         
     }
@@ -24,7 +24,7 @@ public class ScheduleMaker{
 
             //System.out.println(line);
 
-            for (int i = 0; i < line.length() - 1; i++){
+            for (int i = 0; i < line.length() - 1; i++){   
 
                 if (i == 0){
 
@@ -52,11 +52,17 @@ public class ScheduleMaker{
                 }
 
                 else{
-                    instanceVarValues.add(new ArrayList<String>(Arrays.asList(line.substring(i, line.indexOf(",", i + 1)))));
-                    i = line.indexOf(",", i + 1);
+                    int nextComma = line.indexOf(",", i + 1);
+
+                    if (nextComma == -1){
+                    nextComma = line.length();
+                } 
+                    instanceVarValues.add(new ArrayList<String>(Arrays.asList(line.substring(i, nextComma))));
+                    i = nextComma;
                 }
 
 
+            
             }
             System.out.println(instanceVarValues);
 
