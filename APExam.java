@@ -11,16 +11,16 @@ public class APExam extends ScheduleMaker {
     private String department; 
 
     //constructors
-    public APExam() {
-        this("AP World History","May 1 2023", "9:00", "12:00", "History" ); 
-    }
+    // public APExam() {
+    //     this("AP World History","May 1 2023", "9:00", "12:00", "History" ); 
+    // }
 
-    public APExam (String name, String date, String startTime, String endTime, String department) {
-        this.name = name; 
-        this.date = date; 
-        this.startTime = startTime; 
-        this.endTime = endTime; 
-        this.department = department;
+    public APExam (ArrayList<ArrayList<String>> instanceVars) {
+        this.name = (instanceVars.get(0)).get(0); 
+        this.department = (instanceVars.get(1)).get(0);
+        this.date = (instanceVars.get(2)).get(0); 
+        this.startTime = (instanceVars.get(3)).get(0); 
+        this.endTime = (instanceVars.get(4)).get(0); 
     }
 
     //"getter" methods
