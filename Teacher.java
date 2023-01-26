@@ -10,11 +10,12 @@ public class Teacher extends ScheduleMaker {
     private int examsProctored; 
 
     //4 argument constructor to create basic teacher objects
-    public Teacher (String name, List<String> department, List<String> freePeriods, int examsProctored) {
-        this.name = name; 
-        this.department = department; 
-        this.freePeriods = freePeriods; 
-        this.examsProctored = examsProctored; 
+    public Teacher (ArrayList<ArrayList<String>> instanceVars) {
+
+        this.name = (instanceVars.get(0)).get(0);
+        this.department = instanceVars.get(1); 
+        this.freePeriods = instanceVars.get(2); 
+        this.examsProctored = 0; 
     }
 
     //function to return the name of the teacher
@@ -55,7 +56,19 @@ public class Teacher extends ScheduleMaker {
     }
     
     //function to set the number of exams proctored to the instance variable
-    public void setExamsProctored (int newExamsProctored)
+    public void setExamsProctored (int newExamsProctored){
         this.examsProctored = newExamsProctored; 
+    }
+
+      public String toString() {
+        String toRet  = ""; //to return 
+        toRet += "Name: " + name + "\n"; 
+        toRet += "Department: " + department + "\n";
+        toRet += "free periods: " + freePeriods + "\n";
+        return toRet; 
+    }
+
+
+
 }
 
