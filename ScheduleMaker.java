@@ -9,7 +9,7 @@ public class ScheduleMaker {
     scanFile(f);
   }
 
-  public static void scanFile(File f) throws FileNotFoundException {
+  public static void generateListOfObjects(File f) throws FileNotFoundException {
     Scanner fileScan = new Scanner(f);
     fileScan.nextLine();
 
@@ -43,7 +43,6 @@ public class ScheduleMaker {
         }
       }
       System.out.println(instanceVarValues);
-
     }
   }
 
