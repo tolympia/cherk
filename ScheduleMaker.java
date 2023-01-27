@@ -22,12 +22,14 @@ public class ScheduleMaker {
     }
 
     System.out.println(((examObjects.get(0))).getName());
+
+
   }
 
   public static void generateListsOfObjects(
     List<File> f,
-    ArrayList<APExam> examObjects,
-    ArrayList<Teacher> teacherObjects
+    List<APExam> examObjects,
+    List<Teacher> teacherObjects
   ) throws FileNotFoundException {
     for (int j = 0; j < f.size(); j++) {
       Scanner fileScan = new Scanner(f.get(j));
