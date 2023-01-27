@@ -70,7 +70,9 @@ public class ScheduleMaker {
           examObjects.add(new APExam(instanceVarValues));
         }
       }
+      fileScan.close();
     }
+   
   }
 
   public static String testerTimeConverter(String block, int date) {
