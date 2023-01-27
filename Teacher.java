@@ -60,6 +60,10 @@ public class Teacher extends ScheduleMaker {
         this.examsProctored = newExamsProctored; 
     }
 
+     public void increaseExamsProctored (){
+        this.examsProctored++; 
+    }
+
       public String toString() {
         String toRet  = ""; //to return 
         toRet += "Name: " + name + "\n"; 
