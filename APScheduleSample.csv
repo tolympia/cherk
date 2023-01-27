@@ -1,5 +1,5 @@
-AP Exam,Department,Date,Start time,End time
-APCSA,Comp Sci,5/2,9:00,11:00
-APUSH,History,5/3,9:00,11:30
-AP Physics,Science,5/4,1:00,3:00
-Ap Econ,History,5/5,1:00,3:00
+AP Exam,Number of Students,Department,Date,Start time,End time
+APCSA,1,Comp Sci,5/2,9:00,11:00
+APUSH,2,History,5/3,9:00,11:30
+AP Physics,3,Science,5/4,1:00,3:00
+Ap Econ,4,History,5/5,1:00,3:00

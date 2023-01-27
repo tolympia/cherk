@@ -5,6 +5,7 @@ import java.util.*;
 public class APExam extends ScheduleMaker {
     //instance variables
     private String name; //private or public
+    private int numStudents;
     private String date; 
     private String startTime; 
     private String endTime; 
@@ -17,10 +18,11 @@ public class APExam extends ScheduleMaker {
 
     public APExam (ArrayList<ArrayList<String>> instanceVars) {
         this.name = (instanceVars.get(0)).get(0); 
-        this.department = (instanceVars.get(1)).get(0);
-        this.date = (instanceVars.get(2)).get(0); 
-        this.startTime = (instanceVars.get(3)).get(0); 
-        this.endTime = (instanceVars.get(4)).get(0); 
+        this.numStudents = Integer.parseInt((instanceVars.get(1)).get(0));
+        this.department = (instanceVars.get(2)).get(0); 
+        this.date = (instanceVars.get(3)).get(0);; 
+        this.startTime = (instanceVars.get(4)).get(0);
+        this.endTime = (instanceVars.get(5)).get(0); 
     }
 
     //"getter" methods
@@ -68,6 +70,7 @@ public class APExam extends ScheduleMaker {
     public String toString() {
         String toRet  = ""; //to return 
         toRet += "Name: " + name + "\n"; 
+        toRet += "Number of Students: " + numStudents + "\n";
         toRet += "Department: " + department + "\n";
         toRet += "Date: " + date + "\n";
         toRet += "Start time: " + startTime + "\n";

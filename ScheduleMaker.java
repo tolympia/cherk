@@ -75,7 +75,7 @@ public class ScheduleMaker {
    
   }
 
-  public static String testerTimeConverter(String block, int date) {
+  public static String testerTimeConverter(String block, int date){
     String timeToRet = "";
     //pretending there are only 2 possible dates and hard coding what time each block would be
     if (date == 27) {
