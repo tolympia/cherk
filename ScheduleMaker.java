@@ -5,36 +5,30 @@ import java.util.*;
 public class ScheduleMaker {
 
   public static void main(String[] args) throws FileNotFoundException {
-    File f = new File(args[0]);
+    ArrayList<File> files = new ArrayList<File>(Arrays.asList((new File(args[0])), (new File(args[1]))));
 
-    File f2 = new File(args[1]);
+    ArrayList<APExam> examObjects  = new ArrayList<>();
+    ArrayList<Teacher> teacherObjects  = new ArrayList<>();
 
-    ArrayList<Object> examObjects = new ArrayList<Object>();
-    ArrayList<Object> teacherObjects = new ArrayList<Object>();
+    generateListOfObjects(files, examObjects, teacherObjects);
 
-    generateListOfObjects(f, examObjects, "exam");
-    generateListOfObjects(f2, teacherObjects, "teacher");
-
-
-    for (int i = 0; i < examObjects.size(); i++){
-
-      System.out.println(examObjects.get(i));
-
+    for (APExam exam: examObjects){
+      System.out.println(exam);
+    }
+    for (Teacher teacher: teacherObjects){
+      System.out.println(teacher);
     }
 
-
-    for (int i = 0; i < teacherObjects.size(); i++){
-
-      System.out.println(teacherObjects.get(i));
-
-    }
-
+    System.out.println(((examObjects.get(0))).getName());
 
   }
 
-  public static void generateListOfObjects(File f, ArrayList<Object> arr, String s) throws FileNotFoundException {
-    Scanner fileScan = new Scanner(f);
+  public static void generateListOfObjects(List<File> f, ArrayList<APExam> examObjects, ArrayList<Teacher> teacherObjects) throws FileNotFoundException {
+    for (int j = 0; j < f.size(); j ++){
+    
+    Scanner fileScan = new Scanner(f.get(j));
     fileScan.nextLine();
+    // ArrayList<Object> arrOfInstances  = new ArrayList<Object>();
 
     while (fileScan.hasNextLine()) {
       String line = fileScan.nextLine();
@@ -49,8 +43,7 @@ public class ScheduleMaker {
               Arrays.asList(line.substring(i + 1, nextQuote).split(","))
             )
           );
-
-          i = nextQuote + 1;
+          i = nextQuote + 1;//"moving" i to the end of the quote
         } 
         
         else {
@@ -59,29 +52,45 @@ public class ScheduleMaker {
           if (nextComma == -1) {
             nextComma = line.length();
           }
+
           instanceVarValues.add(
-            new ArrayList<String>(Arrays.asList(line.substring(i, nextComma)))
+            new ArrayList<String>(
+              Arrays.asList(
+                line.substring(i, nextComma)
+              )
+            )
           );
           i = nextComma;
         }
       }
 
-      if (s.equals("exam")){
-
-          arr.add(new APExam(instanceVarValues));
-
+      if (((f.get(j)).getName()).contains("eacher")){
+        teacherObjects.add(new Teacher(instanceVarValues)); 
       }
 
-      else if (s.equals("teacher")){
-
-        arr.add(new Teacher(instanceVarValues));
-
+      else {
+        examObjects.add(new APExam(instanceVarValues));
       }
-
-      //System.out.println(instanceVarValues);
     }
-    //return arrOfInstances;
+    }
   }
+
+  // public static void downcast(ArrayList<T> arr, String s){//because the generateListOfObjects returns an object array, this method downcasts all the instances so we can access the methods of the APExam an Teacher classes.
+  //   for (int i = 0; i < arr.size(); i++){
+
+  //     if (s.equals("exam")){
+  //       arr.set(i, ((APExam)(arr.get(i))));
+  //       ((APExam)(arr.get(i))).getName();
+  //     }
+
+  //     else if (s.equals("teacher")){
+  //        arr.set(i, ((Teacher)(arr.get(i))));
+  //        ((Teacher)(arr.get(i))).getName();
+
+  //     }
+
+  //   }
+  // }
 
   public static String testerTimeConverter(String block, int date) {
     String timeToRet = "";
