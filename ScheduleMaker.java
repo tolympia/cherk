@@ -32,7 +32,6 @@ public class ScheduleMaker {
     for (int j = 0; j < f.size(); j++) {
       Scanner fileScan = new Scanner(f.get(j));
       fileScan.nextLine();
-      // ArrayList<Object> arrOfInstances  = new ArrayList<Object>();
 
       while (fileScan.hasNextLine()) {
         String line = fileScan.nextLine();
@@ -71,7 +70,7 @@ public class ScheduleMaker {
       }
     }
   }
-  
+
   public static String testerTimeConverter(String block, int date) {
     String timeToRet = "";
     //pretending there are only 2 possible dates and hard coding what time each block would be
