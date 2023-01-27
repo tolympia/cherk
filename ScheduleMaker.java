@@ -12,7 +12,7 @@ public class ScheduleMaker {
     ArrayList<APExam> examObjects = new ArrayList<>();
     ArrayList<Teacher> teacherObjects = new ArrayList<>();
 
-    generateListOfObjects(files, examObjects, teacherObjects);
+    generateListsOfObjects(files, examObjects, teacherObjects);
 
     for (APExam exam : examObjects) {
       System.out.println(exam);
@@ -24,7 +24,7 @@ public class ScheduleMaker {
     System.out.println(((examObjects.get(0))).getName());
   }
 
-  public static void generateListOfObjects(
+  public static void generateListsOfObjects(
     List<File> f,
     ArrayList<APExam> examObjects,
     ArrayList<Teacher> teacherObjects
