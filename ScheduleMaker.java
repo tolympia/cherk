@@ -114,6 +114,7 @@ public class ScheduleMaker {
     return headers;
   }
 
+  //to be implemented in matchUp()
   public static void removeTeacher(List<Teacher> teacherList, Teacher teacher) { 
     teacherList.remove(teacher); 
   }
