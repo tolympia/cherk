@@ -113,4 +113,8 @@ public class ScheduleMaker {
 
     return headers;
   }
+
+  public static void removeTeacher(List<Teacher> teacherList, Teacher teacher) { 
+    teacherList.remove(teacher); 
+  }
 }
