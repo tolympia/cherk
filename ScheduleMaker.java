@@ -115,6 +115,7 @@ public class ScheduleMaker {
   }
 
   //to be implemented in matchUp()
+  //is this necessary? Isn't it easier to just remove a teacher the way it is currently being done in matchup
   public static void removeTeacher(List<Teacher> teacherList, Teacher teacher) { 
     teacherList.remove(teacher); 
   }
