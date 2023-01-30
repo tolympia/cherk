@@ -34,6 +34,7 @@ public class ConsolidateFreesHelperMethod{
     }
 
     public static ArrayList<ArrayList<LocalTime>> sort(ArrayList<ArrayList<LocalTime>> freesTimes){
-        
+        //https://docs.oracle.com/javase/8/docs/api/java/time/LocalTime.html
+        //this link should help a lot with finding date time librar tools robyn!
     }
 }
