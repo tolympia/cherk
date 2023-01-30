@@ -16,7 +16,7 @@ public class ConsolidateFreesHelperMethod{
             }
         }
 
-        ArrayList<ArrayList<String>> freesTimes = new ArrayList<ArrayList<String>>;
+        ArrayList<ArrayList<LocalTime>> freesTimes = new ArrayList<ArrayList<LocalTime>>;
         for (int i=0; i<frees.length; i++){
             ArrayList<LocalTime> startAndEnd = new ArrayList<>;
             
@@ -27,5 +27,13 @@ public class ConsolidateFreesHelperMethod{
             freesTimes.add(startAndEnd);
         }
 
+        ArrayList<ArrayList<LocalTime>> timesInOrder = new ArrayList<ArrayList<LocalTime>>;
+        timesInOrder = sort(freesTimes);
+        
+
+    }
+
+    public static ArrayList<ArrayList<LocalTime>> sort(ArrayList<ArrayList<LocalTime>> freesTimes){
+        
     }
 }
