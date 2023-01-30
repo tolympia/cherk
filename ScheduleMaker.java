@@ -26,22 +26,22 @@ public class ScheduleMaker {
 
   }
 
-  public static void generateListsOfObjects(
+  public static void generateListsOfObjects(//takes in list of files and list of examObjects and teacherObjects to populate
     List<File> f,
     List<APExam> examObjects,
     List<Teacher> teacherObjects
   ) throws FileNotFoundException {
     for (int j = 0; j < f.size(); j++) {
       Scanner fileScan = new Scanner(f.get(j));
-      fileScan.nextLine();
+      fileScan.nextLine();//don't want the first line of columns
 
       while (fileScan.hasNextLine()) {
-        String line = fileScan.nextLine();
+        String line = fileScan.nextLine();//saving the current line of the file as a string
 
-        ArrayList<ArrayList<String>> instanceVarValues = new ArrayList<ArrayList<String>>();
+        ArrayList<ArrayList<String>> instanceVarValues = new ArrayList<ArrayList<String>>();//2d array, each array in the 2d array corresponds to a column of the file
 
-        for (int i = 0; i < line.length() - 1; i++) {
-          if (line.charAt(i) == '"') {
+        for (int i = 0; i < line.length() - 1; i++) {//iterating through string
+          if (line.charAt(i) == '"') {//if the current char is a quote, take the entire substring that is within the quotes, spllit it by the commas, and make an array
             int nextQuote = line.indexOf("\"", i + 1);
             instanceVarValues.add(
               new ArrayList<String>(
@@ -50,11 +50,11 @@ public class ScheduleMaker {
             );
             i = nextQuote + 1; //"moving" i to the end of the quote
           } 
-          else {
+          else {//if there are no commas, just add the element to the 2d array as a one element array list. 
             int nextComma = line.indexOf(",", i + 1);
 
             if (nextComma == -1) {
-              nextComma = line.length();
+              nextComma = line.length();//if we have reacherd the last comma in the string, then the
             }
 
             instanceVarValues.add(
