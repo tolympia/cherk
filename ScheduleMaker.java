@@ -26,22 +26,22 @@ public class ScheduleMaker {
 
   }
 
-  public static void generateListsOfObjects(
+  public static void generateListsOfObjects(//takes in list of files and list of examObjects and teacherObjects to populate
     List<File> f,
     List<APExam> examObjects,
     List<Teacher> teacherObjects
   ) throws FileNotFoundException {
     for (int j = 0; j < f.size(); j++) {
       Scanner fileScan = new Scanner(f.get(j));
-      fileScan.nextLine();
+      fileScan.nextLine();//don't want the first line of columns
 
       while (fileScan.hasNextLine()) {
-        String line = fileScan.nextLine();
+        String line = fileScan.nextLine();//saving the current line of the file as a string
 
-        ArrayList<ArrayList<String>> instanceVarValues = new ArrayList<ArrayList<String>>();
+        ArrayList<ArrayList<String>> instanceVarValues = new ArrayList<ArrayList<String>>();//2d array, each array in the 2d array corresponds to a column of the file
 
-        for (int i = 0; i < line.length() - 1; i++) {
-          if (line.charAt(i) == '"') {
+        for (int i = 0; i < line.length() - 1; i++) {//iterating through string
+          if (line.charAt(i) == '"') {//if the current char is a quote, take the entire substring that is within the quotes, spllit it by the commas, and make an array
             int nextQuote = line.indexOf("\"", i + 1);
             instanceVarValues.add(
               new ArrayList<String>(
@@ -50,23 +50,23 @@ public class ScheduleMaker {
             );
             i = nextQuote + 1; //"moving" i to the end of the quote
           } 
-          else {
+          else {//if there are no commas, just add the substring between the cirrent comma and nextComma to the 2d array as a one element array list. 
             int nextComma = line.indexOf(",", i + 1);
 
             if (nextComma == -1) {
-              nextComma = line.length();
+              nextComma = line.length();//if we have reached the last comma in the string, then just substring to the end of the array
             }
 
             instanceVarValues.add(
               new ArrayList<String>(Arrays.asList(line.substring(i, nextComma))));
-            i = nextComma;
+            i = nextComma;//put i at the index of the next comma
           }
         }
 
-        if (((f.get(j)).getName()).contains("eacher")) {
+        if (((f.get(j)).getName()).contains("eacher")) {//if the file contains "eacher", I am assuming it is the file for teacher frees, and will add to the teacher array list
           teacherObjects.add(new Teacher(instanceVarValues));
         } 
-        else {
+        else {//adding to the exam arraylist
           examObjects.add(new APExam(instanceVarValues));
         }
       }
@@ -145,19 +145,22 @@ public class ScheduleMaker {
       //loop through updated teacher list
       for(int r = 0; i<teacherClone.size(); i++){
         //convert free blocks to times on date of exams
-        String freeTime = testerTimeConverter(  );
+        ArrayList<String> freeTime = testerTimeConverter(  );
         
         //if exam contains free blocks - assign teacher to exam in that time
         //convert strings to integers
           //how do i convert if its a range of times
+        ArrayList<ArrayList<String>> consolidateFrees = consolidateFrees(teacherClone.get(i), date);
         ArrayList<String> proctors = new ArrayList<>();
-        int freeBlockTime = Integer.parseInt(freeTime);
-        int startTimeInt = Integer.parseInt(startTime);
-        int endTimeInt = Integer.parseInt(endTime);
-        if(freeBlockTime > startTimeInt && freeBlockTime < endTimeInt){
-          proctors.add(teacherClone.get(i));
-        }
+        for(int i=0; i<consolidateFrees.size(); i++){
+          String teacherBlockStart = consolidateFrees.get(i).get(0);
+          String teacherBlockEnd = consolidateFrees.get(i).get(1);
+          if(containsTime(startTime, endTime, teacherBlockStart, teacherBlockEnd)){
+            proctors.add(teacherClone.get(i));
+          }
           //remove that time from total time of exam
+          //robyn to make remove time method
+        }
       }
       //add name of exam and proctors to map
       examSchedule.add(examList.get(i).getName(), proctors);
