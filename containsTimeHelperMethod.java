@@ -1,8 +1,12 @@
-import java.time;
+import java.time.Localtime;
 
 public class containsTimeHelperMethod{
     public static void main(String[] args){
-
+        String outerStart = "7:59";
+        String outerEnd = "11:01";
+        String innerStart = "8:00";
+        String innerEnd = "11:00";
+        System.out.println(containsTime(outerStart, outerEnd, innerStart, innerEnd));
     }
     public static boolean containsTime(String outerTimeStart, String outerTimeEnd, String innerTimeStart, String innerTimeEnd){
         LocalTime outerStart = Localtime.parse(outerTimeStart);
