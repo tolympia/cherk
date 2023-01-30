@@ -50,23 +50,23 @@ public class ScheduleMaker {
             );
             i = nextQuote + 1; //"moving" i to the end of the quote
           } 
-          else {//if there are no commas, just add the element to the 2d array as a one element array list. 
+          else {//if there are no commas, just add the substring between the cirrent comma and nextComma to the 2d array as a one element array list. 
             int nextComma = line.indexOf(",", i + 1);
 
             if (nextComma == -1) {
-              nextComma = line.length();//if we have reacherd the last comma in the string, then the
+              nextComma = line.length();//if we have reached the last comma in the string, then just substring to the end of the array
             }
 
             instanceVarValues.add(
               new ArrayList<String>(Arrays.asList(line.substring(i, nextComma))));
-            i = nextComma;
+            i = nextComma;//put i at the index of the next comma
           }
         }
 
-        if (((f.get(j)).getName()).contains("eacher")) {
+        if (((f.get(j)).getName()).contains("eacher")) {//if the file contains "eacher", I am assuming it is the file for teacher frees, and will add to the teacher array list
           teacherObjects.add(new Teacher(instanceVarValues));
         } 
-        else {
+        else {//adding to the exam arraylist
           examObjects.add(new APExam(instanceVarValues));
         }
       }
