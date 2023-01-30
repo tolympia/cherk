@@ -145,7 +145,7 @@ public class ScheduleMaker {
       //loop through updated teacher list
       for(int r = 0; i<teacherClone.size(); i++){
         //convert free blocks to times on date of exams
-        ArrayList<String> freeTime = testerTimeConverter(  );
+        ArrayList<ArrayList<String>> freeTime = testerTimeConverter(  );
         
         //if exam contains free blocks - assign teacher to exam in that time
         //convert strings to integers
