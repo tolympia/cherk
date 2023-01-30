@@ -151,13 +151,15 @@ public class ScheduleMaker {
         //convert strings to integers
           //how do i convert if its a range of times
         ArrayList<String> proctors = new ArrayList<>();
-        String teacherBlockStart = freeTime.get(0);
-        String teacherBlockEnd = freeTime.get(1);
-        if(containsTime(startTime, endTime, teacherBlockStart, teacherBlockEnd)){
-          proctors.add(teacherClone.get(i));
-        }
+        for(int i=0; i<freeTime.size(); i++){
+          String teacherBlockStart = freeTime.get(i).get(0);
+          String teacherBlockEnd = freeTime.get(i).get(1);
+          if(containsTime(startTime, endTime, teacherBlockStart, teacherBlockEnd)){
+            proctors.add(teacherClone.get(i));
+          }
           //remove that time from total time of exam
           //robyn to make remove time method
+        }
       }
       //add name of exam and proctors to map
       examSchedule.add(examList.get(i).getName(), proctors);
