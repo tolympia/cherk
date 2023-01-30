@@ -145,15 +145,16 @@ public class ScheduleMaker {
       //loop through updated teacher list
       for(int r = 0; i<teacherClone.size(); i++){
         //convert free blocks to times on date of exams
-        ArrayList<ArrayList<String>> freeTime = testerTimeConverter(  );
+        ArrayList<String> freeTime = testerTimeConverter(  );
         
         //if exam contains free blocks - assign teacher to exam in that time
         //convert strings to integers
           //how do i convert if its a range of times
+        ArrayList<ArrayList<String>> consolidateFrees = consolidateFrees(teacherClone.get(i), date);
         ArrayList<String> proctors = new ArrayList<>();
-        for(int i=0; i<freeTime.size(); i++){
-          String teacherBlockStart = freeTime.get(i).get(0);
-          String teacherBlockEnd = freeTime.get(i).get(1);
+        for(int i=0; i<consolidateFrees.size(); i++){
+          String teacherBlockStart = consolidateFrees.get(i).get(0);
+          String teacherBlockEnd = consolidateFrees.get(i).get(1);
           if(containsTime(startTime, endTime, teacherBlockStart, teacherBlockEnd)){
             proctors.add(teacherClone.get(i));
           }
