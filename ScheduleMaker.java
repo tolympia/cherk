@@ -118,4 +118,48 @@ public class ScheduleMaker {
   public static void removeTeacher(List<Teacher> teacherList, Teacher teacher) { 
     teacherList.remove(teacher); 
   }
+
+  public static Map<String, List<String>> matchUp(List<Teacher> teacherList, List<APExam> examList){
+    //initalize map to hold name of exam and list of proctors
+    Map<String, List<String>> examSchedule = new HashMap<String, List<String>>();
+    //loop through exam list
+    for(int i=0; i<examList.size(); i++){
+      //clone teacher list
+      ArrayList<Teacher> teacherClone = (ArrayList)teacherList.clone();
+      //store department, date and start time/ end time of current exam
+      String department = examList.get(i).getDepartment();
+      String date = examList.get(i).getDate();
+      String startTime = examList.get(i).getStartTime();
+      String endTime = examList.get(i).getEndTime();
+      //check and see if any of the teachers are in the same department as exam and remove if they do
+      for(int j=0; j<teacherClone.size(); j++){
+        ArrayList<String> departments = teacherClone.get(j).getDepartment();
+        for(int c =0; c<departments.size(); c++){
+          if(department == departments.get(c)){
+            teacherClone.remove(j);
+            j--;
+          }
+        }
+      }
+      //loop through updated teacher list
+      for(int r = 0; i<teacherClone.size(); i++){
+        //convert free blocks to times on date of exams
+        String freeTime = testerTimeConverter(  );
+        
+        //if exam contains free blocks - assign teacher to exam in that time
+        //convert strings to integers
+          //how do i convert if its a range of times
+        ArrayList<String> proctors = new ArrayList<>();
+        int freeBlockTime = Integer.parseInt(freeTime);
+        int startTimeInt = Integer.parseInt(startTime);
+        int endTimeInt = Integer.parseInt(endTime);
+        if(freeBlockTime > startTimeInt && freeBlockTime < endTimeInt){
+          proctors.add(teacherClone.get(i));
+        }
+          //remove that time from total time of exam
+      }
+      //add name of exam and proctors to map
+      examSchedule.add(examList.get(i).getName(), proctors);
+    }
+  }
 }
