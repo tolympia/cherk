@@ -125,6 +125,7 @@ public class ScheduleMaker {
     Map<String, List<String>> examSchedule = new HashMap<String, List<String>>();
     //loop through exam list
     for(int i=0; i<examList.size(); i++){
+      ArrayList<String> proctors = new ArrayList<>();
       //clone teacher list
       ArrayList<Teacher> teacherClone = new ArrayList<Teacher>();
       for(int y=0; y<teacherList.size(); y++){
@@ -154,7 +155,6 @@ public class ScheduleMaker {
         //convert strings to integers
           //how do i convert if its a range of times
         ArrayList<ArrayList<String>> combineFrees = consolidateFrees(teacherClone.get(i), date);
-        ArrayList<String> proctors = new ArrayList<>();
         for(int x=0; x<combineFrees.size(); x++){
           String teacherBlockStart = combineFrees.get(x).get(0);
           String teacherBlockEnd = combineFrees.get(x).get(1);
@@ -166,7 +166,7 @@ public class ScheduleMaker {
         }
       }
       //add name of exam and proctors to map
-      examSchedule.add(examList.get(i).getName(), proctors);
+      examSchedule.put(examList.get(i).getName(), proctors);
     }
   }
 
