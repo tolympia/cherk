@@ -4,24 +4,20 @@ import java.util.*;
 public class ConsolidateFreesHelperMethod{
     public static void main(String[] args){
         ArrayList<ArrayList<LocalTime>> freesTimes = new ArrayList<ArrayList<LocalTime>>(); 
-        LocalTime hour1 = LocalTime.of(9, 00, 00,00); 
-        LocalTime hour2 = LocalTime.of(10, 00, 00, 00);  
-        ArrayList<LocalTime> time1 = new ArrayList<LocalTime>(); 
-        time1.add(hour1); 
-        time1.add(hour2); 
-        LocalTime hour3 = LocalTime.of(10, 00, 00,00); 
-        LocalTime hour4 = LocalTime.of(11, 00, 00, 00); 
-        ArrayList<LocalTime> time2 = new ArrayList<LocalTime>(); 
-        time2.add(hour3); 
-        time2.add(hour4);  
-        LocalTime hour5 = LocalTime.of(13, 00, 00,00); 
-        LocalTime hour6 = LocalTime.of(2, 00, 00, 00); 
-        ArrayList<LocalTime> time3 = new ArrayList<LocalTime>(); 
-        time3.add(hour5); 
-        time3.add(hour6);  
-        freesTimes.add(time1); 
-        freesTimes.add(time2);
-        freesTimes.add(time3);
+        LocalTime hour2 = LocalTime.parse(formatTime("9:00"));
+        LocalTime hour3 = LocalTime.parse(formatTime("10:00"));
+        LocalTime hour4 = LocalTime.parse(formatTime("12:00"));
+        LocalTime hour5 = LocalTime.parse(formatTime("12:30"));
+        LocalTime hour6 = LocalTime.parse(formatTime("1:00"));
+        LocalTime hour1 = LocalTime.parse(formatTime("8:30"));
+
+        freesTimes.add(hour1);
+        freesTimes.add(hour2);
+        freesTimes.add(hour3);
+        freesTimes.add(hour4);
+        freesTimes.add(hour5);
+        freesTimes.add(hour6);
+
         sort(freesTimes); 
     }
 
@@ -93,5 +89,15 @@ public class ConsolidateFreesHelperMethod{
     
         System.out.println(sortedTimes); 
         return sortedTimes; 
+    }
+
+    public static String formatTime(String time){
+        if (time.length()==5){
+            return time;
+        }
+        else{
+            String newTime = "0" + time;
+            return newTime;
+        }
     }
 }
