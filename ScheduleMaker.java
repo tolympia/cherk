@@ -157,7 +157,7 @@ public class ScheduleMaker {
         //if exam contains free blocks - assign teacher to exam in that time
         //convert strings to integers
           //how do i convert if its a range of times
-        ArrayList<ArrayList<String>> combineFrees = ConsolidateFreesHelperMethod.ConsolidateFrees(teacherClone.get(i), date);
+        ArrayList<ArrayList<String>> combineFrees = ConsolidateFreesHelperMethod.consolidateFrees(teacherClone.get(i), date);
         for(int x=0; x<combineFrees.size(); x++){
           String teacherBlockStart = combineFrees.get(x).get(0);
           String teacherBlockEnd = combineFrees.get(x).get(1);
@@ -171,9 +171,13 @@ public class ScheduleMaker {
       //add name of exam and proctors to map
       examSchedule.put(examList.get(i).getName(), proctors);
     }
+    return examSchedule;
   }
 
-  public static void writeIn(Map<String, List<String>> proctorMap, List<APExam> examList){
+
+  
+
+  public static void writeIn(Map<String, List<String>> proctorMap, List<APExam> examList) throws FileNotFoundException{
     //create new file with printsteram
     PrintStream p = new PrintStream("ApExamProctorSchedule.csv");
     //print headers into the csv 
