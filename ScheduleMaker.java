@@ -171,9 +171,12 @@ public class ScheduleMaker {
     //create new file with printsteram
     PrintStream p = new PrintStream("ApExamProctorSchedule.csv");
     //print headers into the csv 
-    p.print()
+    p.println("AP Exam", "Exam Date", "Exam Time", "Proctors");
+    //loop through map to print to csv
     for(int i=0; i<proctorMap.size(); i++){
+      //how do i use .getDate() and .getTime() for specific AP exams
+      p.println(proctorMap.get(i), proctorMap.get(i).getDate(), proctorMap.getTime(), proctorMap.get(proctorMap.get(i)));
     }
-    p.close()
+    p.close();
   }
 }
