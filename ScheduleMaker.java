@@ -150,16 +150,18 @@ public class ScheduleMaker {
       //loop through updated teacher list
       for(int r = 0; r<teacherClone.size(); r++){
         //convert free blocks to times on date of exams
-        ArrayList<String> freeTime = testerTimeConverter(  );
+
+        //
+        ///ArrayList<String> freeTime = Arrays.asList(testerTimeConverter();
         
         //if exam contains free blocks - assign teacher to exam in that time
         //convert strings to integers
           //how do i convert if its a range of times
-        ArrayList<ArrayList<String>> combineFrees = consolidateFrees(teacherClone.get(i), date);
+        ArrayList<ArrayList<String>> combineFrees = ConsolidateFreesHelperMethod.ConsolidateFrees(teacherClone.get(i), date);
         for(int x=0; x<combineFrees.size(); x++){
           String teacherBlockStart = combineFrees.get(x).get(0);
           String teacherBlockEnd = combineFrees.get(x).get(1);
-          if(containsTime(startTime, endTime, teacherBlockStart, teacherBlockEnd)){
+          if(ContainsTimeHelperMethod.containsTime(startTime, endTime, teacherBlockStart, teacherBlockEnd)){
             proctors.add(teacherClone.get(x).getName());
           }
           //remove that time from total time of exam
