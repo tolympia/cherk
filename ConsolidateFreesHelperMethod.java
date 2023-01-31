@@ -13,16 +13,16 @@ public class ConsolidateFreesHelperMethod{
         LocalTime hour7 = LocalTime.parse(formatTime("1:00"));
         LocalTime hour8 = LocalTime.parse(formatTime("3:00"));
 
-        ArrayList<LocalTime> block1 = new ArrayList<>;
+        ArrayList<LocalTime> block1 = new ArrayList<>();
         block1.add(hour1);
         block1.add(hour2);
-        ArrayList<LocalTime> block2 = new ArrayList<>;
+        ArrayList<LocalTime> block2 = new ArrayList<>();
         block2.add(hour3);
         block2.add(hour4);
-        ArrayList<LocalTime> block3 = new ArrayList<>;
+        ArrayList<LocalTime> block3 = new ArrayList<>();
         block3.add(hour5);
         block3.add(hour6);
-        ArrayList<LocalTime> block4 = new ArrayList<>;
+        ArrayList<LocalTime> block4 = new ArrayList<>();
         block4.add(hour7);
         block4.add(hour8);
 
