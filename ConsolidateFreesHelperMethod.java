@@ -22,10 +22,8 @@ public class ConsolidateFreesHelperMethod{
     }
 
     public static ArrayList<ArrayList<String>> consolidateFrees(Teacher teacher, String date){
-<<<<<<< HEAD
         List<String> frees = teacher.getFreePeriods();
         List<String> freesOnDay = date.getFrees(); //this will be using Mrs. Zhu's code 
-=======
         // List<String> frees = teacher.getFreePeriods(); //HOW DO I GET TEACHERS FREES
         List <String> freesOnDay = new List<String>;
         if (getTimeFromBlockAndDate("A", date)!=null){
@@ -49,7 +47,6 @@ public class ConsolidateFreesHelperMethod{
         if (getTimeFromBlockAndDate("G", date)!=null){
             freesOnDay.add("G");
         } 
->>>>>>> 0a08ef6185bb215d63ba76ee79bf98db3f62893d
         
         
         for (int i=0; i<frees.size(); i++){
@@ -84,7 +81,6 @@ public class ConsolidateFreesHelperMethod{
             }
             consolidatedFrees.add(newTimeBlock);
         }
-
         return consolidatedFrees;
 
     }
@@ -144,4 +140,31 @@ public class ConsolidateFreesHelperMethod{
         LocalTime endTime = thisBlock.endTime;
         return new ArrayList<LocalTime>(Arrays.asList(startTime, endTime));
     }
+
+    private static USSchedule getUSScheduleForDate(LocalDate date) {
+        DayOfWeek day = date.getDayOfWeek();
+
+        USSchedule schedule;
+
+        // Determine if this is an adjusted schedule day.
+        if (USSchedule.adjustedSchedules.containsKey(date)) {
+            String adjustedType = USSchedule.adjustedSchedules.get(date);
+            schedule = new USAdjusted1(date, true);
+        } else {
+            boolean flexDay = day == DayOfWeek.MONDAY || day == DayOfWeek.TUESDAY || day == DayOfWeek.THURSDAY;
+            if (flexDay) {
+                schedule = new USFlexDay(date, true);
+            } else if (day == DayOfWeek.FRIDAY) {
+                schedule = new USFriday(date, true);
+            } else {  // Wed schedule
+                schedule = new USWednesday(date, true);
+            }
+            if (schedule.getDayType() == -1) {
+                // Not a real school day.
+                return null;
+            }
+        }
+        return schedule;
+    }
+
 }
