@@ -33,6 +33,23 @@ public class ConsolidateFreesHelperMethod{
         freesTimes.add(block4);
 
         sort(freesTimes); 
+
+        ArrayList<ArrayList<String>> teacher = new ArrayList<ArrayList<String>>();
+
+        ArrayList<String> arr1 = new ArrayList(Arrays.asList("Ms z"));
+        ArrayList<String> arr2 = new ArrayList(Arrays.asList("compsci"));
+        ArrayList<String> arr3 = new ArrayList(Arrays.asList("A", "B", "C"));
+
+        teacher.add(arr1);
+        teacher.add(arr2);
+        teacher.add(arr3);
+
+        Teacher teacher1 = new Teacher (teacher);
+
+        System.out.println(consolidateFrees(teacher1, "31-01-2022"));//how do you format the date lol
+
+
+
     }
 
     public static ArrayList<ArrayList<String>> consolidateFrees(Teacher teacher, String date){
