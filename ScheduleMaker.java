@@ -167,18 +167,18 @@ public class ScheduleMaker {
     }
   }
 
-  public static void writeIn(Map<<String>, <List<String>>> proctorMap, List<APExam> examList){
+  public static void writeIn(Map<String, List<String>> proctorMap, List<APExam> examList){
     //create new file with printsteram
     PrintStream p = new PrintStream("ApExamProctorSchedule.csv");
     //print headers into the csv 
-    p.println("AP Exam", "Exam Date", "Exam Start Time", "Exam End Time", "Proctors");
+    p.println("AP Exam" + "Exam Date" + "Exam Start Time" + "Exam End Time" + "Proctors");
     //loop through map to print to csv
     for(int i=0; i<examList.size(); i++){
       APExam exam = examList.get(i);
       //how do i use .getDate() and .getTime() for specific AP exams
       List<String> proctorNames = proctorMap.get(exam.getName());
       String proctors = arrayFormat(proctorNames);
-      p.println(exam.getName(), exam.getDate(), exam.getStartTime(), exam.getEndTime(), proctors);
+      p.println(exam.getName() + exam.getDate() + exam.getStartTime() + exam.getEndTime() + proctors);
     }
     p.close();
   }
