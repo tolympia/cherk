@@ -137,7 +137,7 @@ public class ScheduleMaker {
       String endTime = examList.get(i).getEndTime();
       //check and see if any of the teachers are in the same department as exam and remove if they do
       for(int j=0; j<teacherClone.size(); j++){
-        ArrayList<String> departments = teacherClone.get(j).getDepartment();
+        List<String> departments = teacherClone.get(j).getDepartment();
         for(int c =0; c<departments.size(); c++){
           if(department == departments.get(c)){
             teacherClone.remove(j);
@@ -155,11 +155,11 @@ public class ScheduleMaker {
           //how do i convert if its a range of times
         ArrayList<ArrayList<String>> combineFrees = consolidateFrees(teacherClone.get(i), date);
         ArrayList<String> proctors = new ArrayList<>();
-        for(int i=0; i<combineFrees.size(); i++){
-          String teacherBlockStart = combineFrees.get(i).get(0);
-          String teacherBlockEnd = combineFrees.get(i).get(1);
+        for(int x=0; x<combineFrees.size(); x++){
+          String teacherBlockStart = combineFrees.get(x).get(0);
+          String teacherBlockEnd = combineFrees.get(x).get(1);
           if(containsTime(startTime, endTime, teacherBlockStart, teacherBlockEnd)){
-            proctors.add(teacherClone.get(i).getName());
+            proctors.add(teacherClone.get(x).getName());
           }
           //remove that time from total time of exam
           //robyn to make remove time method
