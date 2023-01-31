@@ -126,7 +126,10 @@ public class ScheduleMaker {
     //loop through exam list
     for(int i=0; i<examList.size(); i++){
       //clone teacher list
-      ArrayList<Teacher> teacherClone = (ArrayList)teacherList.clone();
+      ArrayList<Teacher> teacherClone = new ArrayList<Teacher>();
+      for(int y=0; y<teacherList.size(); y++){
+        teacherClone.add(teacherList.get(y));
+      }
       //store department, date and start time/ end time of current exam
       String department = examList.get(i).getDepartment();
       String date = examList.get(i).getDate();
@@ -167,7 +170,7 @@ public class ScheduleMaker {
     }
   }
 
-  public static void writeIn(Map<<String>, <List<String>>> proctorMap, List<APExam> examList){
+  public static void writeIn(Map<String, List<String>> proctorMap, List<APExam> examList){
     //create new file with printsteram
     PrintStream p = new PrintStream("ApExamProctorSchedule.csv");
     //print headers into the csv 
