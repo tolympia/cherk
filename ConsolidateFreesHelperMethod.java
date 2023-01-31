@@ -3,7 +3,7 @@ import java.util.*;
 
 public class ConsolidateFreesHelperMethod{
     public static void main(String[] args){
-        ArrayList<LocalTime> freesTimes = new ArrayList<LocalTime>(); 
+        ArrayList<ArrayList<LocalTime>> freesTimes = new ArrayList<ArrayList<LocalTime>>(); 
         LocalTime hour2 = LocalTime.parse(formatTime("9:00"));
         LocalTime hour3 = LocalTime.parse(formatTime("10:00"));
         LocalTime hour4 = LocalTime.parse(formatTime("12:00"));
@@ -22,8 +22,34 @@ public class ConsolidateFreesHelperMethod{
     }
 
     public static ArrayList<ArrayList<String>> consolidateFrees(Teacher teacher, String date){
+<<<<<<< HEAD
         List<String> frees = teacher.getFreePeriods();
         List<String> freesOnDay = date.getFrees(); //this will be using Mrs. Zhu's code 
+=======
+        // List<String> frees = teacher.getFreePeriods(); //HOW DO I GET TEACHERS FREES
+        List <String> freesOnDay = new List<String>;
+        if (getTimeFromBlockAndDate("A", date)!=null){
+            freesOnDay.add("A");
+        }
+        if (getTimeFromBlockAndDate("B", date)!=null){
+            freesOnDay.add("B");
+        }
+        if (getTimeFromBlockAndDate("C", date)!=null){
+            freesOnDay.add("C");
+        }
+        if (getTimeFromBlockAndDate("D", date)!=null){
+            freesOnDay.add("D");
+        }
+        if (getTimeFromBlockAndDate("E", date)!=null){
+            freesOnDay.add("E");
+        }
+        if (getTimeFromBlockAndDate("F", date)!=null){
+            freesOnDay.add("F");
+        }
+        if (getTimeFromBlockAndDate("G", date)!=null){
+            freesOnDay.add("G");
+        } 
+>>>>>>> 0a08ef6185bb215d63ba76ee79bf98db3f62893d
         
         
         for (int i=0; i<frees.size(); i++){
@@ -100,5 +126,27 @@ public class ConsolidateFreesHelperMethod{
             String newTime = "0" + time;
             return newTime;
         }
+    }
+
+//*****MRS ZHUS CODE */
+    public static ArrayList<LocalTime> getTimeFromBlockAndDate(String blockName, String date) {
+        // Convert date to a Date object.
+        LocalDate dateObject = LocalDate.parse(date);
+        // Get schedule for this date.
+        USSchedule schedule = getUSScheduleForDate(dateObject);
+        // Get list of block names.
+        ArrayList<String> blockNames = schedule.blocksForDayType();
+
+        // Find the index of the desired block within all the blocks.
+        int blockIndex = blockNames.indexOf(blockName);
+        if (blockIndex == -1) {
+            // This block (e.g. A) does not occur on this date, so return null.
+            return null;
+        }
+        // Get the corresponding Block object, which contains start and end times.
+        Block thisBlock = schedule.blocks.get(blockIndex);
+        LocalTime startTime = thisBlock.startTime;
+        LocalTime endTime = thisBlock.endTime;
+        return new ArrayList<LocalTime>(Arrays.asList(startTime, endTime));
     }
 }
