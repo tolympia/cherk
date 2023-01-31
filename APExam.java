@@ -5,7 +5,6 @@ import java.util.*;
 public class APExam extends ScheduleMaker {
     //instance variables
     private String name; //private or public
-    private int numStudents;
     private String date; 
     private String startTime; 
     private String endTime; 
