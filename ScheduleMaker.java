@@ -150,13 +150,13 @@ public class ScheduleMaker {
         //if exam contains free blocks - assign teacher to exam in that time
         //convert strings to integers
           //how do i convert if its a range of times
-        ArrayList<ArrayList<String>> consolidateFrees = consolidateFrees(teacherClone.get(i), date);
+        ArrayList<ArrayList<String>> combineFrees = consolidateFrees(teacherClone.get(i), date);
         ArrayList<String> proctors = new ArrayList<>();
-        for(int i=0; i<consolidateFrees.size(); i++){
-          String teacherBlockStart = consolidateFrees.get(i).get(0);
-          String teacherBlockEnd = consolidateFrees.get(i).get(1);
+        for(int i=0; i<combineFrees.size(); i++){
+          String teacherBlockStart = combineFrees.get(i).get(0);
+          String teacherBlockEnd = combineFrees.get(i).get(1);
           if(containsTime(startTime, endTime, teacherBlockStart, teacherBlockEnd)){
-            proctors.add(teacherClone.get(i));
+            proctors.add(teacherClone.get(i).getName());
           }
           //remove that time from total time of exam
           //robyn to make remove time method
@@ -176,14 +176,14 @@ public class ScheduleMaker {
     for(int i=0; i<examList.size(); i++){
       APExam exam = examList.get(i);
       //how do i use .getDate() and .getTime() for specific AP exams
-      ArrayList<String> proctorNames = proctorMap.get(exam.getName());
+      List<String> proctorNames = proctorMap.get(exam.getName());
       String proctors = arrayFormat(proctorNames);
       p.println(exam.getName(), exam.getDate(), exam.getStartTime(), exam.getEndTime(), proctors);
     }
     p.close();
   }
 
-  public static String arrayFormat(ArrayList<String> proctors){
+  public static String arrayFormat(List<String> proctors){
     String proctorNames = "";
     for(int i=0; i<proctors.size(); i++){
       proctorNames += proctors.get(i) + ", ";
