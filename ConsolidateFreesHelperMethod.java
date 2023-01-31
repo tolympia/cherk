@@ -22,9 +22,7 @@ public class ConsolidateFreesHelperMethod{
     }
 
     public static ArrayList<ArrayList<String>> consolidateFrees(Teacher teacher, String date){
-        List<String> frees = teacher.getFreePeriods();
-        List<String> freesOnDay = date.getFrees(); //this will be using Mrs. Zhu's code 
-        // List<String> frees = teacher.getFreePeriods(); //HOW DO I GET TEACHERS FREES
+        List<String> frees = teacher.getFreePeriods(); //WHERE ID GETFREEPERIODS LOCATED
         List <String> freesOnDay = new List<String>;
         if (getTimeFromBlockAndDate("A", date)!=null){
             freesOnDay.add("A");
