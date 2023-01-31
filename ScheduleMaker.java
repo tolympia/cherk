@@ -167,7 +167,7 @@ public class ScheduleMaker {
     }
   }
 
-  public static void writeIn(Map<String, List<String>> proctorMap, List<APExam> examList){
+  public static void writeIn(Map<<String>, <List<String>>> proctorMap, List<APExam> examList){
     //create new file with printsteram
     PrintStream p = new PrintStream("ApExamProctorSchedule.csv");
     //print headers into the csv 
