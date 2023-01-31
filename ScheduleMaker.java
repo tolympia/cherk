@@ -166,4 +166,14 @@ public class ScheduleMaker {
       examSchedule.add(examList.get(i).getName(), proctors);
     }
   }
+
+  public static void writeIn(Map<String, List<String>> proctorMap){
+    //create new file with printsteram
+    PrintStream p = new PrintStream("ApExamProctorSchedule.csv");
+    //print headers into the csv 
+    p.print()
+    for(int i=0; i<proctorMap.size(); i++){
+    }
+    p.close()
+  }
 }
