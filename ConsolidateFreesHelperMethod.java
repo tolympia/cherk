@@ -1,5 +1,6 @@
 import java.time.*;
 import java.util.*; 
+import java.text.SimpleDateFormat;
 
 public class ConsolidateFreesHelperMethod{
     public static void main(String[] args){
@@ -14,7 +15,7 @@ public class ConsolidateFreesHelperMethod{
         ArrayList<LocalTime> time2 = new ArrayList<LocalTime>(); 
         time2.add(hour3); 
         time2.add(hour4);  
-        LocalTime hour5 = LocalTime.of(13, 00, 00,00); 
+        LocalTime hour5 = LocalTime.of(1, 00, 00,00); 
         LocalTime hour6 = LocalTime.of(2, 00, 00, 00); 
         ArrayList<LocalTime> time3 = new ArrayList<LocalTime>(); 
         time3.add(hour5); 
@@ -72,6 +73,7 @@ public class ConsolidateFreesHelperMethod{
     }
 
     public static ArrayList<ArrayList<LocalTime>> sort(ArrayList<ArrayList<LocalTime>> freesTimes){
+        convertStandardTo24(freesTimes); 
         ArrayList<ArrayList<LocalTime>> sortedTimes = new ArrayList<ArrayList<LocalTime>>(); 
         
         while (freesTimes.size()>0) {
@@ -90,8 +92,32 @@ public class ConsolidateFreesHelperMethod{
             sortedTimes.add(min); 
             freesTimes.remove(min); 
         }
-    
+        //convertMilitaryToStandard(freesTimes); 
         System.out.println(sortedTimes); 
         return sortedTimes; 
+    }
+
+    //can I just hard code it so it can deal with times 1, 2, 3, 4 ?
+    public static ArrayList<ArrayList<LocalTime>> convertStandardTo24(ArrayList<ArrayList<LocalTime>> standardTimes) {
+        ArrayList<ArrayList<LocalTime>> militaryTimes = new ArrayList<ArrayList<LocalTime>>(); 
+
+        for (int i = 0; i<standardTimes.size(); i++) {
+            for (int j = 0; j<standardTimes.get(0).size(); j++) {;
+                LocalTime currTime = standardTimes.get(i).get(j); 
+                int hour = currTime.getHour(); 
+                if (hour<7) {
+                    militaryTimes.get(i).add(currTime.plusHours(12));
+                }
+                else {
+                    militaryTimes.get(i).add(currTime); 
+                }
+            }
+        }
+        return militaryTimes; 
+    }
+
+    public static ArrayList<ArrayList<LocalTime>> convert24ToStandard(ArrayList<ArrayList<LocalTime>> militaryTimes) {
+        ArrayList<ArrayList<LocalTime>> standardTimes = new ArrayList<ArrayList<LocalTime>>(); 
+        return standardTimes; 
     }
 }
