@@ -3,7 +3,7 @@ import java.util.*;
 
 public class ConsolidateFreesHelperMethod{
     public static void main(String[] args){
-        ArrayList<ArrayList<LocalTime>> freesTimes = new ArrayList<ArrayList<LocalTime>>(); 
+        ArrayList<LocalTime> freesTimes = new ArrayList<LocalTime>(); 
         LocalTime hour2 = LocalTime.parse(formatTime("9:00"));
         LocalTime hour3 = LocalTime.parse(formatTime("10:00"));
         LocalTime hour4 = LocalTime.parse(formatTime("12:00"));
