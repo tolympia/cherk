@@ -119,6 +119,8 @@ public class ConsolidateFreesHelperMethod{
     }
 
     public static ArrayList<ArrayList<LocalTime>> sort(ArrayList<ArrayList<LocalTime>> freesTimes){
+        convertStandardtoMilitary(freesTimes); 
+
         ArrayList<ArrayList<LocalTime>> sortedTimes = new ArrayList<ArrayList<LocalTime>>(); 
         
         while (freesTimes.size()>0) {
@@ -138,6 +140,7 @@ public class ConsolidateFreesHelperMethod{
             freesTimes.remove(min); 
         }
     
+        convertMilitaryToStandard(sortedTimes); 
         System.out.println(sortedTimes); 
         return sortedTimes; 
     }
