@@ -7,7 +7,6 @@ public class Teacher extends ScheduleMaker {
     private String name; 
     private List<String> department; 
     private List<String> freePeriods; 
-    private int examsProctored; 
 
     //4 argument constructor to create basic teacher objects
     public Teacher (ArrayList<ArrayList<String>> instanceVars) {
@@ -34,11 +33,6 @@ public class Teacher extends ScheduleMaker {
         return freePeriods; 
     }
 
-    //function to return the number of exams the specific teacher has proctored
-    public int getExamsProctored() {
-        return examsProctored; 
-    }
-
 
     //function to set the name of a teacher to instance variable
     public void setName (String newName) {
@@ -55,14 +49,6 @@ public class Teacher extends ScheduleMaker {
         this.freePeriods = newFreePeriods; 
     }
     
-    //function to set the number of exams proctored to the instance variable
-    public void setExamsProctored (int newExamsProctored){
-        this.examsProctored = newExamsProctored; 
-    }
-
-     public void increaseExamsProctored (){
-        this.examsProctored++; 
-    }
 
       public String toString() {
         String toRet  = ""; //to return 
