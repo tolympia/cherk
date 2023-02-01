@@ -76,31 +76,32 @@ public class ScheduleMaker {
    
   }
 
-  public static String testerTimeConverter(String block, int date){
-    String timeToRet = "";
-    //pretending there are only 2 possible dates and hard coding what time each block would be
-    if (date == 27) {
-      if (block.equals("A")) {
-        timeToRet += "8:00-9:00am";
-      } else if (block.equals("B")) {
-        timeToRet += "9:00-10:00am";
-      } else if (block.equals("C")) {
-        timeToRet += "10:00-11:00am";
-      }
-    } else {
-      if (block.equals("D")) {
-        timeToRet += "11:00-12:00pm";
-      } else if (block.equals("E")) {
-        timeToRet += "12:00-1:00pm";
-      } else if (block.equals("F")) {
-        timeToRet += "1:00-2:00pm";
-      } else {
-        timeToRet += "2:00-3:00pm";
-      }
+  
+    //using ms. zhu's helper method to convert blocks to times
+  public static ArrayList<LocalTime> blocksToTimes(String blockName, String date) {
+        // Convert date to a Date object.
+        LocalDate dateObject = LocalDate.parse(date);
+        // Get schedule for this date.
+        USSchedule schedule = getUSScheduleForDate(dateObject);
+        // Get list of block names.
+        ArrayList<String> blockNames = schedule.blocksForDayType();
+
+        // Find the index of the desired block within all the blocks.
+        int blockIndex = blockNames.indexOf(blockName);
+        if (blockIndex == -1) {
+            // This block (e.g. A) does not occur on this date, so return null.
+            return null;
+        }
+        // Get the corresponding Block object, which contains start and end times.
+        Block thisBlock = schedule.blocks.get(blockIndex);
+        LocalTime startTime = thisBlock.startTime;
+        LocalTime endTime = thisBlock.endTime;
+        return new ArrayList<LocalTime>(Arrays.asList(startTime, endTime));
+        
+        //we need to figure out if we can use getUSScheduleForDate method 
     }
-    System.out.println(timeToRet);
-    return timeToRet;
-  }
+    
+  
 
   public static ArrayList<String> getColumns(File f)
     throws FileNotFoundException {
@@ -169,9 +170,13 @@ public class ScheduleMaker {
       //add name of exam and proctors to map
       examSchedule.put(examList.get(i).getName(), proctors);
     }
+    return examSchedule;
   }
 
-  public static void writeIn(Map<String, List<String>> proctorMap, List<APExam> examList){
+
+  
+
+  public static void writeIn(Map<String, List<String>> proctorMap, List<APExam> examList) throws FileNotFoundException{
     //create new file with printsteram
     PrintStream p = new PrintStream("ApExamProctorSchedule.csv");
     //print headers into the csv 
