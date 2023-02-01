@@ -1,6 +1,6 @@
 import java.time.*;
 
-public class containsTimeHelperMethod{
+public class ContainsTimeHelperMethod{
     public static void main(String[] args){
         String outerStart = "7:59";
         String outerEnd = "11:01";

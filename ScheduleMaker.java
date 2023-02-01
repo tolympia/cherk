@@ -1,6 +1,7 @@
 import java.io.*;
 import java.lang.*;
 import java.util.*;
+import java.time.*;
 
 public class ScheduleMaker {
 
@@ -125,8 +126,12 @@ public class ScheduleMaker {
     Map<String, List<String>> examSchedule = new HashMap<String, List<String>>();
     //loop through exam list
     for(int i=0; i<examList.size(); i++){
+      ArrayList<String> proctors = new ArrayList<>();
       //clone teacher list
-      ArrayList<Teacher> teacherClone = (ArrayList)teacherList.clone();
+      ArrayList<Teacher> teacherClone = new ArrayList<Teacher>();
+      for(int y=0; y<teacherList.size(); y++){
+        teacherClone.add(teacherList.get(y));
+      }
       //store department, date and start time/ end time of current exam
       String department = examList.get(i).getDepartment();
       String date = examList.get(i).getDate();
@@ -134,7 +139,7 @@ public class ScheduleMaker {
       String endTime = examList.get(i).getEndTime();
       //check and see if any of the teachers are in the same department as exam and remove if they do
       for(int j=0; j<teacherClone.size(); j++){
-        ArrayList<String> departments = teacherClone.get(j).getDepartment();
+        List<String> departments = teacherClone.get(j).getDepartment();
         for(int c =0; c<departments.size(); c++){
           if(department == departments.get(c)){
             teacherClone.remove(j);
@@ -143,40 +148,85 @@ public class ScheduleMaker {
         }
       }
       //loop through updated teacher list
-      for(int r = 0; i<teacherClone.size(); i++){
+      for(int r = 0; r<teacherClone.size(); r++){
         //convert free blocks to times on date of exams
-        ArrayList<String> freeTime = testerTimeConverter(  );
+
+        //
+        ///ArrayList<String> freeTime = Arrays.asList(testerTimeConverter();
         
         //if exam contains free blocks - assign teacher to exam in that time
         //convert strings to integers
           //how do i convert if its a range of times
-        ArrayList<ArrayList<String>> consolidateFrees = consolidateFrees(teacherClone.get(i), date);
-        ArrayList<String> proctors = new ArrayList<>();
-        for(int i=0; i<consolidateFrees.size(); i++){
-          String teacherBlockStart = consolidateFrees.get(i).get(0);
-          String teacherBlockEnd = consolidateFrees.get(i).get(1);
-          if(containsTime(startTime, endTime, teacherBlockStart, teacherBlockEnd)){
-            proctors.add(teacherClone.get(i));
+        ArrayList<ArrayList<String>> combineFrees = ConsolidateFreesHelperMethod.consolidateFrees(teacherClone.get(i), date);
+        for(int x=0; x<combineFrees.size(); x++){
+          String teacherBlockStart = combineFrees.get(x).get(0);
+          String teacherBlockEnd = combineFrees.get(x).get(1);
+          if(ContainsTimeHelperMethod.containsTime(startTime, endTime, teacherBlockStart, teacherBlockEnd)){
+            proctors.add(teacherClone.get(x).getName());
           }
           //remove that time from total time of exam
           //robyn to make remove time method
         }
       }
       //add name of exam and proctors to map
-      examSchedule.add(examList.get(i).getName(), proctors);
+      examSchedule.put(examList.get(i).getName(), proctors);
     }
+    return examSchedule;
   }
 
-  public static void writeIn(Map<String, List<String>> proctorMap){
+
+  
+
+  public static void writeIn(Map<String, List<String>> proctorMap, List<APExam> examList) throws FileNotFoundException{
     //create new file with printsteram
     PrintStream p = new PrintStream("ApExamProctorSchedule.csv");
     //print headers into the csv 
-    p.println("AP Exam", "Exam Date", "Exam Time", "Proctors");
+    p.println("AP Exam" + "Exam Date" + "Exam Start Time" + "Exam End Time" + "Proctors");
     //loop through map to print to csv
-    for(int i=0; i<proctorMap.size(); i++){
+    for(int i=0; i<examList.size(); i++){
+      APExam exam = examList.get(i);
       //how do i use .getDate() and .getTime() for specific AP exams
-      p.println(proctorMap.get(i), proctorMap.get(i).getDate(), proctorMap.getTime(), proctorMap.get(proctorMap.get(i)));
+      List<String> proctorNames = proctorMap.get(exam.getName());
+      String proctors = arrayFormat(proctorNames);
+      p.println(exam.getName() + exam.getDate() + exam.getStartTime() + exam.getEndTime() + proctors);
     }
     p.close();
   }
+
+  public static String arrayFormat(List<String> proctors){
+    String proctorNames = "";
+    for(int i=0; i<proctors.size(); i++){
+      proctorNames += proctors.get(i) + ", ";
+    }
+    return proctorNames;
+  }
+
+  public static boolean containsTime(String outerTimeStart, String outerTimeEnd, String innerTimeStart, String innerTimeEnd){
+    formatTime(outerTimeStart);
+    formatTime(outerTimeEnd);
+    formatTime(innerTimeStart);
+    formatTime(innerTimeEnd);
+    LocalTime outerStart = LocalTime.parse(outerTimeStart);
+    LocalTime outerEnd = LocalTime.parse(outerTimeEnd); 
+    LocalTime innerStart = LocalTime.parse(innerTimeStart); 
+    LocalTime innerEnd = LocalTime.parse(innerTimeEnd);
+
+    if (outerStart.isBefore(innerStart) && outerEnd.isAfter(innerEnd)){
+      return true;
+    }
+    else{
+      return false;
+    }
+  }
+
+  public static String formatTime(String time){
+    if (time.length()==5){
+      return time;
+    }
+    else{
+      String newTime = "0" + time;
+      return newTime;
+    }
+  }
+
 }
