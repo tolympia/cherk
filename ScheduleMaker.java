@@ -138,6 +138,8 @@ public class ScheduleMaker {
       String date = examList.get(i).getDate();
       String startTime = examList.get(i).getStartTime();
       String endTime = examList.get(i).getEndTime();
+      LocalTime outerTimeStart = LocalTime.parse(formatTime(startTime));
+      LocalTime outerTimeEnd = LocalTime.parse(formatTime(endTime));
       //check and see if any of the teachers are in the same department as exam and remove if they do
       for(int j=0; j<teacherClone.size(); j++){
         List<String> departments = teacherClone.get(j).getDepartment();
@@ -150,17 +152,15 @@ public class ScheduleMaker {
       }
       //loop through updated teacher list
       for(int r = 0; r<teacherClone.size(); r++){
-        //convert free blocks to times on date of exams
-        ArrayList<String> freeTime = testerTimeConverter(  );
         
         //if exam contains free blocks - assign teacher to exam in that time
         //convert strings to integers
           //how do i convert if its a range of times
-        ArrayList<ArrayList<String>> combineFrees = consolidateFrees(teacherClone.get(i), date);
+        ArrayList<ArrayList<LocalTime>> combineFrees = consolidateFrees(teacherClone.get(i), date);
         for(int x=0; x<combineFrees.size(); x++){
-          String teacherBlockStart = combineFrees.get(x).get(0);
-          String teacherBlockEnd = combineFrees.get(x).get(1);
-          if(containsTime(startTime, endTime, teacherBlockStart, teacherBlockEnd)){
+          LocalTime teacherBlockStart = combineFrees.get(x).get(0); //get start time of combined frees for given teacher
+          LocalTime teacherBlockEnd = combineFrees.get(x).get(1);
+          if(containsTime(outerTimeStart, outerTimeEnd, teacherBlockStart, teacherBlockEnd)){
             proctors.add(teacherClone.get(x).getName());
           }
           //remove that time from total time of exam
@@ -202,17 +202,9 @@ public class ScheduleMaker {
     return proctorNames;
   }
 
-  public static boolean containsTime(String outerTimeStart, String outerTimeEnd, String innerTimeStart, String innerTimeEnd){
-    formatTime(outerTimeStart);
-    formatTime(outerTimeEnd);
-    formatTime(innerTimeStart);
-    formatTime(innerTimeEnd);
-    LocalTime outerStart = LocalTime.parse(outerTimeStart);
-    LocalTime outerEnd = LocalTime.parse(outerTimeEnd); 
-    LocalTime innerStart = LocalTime.parse(innerTimeStart); 
-    LocalTime innerEnd = LocalTime.parse(innerTimeEnd);
+  public static boolean containsTime(LocalTime outerTimeStart, LocalTime outerTimeEnd, LocalTime innerTimeStart, LocalTime innerTimeEnd){
 
-    if (outerStart.isBefore(innerStart) && outerEnd.isAfter(innerEnd)){
+    if (outerTimeStart.isBefore(innerTimeStart) && outerTimeEnd.isAfter(innerTimeEnd)){
       return true;
     }
     else{
