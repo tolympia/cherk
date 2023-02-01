@@ -202,6 +202,7 @@ public class ConsolidateFreesHelperMethod{
     }
 
     public static ArrayList<ArrayList<LocalTime>> convertMilitaryToStandard (ArrayList<ArrayList<LocalTime>> militaryTimes ) {
+        //ArrayList of ArrayLists to hold converted times (so that each sub ArrayList holds a start and end time of a free block)
         ArrayList<ArrayList<LocalTime>> standardTimes = new ArrayList<ArrayList<LocalTime>> (); 
 
         for (int i=0; i<militaryTimes.size(); i++) {
@@ -209,12 +210,12 @@ public class ConsolidateFreesHelperMethod{
             for (int j=0; j<militaryTimes.get(i).size(); j++) {
                 LocalTime time = militaryTimes.get(i).get(j); 
                 int hour = time.getHour(); 
-                if (hour>12) {
-                    time.minusHours(12); 
+                if (hour>12) { //ex. if time is 14:30... 
+                    time.minusHours(12); //changes it to 2:30 
                 }
                 currArr.add(time); 
             }
-            standardTimes.add(currArr); 
+            standardTimes.add(currArr); //fills new ArrayList of ArrayLists 
         }
 
         return standardTimes; 
@@ -222,6 +223,7 @@ public class ConsolidateFreesHelperMethod{
     }
 
     public static ArrayList<ArrayList<LocalTime>> convertStandardtoMilitary(ArrayList<ArrayList<LocalTime>> standardTimes ) {
+        //ArrayList of ArrayLists to hold converted times (so that each sub ArrayList holds a start and end time of a free block)
         ArrayList<ArrayList<LocalTime>> militaryTimes = new ArrayList<ArrayList<LocalTime>> (); 
 
         for (int i=0; i<standardTimes.size(); i++) {
@@ -229,12 +231,12 @@ public class ConsolidateFreesHelperMethod{
             for (int j=0; j<standardTimes.get(i).size(); j++) {
                 LocalTime time = standardTimes.get(i).get(j); 
                 int hour = time.getHour(); 
-                if (hour<7) {
-                    time.plusHours(12); 
+                if (hour<7) { //ex. if time is 3:00 (during school)...
+                    time.plusHours(12); //changes it to 15:00
                 }
                 currArr.add(time); 
             }
-            militaryTimes.add(currArr); 
+            militaryTimes.add(currArr); //fills new ArrayList of ArrayLists 
         }
         return militaryTimes; 
 
