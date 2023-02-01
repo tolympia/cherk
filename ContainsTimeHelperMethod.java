@@ -10,32 +10,25 @@ public class ContainsTimeHelperMethod{
         //System.out.println(formatTime(outerStart));
         //System.out.println(formatTime(outerEnd));
     }
-    public static boolean containsTime(String outerTimeStart, String outerTimeEnd, String innerTimeStart, String innerTimeEnd){
-        formatTime(outerTimeStart);
-        formatTime(outerTimeEnd);
-        formatTime(innerTimeStart);
-        formatTime(innerTimeEnd);
-        LocalTime outerStart = LocalTime.parse(outerTimeStart);
-        LocalTime outerEnd = LocalTime.parse(outerTimeEnd); 
-        LocalTime innerStart = LocalTime.parse(innerTimeStart); 
-        LocalTime innerEnd = LocalTime.parse(innerTimeEnd);
+   public static boolean containsTime(LocalTime outerTimeStart, LocalTime outerTimeEnd, LocalTime innerTimeStart, LocalTime innerTimeEnd){
 
-        if (outerStart.isBefore(innerStart) && outerEnd.isAfter(innerEnd)){
-            return true;
-        }
-        else{
-            return false;
-        }
+    if (outerTimeStart.isBefore(innerTimeStart) && outerTimeEnd.isAfter(innerTimeEnd)){
+      return true;
     }
+    else{
+      return false;
+    }
+  }
 
-    public static String formatTime(String time){
-        if (time.length()==5){
-            return time;
-        }
-        else{
-            String newTime = "0" + time;
-            return newTime;
-        }
+  public static String formatTime(String time){
+    if (time.length()==5){
+      return time;
     }
+    else{
+      String newTime = "0" + time;
+      return newTime;
+    }
+  }
 
 }
+
