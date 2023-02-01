@@ -193,7 +193,9 @@ public class ScheduleMaker {
   }
 
   public static String arrayFormat(List<String> proctors){
+    //initalize an empty string to be returned
     String proctorNames = "";
+    //loop through proctor list to format the list of proctors in order to better readability
     for(int i=0; i<proctors.size(); i++){
       proctorNames += proctors.get(i) + ", ";
     }
