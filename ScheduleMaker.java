@@ -102,6 +102,31 @@ public class ScheduleMaker {
     }
     
   
+    public static USSchedule getUSScheduleForDate(LocalDate date) {
+        DayOfWeek day = date.getDayOfWeek();
+
+        USSchedule schedule;
+
+        // Determine if this is an adjusted schedule day.
+        if (USSchedule.adjustedSchedules.containsKey(date)) {
+            String adjustedType = USSchedule.adjustedSchedules.get(date);
+            schedule = new USAdjusted1(date, true);
+        } else {
+            boolean flexDay = day == DayOfWeek.MONDAY || day == DayOfWeek.TUESDAY || day == DayOfWeek.THURSDAY;
+            if (flexDay) {
+                schedule = new USFlexDay(date, true);
+            } else if (day == DayOfWeek.FRIDAY) {
+                schedule = new USFriday(date, true);
+            } else {  // Wed schedule
+                schedule = new USWednesday(date, true);
+            }
+            if (schedule.getDayType() == -1) {
+                // Not a real school day.
+                return null;
+            }
+        }
+        return schedule;
+    }
 
   public static ArrayList<String> getColumns(File f)
     throws FileNotFoundException {
@@ -151,18 +176,16 @@ public class ScheduleMaker {
       //loop through updated teacher list
       for(int r = 0; r<teacherClone.size(); r++){
         //convert free blocks to times on date of exams
-
-        //
-        ///ArrayList<String> freeTime = Arrays.asList(testerTimeConverter();
+        ArrayList<String> freeTime = testerTimeConverter(  );
         
         //if exam contains free blocks - assign teacher to exam in that time
         //convert strings to integers
           //how do i convert if its a range of times
-        ArrayList<ArrayList<String>> combineFrees = ConsolidateFreesHelperMethod.consolidateFrees(teacherClone.get(i), date);
+        ArrayList<ArrayList<String>> combineFrees = consolidateFrees(teacherClone.get(i), date);
         for(int x=0; x<combineFrees.size(); x++){
           String teacherBlockStart = combineFrees.get(x).get(0);
           String teacherBlockEnd = combineFrees.get(x).get(1);
-          if(ContainsTimeHelperMethod.containsTime(startTime, endTime, teacherBlockStart, teacherBlockEnd)){
+          if(containsTime(startTime, endTime, teacherBlockStart, teacherBlockEnd)){
             proctors.add(teacherClone.get(x).getName());
           }
           //remove that time from total time of exam
@@ -195,7 +218,9 @@ public class ScheduleMaker {
   }
 
   public static String arrayFormat(List<String> proctors){
+    //initalize an empty string to be returned
     String proctorNames = "";
+    //loop through proctor list to format the list of proctors in order to better readability
     for(int i=0; i<proctors.size(); i++){
       proctorNames += proctors.get(i) + ", ";
     }
