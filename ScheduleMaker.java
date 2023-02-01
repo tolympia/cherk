@@ -102,6 +102,31 @@ public class ScheduleMaker {
     }
     
   
+    public static USSchedule getUSScheduleForDate(LocalDate date) {
+        DayOfWeek day = date.getDayOfWeek();
+
+        USSchedule schedule;
+
+        // Determine if this is an adjusted schedule day.
+        if (USSchedule.adjustedSchedules.containsKey(date)) {
+            String adjustedType = USSchedule.adjustedSchedules.get(date);
+            schedule = new USAdjusted1(date, true);
+        } else {
+            boolean flexDay = day == DayOfWeek.MONDAY || day == DayOfWeek.TUESDAY || day == DayOfWeek.THURSDAY;
+            if (flexDay) {
+                schedule = new USFlexDay(date, true);
+            } else if (day == DayOfWeek.FRIDAY) {
+                schedule = new USFriday(date, true);
+            } else {  // Wed schedule
+                schedule = new USWednesday(date, true);
+            }
+            if (schedule.getDayType() == -1) {
+                // Not a real school day.
+                return null;
+            }
+        }
+        return schedule;
+    }
 
   public static ArrayList<String> getColumns(File f)
     throws FileNotFoundException {
