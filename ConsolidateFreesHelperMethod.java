@@ -4,6 +4,11 @@ import java.text.SimpleDateFormat;
 
 public class ConsolidateFreesHelperMethod{
     public static void main(String[] args){
+        LocalTime hour5 = LocalTime.of(1, 00, 00,00); 
+        LocalTime hour6 = LocalTime.of(2, 00, 00, 00); 
+        ArrayList<LocalTime> time3 = new ArrayList<LocalTime>(); 
+        time3.add(hour5); 
+        time3.add(hour6);  
         ArrayList<ArrayList<LocalTime>> freesTimes = new ArrayList<ArrayList<LocalTime>>(); 
         LocalTime hour1 = LocalTime.of(9, 00, 00,00); 
         LocalTime hour2 = LocalTime.of(10, 00, 00, 00);  
@@ -15,15 +20,14 @@ public class ConsolidateFreesHelperMethod{
         ArrayList<LocalTime> time2 = new ArrayList<LocalTime>(); 
         time2.add(hour3); 
         time2.add(hour4);  
-        LocalTime hour5 = LocalTime.of(1, 00, 00,00); 
-        LocalTime hour6 = LocalTime.of(2, 00, 00, 00); 
-        ArrayList<LocalTime> time3 = new ArrayList<LocalTime>(); 
-        time3.add(hour5); 
-        time3.add(hour6);  
-        freesTimes.add(time1); 
+        freesTimes.add(time3); 
         freesTimes.add(time2);
-        freesTimes.add(time3);
+        freesTimes.add(time1);
+        convertStandardToMilitary(freesTimes); 
+        convertMilitarytoStandard(freesTimes); 
         sort(freesTimes); 
+
+
     }
 
     public static ArrayList<ArrayList<String>> consolidateFrees(Teacher teacher, String date){
@@ -73,7 +77,6 @@ public class ConsolidateFreesHelperMethod{
     }
 
     public static ArrayList<ArrayList<LocalTime>> sort(ArrayList<ArrayList<LocalTime>> freesTimes){
-        convertStandardTo24(freesTimes); 
         ArrayList<ArrayList<LocalTime>> sortedTimes = new ArrayList<ArrayList<LocalTime>>(); 
         
         while (freesTimes.size()>0) {
@@ -97,27 +100,48 @@ public class ConsolidateFreesHelperMethod{
         return sortedTimes; 
     }
 
-    //can I just hard code it so it can deal with times 1, 2, 3, 4 ?
-    public static ArrayList<ArrayList<LocalTime>> convertStandardTo24(ArrayList<ArrayList<LocalTime>> standardTimes) {
+    //unused 
+    public static ArrayList<ArrayList<LocalTime>> convertStandardToMilitary(ArrayList<ArrayList<LocalTime>> standardTimes) {
         ArrayList<ArrayList<LocalTime>> militaryTimes = new ArrayList<ArrayList<LocalTime>>(); 
 
         for (int i = 0; i<standardTimes.size(); i++) {
-            for (int j = 0; j<standardTimes.get(0).size(); j++) {;
+            ArrayList<LocalTime> currArr = new ArrayList<LocalTime>();
+            for (int j = 0; j<standardTimes.get(i).size(); j++) {
                 LocalTime currTime = standardTimes.get(i).get(j); 
-                int hour = currTime.getHour(); 
+                int hour = currTime.getHour();
                 if (hour<7) {
-                    militaryTimes.get(i).add(currTime.plusHours(12));
+                    currArr.add(currTime.plusHours(12)); 
                 }
                 else {
-                    militaryTimes.get(i).add(currTime); 
+                    currArr.add(currTime); 
                 }
             }
+            militaryTimes.add(currArr); 
         }
+        System.out.println(militaryTimes); 
         return militaryTimes; 
     }
 
-    public static ArrayList<ArrayList<LocalTime>> convert24ToStandard(ArrayList<ArrayList<LocalTime>> militaryTimes) {
+    public static ArrayList<ArrayList<LocalTime>> convertMilitarytoStandard(ArrayList<ArrayList<LocalTime>> miltaryTimes) {
         ArrayList<ArrayList<LocalTime>> standardTimes = new ArrayList<ArrayList<LocalTime>>(); 
+
+        for (int i = 0; i<miltaryTimes.size(); i++) {
+            ArrayList<LocalTime> currArr = new ArrayList<LocalTime>();
+            for (int j = 0; j<miltaryTimes.get(i).size(); j++) {
+                LocalTime currTime = miltaryTimes.get(i).get(j); 
+                int hour = currTime.getHour();
+                if (hour>12) {
+                    currArr.add(currTime.minusHours(12)); 
+                }
+                else {
+                    currArr.add(currTime); 
+                }
+            }
+            standardTimes.add(currArr); 
+        }
+        System.out.println(standardTimes); 
         return standardTimes; 
     }
+
+    
 }
