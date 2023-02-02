@@ -271,7 +271,7 @@ public class ScheduleMaker {
            LocalTime time1End = timeFrame1.get(1);
            LocalTime time2Start = timeFrame2.get(0);
 
-           ArrayList<String> newTimeBlock = new ArrayList<>();
+           ArrayList<LocalTime> newTimeBlock = new ArrayList<>();
            if(time2Start.minusMinutes(11).isBefore(time1End)){ //if we want to consolidate adjacent blocks
                newTimeBlock.add(timeFrame1.get(0));
                newTimeBlock.add(timeFrame2.get(1));
