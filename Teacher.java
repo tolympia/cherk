@@ -14,7 +14,6 @@ public class Teacher extends ScheduleMaker {
         this.name = (instanceVars.get(0)).get(0);
         this.department = instanceVars.get(1); 
         this.freePeriods = instanceVars.get(2); 
-        this.examsProctored = 0; 
     }
 
     //function to return the name of the teacher
