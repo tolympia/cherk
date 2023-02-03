@@ -32,12 +32,26 @@ helped us convert between 12 hour and 24 hour time. Our file contains time in th
 ##### sort
 takes a list of LocalTime objecta and puts them in order because, again, computers don't intrinsically know the order time occurs. 
 
+##### generateListOfObjects
 
+##### consolidateFrees
 
+##### blocksToTimes
+
+##### getColumns
+
+##### removeTeacher
+
+##### arrayFormat
+
+##### freesTimes
+
+##### getTimeFromBlockAndDate
+
+##### getUSScheduleForDate
 
 
 #### Main Methods
-##### generateListsOfObjects 
 
 ##### matchUp
 Using the output from generateListsOfObjects(), matchUp() was used in order to create a map, holding the keys as Strings, which are examNames, and values as ArrayLists of Strings, which are a list of proctors. In order to do this, we first initialize an empty map with Strings as keys, and ArrayLists of Strings as values. Then, created an outer loop, that would loop through the exam objects, in order to look at each exam individually. Within this loop, we then cloned the list of teacher objects, in order to be able to edit this list of each specific exam, without altering the main list. Then we stored the date, department, and time of the exam, in order to be used later. After this, we decided to loop through the cloned list of teachers and remove all teachers that are in the same department as the department of the exam. Then, after this loop, we are going to loop through the newly updated teacher list, and first use the consildateFrees() to consolidate the frees and convert them to LocalTime objects and return an ArrayList of ArrayLists of Strings. This will hold both the start time and end time of each group of frees for the teacher that is being looked at. Then, once this list is made, we used the helper method containsTime() in order to determine if a teacher’s free block(s) are contained in the exam time, meaning they are able to proctor at least part of this exam. Then, this time is removed from the total exam time. For example, if Ms. Z is free from 10am - 12pm, and the exam time is 10am - 1pm, by removing the time Ms. Z is proctoring, the new exam time that we must find a proctor for is 12pm-1pm. This loop will continue until the teacher cannot proctor another time, and will move onto the next exam once there is no remaining time left to be proctored for this exam. Finally, once the proctors are determined for an exam, the name and the list of proctors will be added to the map that was initialized at the beginning of the function, and this map will eventually be returned. 
