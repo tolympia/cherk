@@ -221,6 +221,7 @@ public class ScheduleMaker {
     }
   }
 
+  //formats time "7:59" as "07:59" which is the proper format for input for localTime objects
   public static String formatTime(String time){
     if (time.length()==5){
       return time;
