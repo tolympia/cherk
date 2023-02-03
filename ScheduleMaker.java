@@ -160,12 +160,11 @@ public class ScheduleMaker {
       LocalTime outerTimeStart = LocalTime.parse(formatTime(startTime));
       LocalTime outerTimeEnd = LocalTime.parse(formatTime(endTime));
       //check and see if any of the teachers are in the same department as exam and remove if they do
-      for(int j=0; j<teacherClone.size(); j++){
+      for(int j = teacherClone.size()-1; j >= 0; j--){
         List<String> departments = teacherClone.get(j).getDepartment();
         for(int c =0; c<departments.size(); c++){
           if(department == departments.get(c)){
             teacherClone.remove(j);
-            j--;
           }
         }
       }
@@ -175,18 +174,20 @@ public class ScheduleMaker {
         //convert strings to integers
           //how do i convert if its a range of times
         ArrayList<ArrayList<LocalTime>> combineFrees = consolidateFrees(teacherClone.get(i), date);
+
         for(int x=0; x < combineFrees.size(); x++){
           LocalTime teacherBlockStart = combineFrees.get(x).get(0); //get start time of combined frees for given teacher
           LocalTime teacherBlockEnd = combineFrees.get(x).get(1);
-          if(containsTime(outerTimeStart, outerTimeEnd, teacherBlockStart, teacherBlockEnd)){
 
-            proctors.add(teacherClone.get(x).getName());
+          if(containsTime(outerTimeStart, outerTimeEnd, teacherBlockStart, teacherBlockEnd)){
+            proctors.add(teacherClone.get(r).getName());
           }
           //remove that time from total time of exam
           //robyn to make remove time method
         }
       }
       //add name of exam and proctors to map
+      System.out.println(proctors);
       examSchedule.put(examList.get(i).getName(), proctors);
     }
     return examSchedule;
@@ -199,12 +200,8 @@ public class ScheduleMaker {
     //create new file with printsteram
     PrintStream p = new PrintStream("ApExamProctorSchedule.csv");
     //print headers into the csv 
-    p.println("AP Exam" + "Exam Date" + "Exam Start Time" + "Exam End Time" + "Proctors");
+    p.println("AP Exam," + "Exam Date," + "Exam Start Time," + "Exam End Time," + "Proctors");
     //loop through map to print to csv
-
-    System.out.println(proctorMap);
-
-    System.out.println(examList.size());
 
 
     for(int i=0; i<examList.size(); i++){
@@ -214,7 +211,7 @@ public class ScheduleMaker {
       List<String> proctorNames = proctorMap.get(exam.getName());
 
       String proctors = arrayFormat(proctorNames);
-      p.println(exam.getName() + exam.getDate() + exam.getStartTime() + exam.getEndTime() + proctors);
+      p.println(exam.getName() + "," + exam.getDate() + "," + exam.getStartTime() + "," + exam.getEndTime() + "," + proctors);
     }
     p.close();
   }
