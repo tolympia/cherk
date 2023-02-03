@@ -35,10 +35,13 @@ takes a list of LocalTime objecta and puts them in order because, again, compute
 ##### generateListOfObjects
 
 ##### consolidateFrees
+CASS EXPLAIN THIS
 
 ##### containsTime
+CASS EXPLAIN THIS
 
-##### blocksToTimes
+##### getTimeFromBlockAndDate 
+CASS EXPLAIN THIS
 
 ##### getColumns
 
@@ -49,10 +52,8 @@ This helper method is used in the main writeIn function, in order to correctly f
 
 ##### freesTimes
 
-##### getTimeFromBlockAndDate
-
 ##### getUSScheduleForDate
-
+CASS EXPlAIN THIS
 
 #### Main Methods
 
