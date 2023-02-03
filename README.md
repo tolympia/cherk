@@ -3,6 +3,10 @@
 ## Process
 #### Arriving at our idea
 #### Doing research
+
+##### DateTime Library
+Originally we wanted to avoid using to many Java API's. These are packages that contain prewritten code that we can implement in our projects. However, reaserching these packages contain time, and we wanted to focus more on the actual planning and coding part. However, we needed to use the DateTime library when coding our project. 
+
 #### Creating big goals and outlining 
 #### Execution
 ### Program Goals/Design
