@@ -26,9 +26,11 @@ The primary goal of our project was to make Ms. Berman and our AP teachers' live
 
 #### Helper Methods
 
-##### convertStandardtoMilitary and convertMilitaryToStandard: helped us convert between 12 hour and 24 hour time. Our file contains time in the 12 hour format because that is what we use day-to-day, but converting it into military time makes it easier for our code to compare times are before and after each other. We intrinsically distinguish between a.m. and p.m., but our coumputers don't. 
+##### convertStandardtoMilitary and convertMilitaryToStandard
+helped us convert between 12 hour and 24 hour time. Our file contains time in the 12 hour format because that is what we use day-to-day, but converting it into military time makes it easier for our code to compare times are before and after each other. We intrinsically distinguish between a.m. and p.m., but our coumputers don't. 
 
-##### sort: takes a list of LocalTime objecta and puts them in order because, again, computers don't intrinsically know the order time occurs. 
+##### sort
+takes a list of LocalTime objecta and puts them in order because, again, computers don't intrinsically know the order time occurs. 
 
 
 
