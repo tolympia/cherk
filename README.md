@@ -1,7 +1,10 @@
 # CHERK readme
 ## Introduction
 Each spring, the College Board administers a set of AP Exams to test students' knowledge in various subject areas. Here at GA, we offer many AP classes, and scheduling the exams is a difficult and tedious process. There are many moving parts, such as coordinating times proctors are free with the times of the exams. We wanted to help simplify this process, and we feel that our code can benefit multiple users. 
+
 ## Process
+We used a Google spreadsheet to manage our tasks. We thought of our code broadly at first, outlining larger tasks that we wanted our code to execute and breaking it down into smaller parts. This top-down design helped us better organize and plan out our code and allowed us to better understand what exactly we were trying to accomplish. We then wrote out an algorithm for segments of code, which detailed the steps we would take to accomplish a task. Writing out algortithms made the coding itself more manageable and less confusing. While writing the algorithms for the main chunks of our code we also identified possible helper methods, or pieces of code that were used multiple times across our programs that we could write into a method to reuse and therefore simplify our code. By planning out our code very carefully, our process was very efficient. However, we remained flexible, and we would change our spreasheet plan depending on our circumstances. For example, we realized that code used to scan both the exam file and teacher files were similar, so instead of writing two seperate methods we combined them into one. By having a well structured and organized plan but also remaining adaptible, we were able to plan our project efficiently. 
+
 #### Arriving at our idea
 
 #### Doing research
