@@ -6,42 +6,12 @@ import java.time.format.DateTimeFormatter;
 
 public class ConsolidateFreesHelperMethod{
     public static void main(String[] args){
-        ArrayList<ArrayList<LocalTime>> freesTimes = new ArrayList<ArrayList<LocalTime>>(); 
-        LocalTime hour1 = LocalTime.parse(formatTime("8:30"));
-        LocalTime hour2 = LocalTime.parse(formatTime("9:00"));
-        LocalTime hour3 = LocalTime.parse(formatTime("10:00"));
-        LocalTime hour4 = LocalTime.parse(formatTime("12:00"));
-        LocalTime hour5 = LocalTime.parse(formatTime("9:30"));
-        LocalTime hour6 = LocalTime.parse(formatTime("1:00"));
-        LocalTime hour7 = LocalTime.parse(formatTime("1:00"));
-        LocalTime hour8 = LocalTime.parse(formatTime("3:00"));
-
-        ArrayList<LocalTime> block1 = new ArrayList<>();
-        block1.add(hour1);
-        block1.add(hour2);
-        ArrayList<LocalTime> block2 = new ArrayList<>();
-        block2.add(hour3);
-        block2.add(hour4);
-        ArrayList<LocalTime> block3 = new ArrayList<>();
-        block3.add(hour5);
-        block3.add(hour6);
-        ArrayList<LocalTime> block4 = new ArrayList<>();
-        block4.add(hour7);
-        block4.add(hour8);
-
-
-        freesTimes.add(block1);
-        freesTimes.add(block2);
-        freesTimes.add(block3);
-        freesTimes.add(block4);
-
-        sort(freesTimes); 
 
         ArrayList<ArrayList<String>> teacher = new ArrayList<ArrayList<String>>();
 
-        ArrayList<String> arr1 = new ArrayList(Arrays.asList("Ms z"));
-        ArrayList<String> arr2 = new ArrayList(Arrays.asList("compsci"));
-        ArrayList<String> arr3 = new ArrayList(Arrays.asList("A", "B", "C"));
+        ArrayList<String> arr1 = new ArrayList<String> (Arrays.asList("Ms z"));
+        ArrayList<String> arr2 = new ArrayList<String> (Arrays.asList("compsci"));
+        ArrayList<String> arr3 = new ArrayList<String> (Arrays.asList("A", "B", "C"));
 
         teacher.add(arr1);
         teacher.add(arr2);
@@ -56,13 +26,11 @@ public class ConsolidateFreesHelperMethod{
     }
 
     public static ArrayList<ArrayList<LocalTime>> consolidateFrees(Teacher teacher, String date){
-
-
-
-        //System.out.println(freesOnDay);
         
-        List<String> frees = teacher.getFreePeriods(); //WHERE IS GETFREEPERIODS LOCATED
+        List<String> frees = teacher.getFreePeriods(); 
         List <String> freesOnDay = new ArrayList<String>();
+
+        //if the block happens on that day and the teacher is free
         if ((getTimeFromBlockAndDate("A", date)!=null) && (frees.contains("A"))){
             freesOnDay.add("A");
         }
@@ -85,10 +53,6 @@ public class ConsolidateFreesHelperMethod{
             freesOnDay.add("G");
         } 
 
-        // System.out.println(freesOnDay);
-        // System.out.println("*");
-
-
         ArrayList<ArrayList<LocalTime>> freesTimes = new ArrayList<ArrayList<LocalTime>>();
         for (int i=0; i < frees.size() ; i++){
             ArrayList<LocalTime> startAndEnd = getTimeFromBlockAndDate(frees.get(i), date);
@@ -98,10 +62,8 @@ public class ConsolidateFreesHelperMethod{
             }
         }
 
-        //System.out.println(freesTimes);
-        //System.out.println("$");
+
         //arraylist of arraylist of start and end times for the frees the teacher has that day
-    
         ArrayList<ArrayList<LocalTime>> timesInOrder = new ArrayList<ArrayList<LocalTime>>();//using robyn's sort helper methods
         timesInOrder = sort(freesTimes);
         //sorting the blocks in order of occurrance by time
@@ -109,21 +71,15 @@ public class ConsolidateFreesHelperMethod{
         ArrayList<ArrayList<LocalTime>> consolidatedFrees = new ArrayList<ArrayList<LocalTime>>();
         //the arraylist of arraylist of localtime objects that i will ultimately return
 
-        //System.out.println(timesInOrder.size());
         
         for (int i=1; i<timesInOrder.size(); i++){
             ArrayList<LocalTime> timeFrame1 = timesInOrder.get(i-1);
-            //System.out.println(timeFrame1);
 
             ArrayList<LocalTime> timeFrame2 = timesInOrder.get(i);
-            //System.out.println(timeFrame2);
 
             LocalTime time1End = timeFrame1.get(1);
-            //System.out.println(time1End);
-
 
             LocalTime time2Start = timeFrame2.get(0);
-            //System.out.println(time2Start);
 
             ArrayList<LocalTime> newTimeBlock = new ArrayList<LocalTime>();
             if(time2Start.minusMinutes(11).isBefore(time1End)){ //if we want to consolidate adjacent blocks
@@ -164,7 +120,7 @@ public class ConsolidateFreesHelperMethod{
         }
     
         convertMilitaryToStandard(sortedTimes); 
-        //System.out.println(sortedTimes); 
+
         return sortedTimes; 
     }
 
@@ -197,10 +153,6 @@ public class ConsolidateFreesHelperMethod{
             } else {  // Wed schedule
                 s = "wednesday";
             }
-            // if (schedule.getDayType() == -1) {
-            //     // Not a real school day.
-            //     s = "";
-            // }
         }
         return s;
     }
@@ -210,13 +162,10 @@ public class ConsolidateFreesHelperMethod{
     public static ArrayList<LocalTime> getTimeFromBlockAndDate(String blockName, String date) {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
-        //formatter = formatter.withLocale(Locale.US);
         // Convert date to a Date object.
 
         //String pattern = "MM-dd-yyyy";
-        //SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-
-        LocalDate dateObject = LocalDate.parse(date, formatter);
+         LocalDate dateObject = LocalDate.parse(date, formatter);
         // Get schedule for this date.
         USSchedule schedule;
         // Get list of block names.
@@ -238,7 +187,7 @@ public class ConsolidateFreesHelperMethod{
 
             if (schedule.getDayType() == -1) {
                 // Not a real school day.
-                return null;
+                return null; //return nothing, not a real school day
             }
         }
 
@@ -309,20 +258,10 @@ public class ConsolidateFreesHelperMethod{
         //ArrayList of ArrayLists to hold converted times (so that each sub ArrayList holds a start and end time of a free block)
         ArrayList<ArrayList<LocalTime>> militaryTimes = new ArrayList<ArrayList<LocalTime>> (); 
 
-        //System.out.println("miltime");
-
         for (int i=0; i<standardTimes.size(); i++) {
             ArrayList<LocalTime> currArr = new ArrayList<LocalTime>(); 
 
-            //System.out.println(standardTimes.get(i).size());
-
-
             for (int j=0; j<standardTimes.get(i).size(); j++) {
-                // if (standardTimes.get(i).get(j) == null){
-                //     continue;
-                // }
-                //System.out.println(i + "" + j);
-
                 LocalTime time = standardTimes.get(i).get(j); 
                 int hour = time.getHour(); 
                 if (hour<7) { //ex. if time is 3:00 (during school)...
