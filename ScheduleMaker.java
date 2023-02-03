@@ -112,6 +112,8 @@ public class ScheduleMaker {
   public static Map<String, List<String>> matchUp(List<Teacher> teacherList, List<APExam> examList){
     //initalize map to hold name of exam and list of proctors
     Map<String, List<String>> examSchedule = new HashMap<String, List<String>>();
+    System.out.println(examList);
+    System.out.println(teacherList);
     //loop through exam list
     for(int i=0; i<examList.size(); i++){
       ArrayList<String> proctors = new ArrayList<>();
@@ -127,6 +129,8 @@ public class ScheduleMaker {
       String endTime = examList.get(i).getEndTime();
       LocalTime outerTimeStart = LocalTime.parse(formatTime(startTime));
       LocalTime outerTimeEnd = LocalTime.parse(formatTime(endTime));
+
+      
       //check and see if any of the teachers are in the same department as exam and remove if they do
       for(int j = teacherClone.size()-1; j >= 0; j--){
         List<String> departments = teacherClone.get(j).getDepartment();
@@ -136,6 +140,8 @@ public class ScheduleMaker {
           }
         }
       }
+
+      System.out.println(teacherClone);
       //loop through updated teacher list
       for(int r = 0; r<teacherClone.size(); r++){
         //if exam contains free blocks - assign teacher to exam in that time
@@ -143,19 +149,29 @@ public class ScheduleMaker {
           //how do i convert if its a range of times
         ArrayList<ArrayList<LocalTime>> combineFrees = consolidateFrees(teacherClone.get(i), date);
 
+        System.out.println(combineFrees);
+
+
         for(int x=0; x < combineFrees.size(); x++){
           LocalTime teacherBlockStart = combineFrees.get(x).get(0); //get start time of combined frees for given teacher
           LocalTime teacherBlockEnd = combineFrees.get(x).get(1);
+
+          System.out.println(outerTimeStart);
+          System.out.println(outerTimeEnd);
+          System.out.println(teacherBlockStart);
+          System.out.println(teacherBlockEnd);
 
           if(containsTime(outerTimeStart, outerTimeEnd, teacherBlockStart, teacherBlockEnd)){
             proctors.add(teacherClone.get(r).getName());
           }
           //remove that time from total time of exam
           //robyn to make remove time method
+
+
         }
       }
       //add name of exam and proctors to map
-      System.out.println(proctors);
+      //System.out.println(proctors);
       examSchedule.put(examList.get(i).getName(), proctors);
     }
     return examSchedule;
@@ -170,17 +186,17 @@ public class ScheduleMaker {
     //print headers into the csv 
     p.println("AP Exam," + "Exam Date," + "Exam Start Time," + "Exam End Time," + "Proctors");
     //loop through map to print to csv
-
-
     for(int i=0; i<examList.size(); i++){
+      //get AP exam object (to get date, time, and name)
       APExam exam = examList.get(i);
-      //how do i use .getDate() and .getTime() for specific AP exams
-      
+      //create list of proctor names (get value from map by using the exam name)      
       List<String> proctorNames = proctorMap.get(exam.getName());
-
+      //call formatArray helper method to get the correct formatting of proctor names to print to .csv
       String proctors = arrayFormat(proctorNames);
+      //print exam name, date, start time, end time, and proctor list (created with arrayFormat helper method)
       p.println(exam.getName() + "," + exam.getDate() + "," + exam.getStartTime() + "," + exam.getEndTime() + "," + proctors);
     }
+    //close printstream
     p.close();
   }
 
@@ -189,13 +205,14 @@ public class ScheduleMaker {
     String proctorNames = "";
     //loop through proctor list to format the list of proctors in order to better readability
     for(int i=0; i < proctors.size(); i++){
+      //add commas in between each element and concatenate to proctorNames var
       proctorNames += proctors.get(i) + ", ";
     }
     return proctorNames;
   }
 
   public static boolean containsTime(LocalTime outerTimeStart, LocalTime outerTimeEnd, LocalTime innerTimeStart, LocalTime innerTimeEnd){
-
+    // I will add overlap - Kathryn
     if (outerTimeStart.isBefore(innerTimeStart) && outerTimeEnd.isAfter(innerTimeEnd)){
       return true;
     }
@@ -302,7 +319,7 @@ public class ScheduleMaker {
       }
     
       convertMilitaryToStandard(sortedTimes); 
-      System.out.println(sortedTimes); 
+      //System.out.println(sortedTimes); 
        return sortedTimes; 
    }
 
