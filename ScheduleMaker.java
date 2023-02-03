@@ -212,7 +212,7 @@ public class ScheduleMaker {
   }
 
   public static boolean containsTime(LocalTime outerTimeStart, LocalTime outerTimeEnd, LocalTime innerTimeStart, LocalTime innerTimeEnd){
-    // I will add overlap - Kathryn
+    //if the first time block start is before or equal to seocnd time start and first time end is after or equal to second time end thenb return true
     if (outerTimeStart.isBefore(innerTimeStart) && outerTimeEnd.isAfter(innerTimeEnd)){
       return true;
     }
