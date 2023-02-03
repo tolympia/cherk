@@ -114,9 +114,11 @@ public class ScheduleMaker {
     Map<String, List<String>> examSchedule = new HashMap<String, List<String>>();
     //loop through exam list
     for(int i=0; i<examList.size(); i++){
+      //initalize empty ArrayList to hold the proctors for a specific exam
       ArrayList<String> proctors = new ArrayList<>();
-      //clone teacher list
+      //initalize a cloned teacher list
       ArrayList<Teacher> teacherClone = new ArrayList<Teacher>();
+      //loop to add all elements from teacher list to teacherClone list
       for(int y=0; y<teacherList.size(); y++){
         teacherClone.add(teacherList.get(y));
       }
@@ -125,14 +127,23 @@ public class ScheduleMaker {
       String date = examList.get(i).getDate();
       String startTime = examList.get(i).getStartTime();
       String endTime = examList.get(i).getEndTime();
+
+      //store start time of exam and end time of exam as LocalTime objects
       LocalTime outerTimeStart = LocalTime.parse(formatTime(startTime));
       LocalTime outerTimeEnd = LocalTime.parse(formatTime(endTime));
+
       //check and see if any of the teachers are in the same department as exam and remove if they do
+        //loop through teacherClone list
       for(int j = teacherClone.size()-1; j >= 0; j--){
+        //get list of departments (teacher could be in more than one department) - need to check each
         List<String> departments = teacherClone.get(j).getDepartment();
+        //loop through department list
         for(int c =0; c<departments.size(); c++){
+          //if department of teacher matches the department of exam
           if(department == departments.get(c)){
+            //remove teacher from list
             teacherClone.remove(j);
+            j--;
           }
         }
       }
