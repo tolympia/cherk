@@ -16,6 +16,9 @@ The primary goal of our project was to make Ms. Berman and our AP teachers' live
 ### Methods
 ### Challenges
 
+#### Different Branches
+In the beginning of our programming portion, we ended up being on different branches of GitHub, with some of us on one branch and some on the other. This might be beneficial in other cases, but in our case it is not. Being on different branches meant we were essentially in two different workplaces, and our files were in two seperate places. Luckily, we managed to get on the same branch by having our teacher delete one brance and make the ofhter branch the default branch, which allower all of our files and commits to be seen in one place. 
+
 #### Ms. Zhu's code
 We ran into some problems when trying to implement our teachers code. Her code allowed us to enter in a letter block and a date and receive the start and end time of the block. However, in some of our methods we needed the block schedule with corresponding times for the entire day, not just for one block. Different days of the week have different schedules, and it was important to know the days schedule for our code to work as planned. Our teacher made code to do this, but:
 1. it was an abstract class, meaning we could not make instances of the schedule, or in other words, it did not allow us to create a block schedule as we had hoped.
