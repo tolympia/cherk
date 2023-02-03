@@ -12,9 +12,6 @@ public class ScheduleMaker {
 
   makeSchedule(files);
 
-
-
-
   }
 
   public static void makeSchedule(ArrayList<File> files)throws FileNotFoundException{
@@ -25,17 +22,6 @@ public class ScheduleMaker {
     generateListsOfObjects(files, examObjects, teacherObjects);
 
     ArrayList<String> teacherNames = new ArrayList<String>();
-
-    //  for (APExam exam : examObjects) {
-    //   System.out.println(exam);
-    // }
-    // for (Teacher teacher : teacherObjects) {
-    //   System.out.println(teacher);
-    // }
-
-    // for (int i = 0; i < teacherObjects.size(); i++){
-    //   teacherNames.add(teacherObjects.get(i).getName());
-    // }
 
     Map<String, List<String>> proctorsAndExams = new HashMap<String, List<String>>(); 
     proctorsAndExams = matchUp(teacherObjects, examObjects);
@@ -122,28 +108,12 @@ public class ScheduleMaker {
         
         //we need to figure out if we can use getUSScheduleForDate method 
     }
-    
-
-  // public static ArrayList<String> getColumn(File f, String category)
-  //   throws FileNotFoundException {
-  //   Scanner fileScan = new Scanner(f); //new scanner
-
-  //   String[] firstLineArr = fileScan.nextLine().split(","); //assumes first line is header, grabs it and splits it by comma
-
-  //   ArrayList<String> headers = new ArrayList<>(Arrays.asList(firstLineArr)); //make firstLineArr an array list
-
-  //   fileScan.close();
-
-  //   return headers;
-  // }
-
-  // to be implemented in matchUp()
-  // is this necessary? Isn't it easier to just remove a teacher the way it is currently being done in matchup
-
 
   public static Map<String, List<String>> matchUp(List<Teacher> teacherList, List<APExam> examList){
     //initalize map to hold name of exam and list of proctors
     Map<String, List<String>> examSchedule = new HashMap<String, List<String>>();
+    System.out.println(examList);
+    System.out.println(teacherList);
     //loop through exam list
     for(int i=0; i<examList.size(); i++){
       ArrayList<String> proctors = new ArrayList<>();
@@ -159,7 +129,10 @@ public class ScheduleMaker {
       String endTime = examList.get(i).getEndTime();
       LocalTime outerTimeStart = LocalTime.parse(formatTime(startTime));
       LocalTime outerTimeEnd = LocalTime.parse(formatTime(endTime));
+
       LocalTime totalExamTime = outerTimeEnd.minusMinutes(outerTimeStart); 
+
+
       //check and see if any of the teachers are in the same department as exam and remove if they do
       for(int j = teacherClone.size()-1; j >= 0; j--){
         List<String> departments = teacherClone.get(j).getDepartment();
@@ -169,6 +142,8 @@ public class ScheduleMaker {
           }
         }
       }
+
+      System.out.println(teacherClone);
       //loop through updated teacher list
       for(int r = 0; r<teacherClone.size(); r++){
         //if exam contains free blocks - assign teacher to exam in that time
@@ -176,10 +151,18 @@ public class ScheduleMaker {
           //how do i convert if its a range of times
         ArrayList<ArrayList<LocalTime>> combineFrees = consolidateFrees(teacherClone.get(i), date);
 
+        System.out.println(combineFrees);
+
+
         for(int x=0; x < combineFrees.size(); x++){
           LocalTime teacherBlockStart = combineFrees.get(x).get(0); //get start time of combined frees for given teacher
           LocalTime teacherBlockEnd = combineFrees.get(x).get(1);
           LocalTime totalTeacherFreeTime = teacherBlockEnd.minusMinutes(teacherBlockStart); 
+
+          System.out.println(outerTimeStart);
+          System.out.println(outerTimeEnd);
+          System.out.println(teacherBlockStart);
+          System.out.println(teacherBlockEnd);
 
           if(containsTime(outerTimeStart, outerTimeEnd, teacherBlockStart, teacherBlockEnd)){
             proctors.add(teacherClone.get(r).getName());
@@ -189,12 +172,18 @@ public class ScheduleMaker {
             }
           }
           //remove that time from total time of exam
+<<<<<<< HEAD
           //condition to remove time from overall time
           
+=======
+          //robyn to make remove time method
+
+
+>>>>>>> 980258432693a0ecbe9f929ba906c11e9671da0d
         }
       }
       //add name of exam and proctors to map
-      System.out.println(proctors);
+      //System.out.println(proctors);
       examSchedule.put(examList.get(i).getName(), proctors);
     }
     return examSchedule;
@@ -209,17 +198,17 @@ public class ScheduleMaker {
     //print headers into the csv 
     p.println("AP Exam," + "Exam Date," + "Exam Start Time," + "Exam End Time," + "Proctors");
     //loop through map to print to csv
-
-
     for(int i=0; i<examList.size(); i++){
+      //get AP exam object (to get date, time, and name)
       APExam exam = examList.get(i);
-      //how do i use .getDate() and .getTime() for specific AP exams
-      
+      //create list of proctor names (get value from map by using the exam name)      
       List<String> proctorNames = proctorMap.get(exam.getName());
-
+      //call formatArray helper method to get the correct formatting of proctor names to print to .csv
       String proctors = arrayFormat(proctorNames);
+      //print exam name, date, start time, end time, and proctor list (created with arrayFormat helper method)
       p.println(exam.getName() + "," + exam.getDate() + "," + exam.getStartTime() + "," + exam.getEndTime() + "," + proctors);
     }
+    //close printstream
     p.close();
   }
 
@@ -228,13 +217,14 @@ public class ScheduleMaker {
     String proctorNames = "";
     //loop through proctor list to format the list of proctors in order to better readability
     for(int i=0; i < proctors.size(); i++){
+      //add commas in between each element and concatenate to proctorNames var
       proctorNames += proctors.get(i) + ", ";
     }
     return proctorNames;
   }
 
   public static boolean containsTime(LocalTime outerTimeStart, LocalTime outerTimeEnd, LocalTime innerTimeStart, LocalTime innerTimeEnd){
-
+    // I will add overlap - Kathryn
     if (outerTimeStart.isBefore(innerTimeStart) && outerTimeEnd.isAfter(innerTimeEnd)){
       return true;
     }
@@ -243,6 +233,7 @@ public class ScheduleMaker {
     }
   }
 
+  //formats time "7:59" as "07:59" which is the proper format for input for localTime objects
   public static String formatTime(String time){
     if (time.length()==5){
       return time;
@@ -255,8 +246,10 @@ public class ScheduleMaker {
 
   public static ArrayList<ArrayList<LocalTime>> consolidateFrees(Teacher teacher, String date){
         
-      List<String> frees = teacher.getFreePeriods(); //WHERE IS GETFREEPERIODS LOCATED
-      List <String> freesOnDay = new ArrayList<String>();
+      List<String> frees = teacher.getFreePeriods(); //getting the free periods of the teacher and storing them in frees
+
+      //getting the frees that occur on the input date 
+      List <String> freesOnDay = new ArrayList<String>();//storing them in an arraylist 
       if (getTimeFromBlockAndDate("A", date)!=null){
           freesOnDay.add("A");
        }
@@ -280,110 +273,85 @@ public class ScheduleMaker {
       } 
       //Adding all of the frees occur on that day
       
-      for (int i=0; i < frees.size(); i++){
+      for (int i=0; i < frees.size(); i++){//removing the frees that the teacher doesn't have 
           if (!freesOnDay.contains(frees.get(i))){
               frees.remove(frees.get(i));
            }
       }
-       //removing the frees that the teacher doesn't have 
 
-       ArrayList<ArrayList<LocalTime>> freesTimes = new ArrayList<ArrayList<LocalTime>>();
+       ArrayList<ArrayList<LocalTime>> freesTimes = new ArrayList<ArrayList<LocalTime>>(); 
+       //creating an arraylist of arraylists of localtime objects to store the starta nd end time of each free block the teacher has on that day
        for (int i=0; i < frees.size() ; i++){
            ArrayList<LocalTime> startAndEnd = getTimeFromBlockAndDate(frees.get(i), date);
           freesTimes.add(startAndEnd);
        }
-       //arraylist of arraylist of start and end times for the frees the teacher has that day
     
-       ArrayList<ArrayList<LocalTime>> timesInOrder = sort(freesTimes);//using robyn's sort elper methodsw
-       //sorting the blocks in order of occurrance by time
-       ArrayList<ArrayList<LocalTime>> consolidatedFrees = new ArrayList<ArrayList<LocalTime>>();
-      //the arraylist of arraylist of localtime objects that i will ultimately return
+       ArrayList<ArrayList<LocalTime>> timesInOrder = sort(freesTimes);//sorting free blocks the teacher has in order of time (because G can be before A)
+       ArrayList<ArrayList<LocalTime>> consolidatedFrees = new ArrayList<ArrayList<LocalTime>>();//the arraylist of arraylist of localtime objects that i will ultimately return
       for (int i=1; i<timesInOrder.size()-1; i++){
           ArrayList<LocalTime> timeFrame1 = timesInOrder.get(i-1);
-           ArrayList<LocalTime> timeFrame2 = timesInOrder.get(i);
-           LocalTime time1End = timeFrame1.get(1);
-           LocalTime time2Start = timeFrame2.get(0);
-
-           ArrayList<LocalTime> newTimeBlock = new ArrayList<>();
-           if(time2Start.minusMinutes(11).isBefore(time1End)){ //if we want to consolidate adjacent blocks
-               newTimeBlock.add(timeFrame1.get(0));
-               newTimeBlock.add(timeFrame2.get(1));
-           }
-           else{
-              newTimeBlock.add(timeFrame1.get(0)); //we want the first block to remain the same and now comapare the second block to the third
-               newTimeBlock.add(time1End);
-           }
-           consolidatedFrees.add(newTimeBlock);
-           //adding localtime objects for new consolidated time block to arralist
+          ArrayList<LocalTime> timeFrame2 = timesInOrder.get(i);
+          LocalTime time1End = timeFrame1.get(1);
+          LocalTime time2Start = timeFrame2.get(0);
+          //getting all of the localtime objects for start and end of two time blocks being compared
+          ArrayList<LocalTime> newTimeBlock = new ArrayList<>();//consolidated time block if consolidation needs to occur
+          if(time2Start.minusMinutes(11).isBefore(time1End)){ //if we want to consolidate adjacent blocks
+            newTimeBlock.add(timeFrame1.get(0));//new block start = first block start
+            newTimeBlock.add(timeFrame2.get(1));//new block end = second block end 
+          }
+          else{
+            newTimeBlock.add(timeFrame1.get(0)); //we want the first block to remain the same and now comapare the second block to the third
+            newTimeBlock.add(time1End);
+          }
+          consolidatedFrees.add(newTimeBlock);//adding localtime objects for new consolidated time block to arralist
        }
        return consolidatedFrees;
   }
 
-  
 
   public static ArrayList<ArrayList<LocalTime>> sort(ArrayList<ArrayList<LocalTime>> freesTimes){
-       convertStandardtoMilitary(freesTimes); 
-
-      ArrayList<ArrayList<LocalTime>> sortedTimes = new ArrayList<ArrayList<LocalTime>>(); 
+       convertStandardtoMilitary(freesTimes); //converting standard time to military time so that 1:00 is after 11:00
+      ArrayList<ArrayList<LocalTime>> sortedTimes = new ArrayList<ArrayList<LocalTime>>(); //creating an arraylist of arraylists of localtime objects to hold sorted input
        
        while (freesTimes.size()>0) {
-          LocalTime minStart = freesTimes.get(0).get(0);
-          LocalTime minEnd = freesTimes.get(0).get(1);
+          LocalTime minStart = freesTimes.get(0).get(0);//getting current start time of current small arraylist
+          LocalTime minEnd = freesTimes.get(0).get(1);//getting current start time of current small arraylist
            for (int i = 0; i<freesTimes.size(); i++) {
+            //if the start of the first free is before the start of the next free then we want to make min start the smaller start and its associated end the smaller end 
+            //looping through until everything is sorted
                if (freesTimes.get(i).get(0).isBefore(minStart)) {
                    minStart = freesTimes.get(i).get(0); 
                   minEnd = freesTimes.get(i).get(1); 
               }
-                
           }
           ArrayList<LocalTime> min = new ArrayList<LocalTime>(); 
-          min.add(minStart); 
-          min.add(minEnd); 
-          sortedTimes.add(min); 
-          freesTimes.remove(min); 
+          min.add(minStart); //adding object to small arraylist
+          min.add(minEnd); //adding object to small arraylist
+          sortedTimes.add(min); //adding small arraylist (min) to larger arraylist
+          freesTimes.remove(min); //adjusting the freeTimes list for the loop
       }
     
       convertMilitaryToStandard(sortedTimes); 
-      System.out.println(sortedTimes); 
+      //System.out.println(sortedTimes); 
        return sortedTimes; 
    }
 
-//MS ZHUS CODE
+
+    //**MRS ZHUS CODE EDITED BY CASS */
   public static ArrayList<LocalTime> getTimeFromBlockAndDate(String blockName, String date) {
 
-    //creating a date formatter to ensure strings are parsed correctly.
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
-    formatter = formatter.withLocale( Locale.US );  
+      DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+      //formatter = formatter.withLocale( Locale.US );  
+        // Convert date to a Date object.
+        LocalDate dateObject = LocalDate.parse(date, formatter);
 
-      // Convert date to a Date object.
-      LocalDate dateObject = LocalDate.parse(date, formatter);
-        // Get schedule for this date.
-       USSchedule schedule;
-        // Get list of block names.
-
-        String s = ConsolidateFreesHelperMethod.dayType(dateObject);
-
-        if (s.equals("adjusted")){
-            schedule = new USAdjusted1(dateObject, true);
-        }
-
-        else {
-            if (s.equals("flex")) {
-                schedule = new USFlexDay(dateObject, true);
-            } else if (s.equals("friday")) {
-                schedule = new USFriday(dateObject, true);
-            } else {  
-                schedule = new USWednesday(dateObject, true);
-            }
-
-            if (schedule.getDayType() == -1) {
-                // Not a real school day.
-                return null;
-            }
-        }
+      // Get schedule for this date.
+       USSchedule schedule = getUSScheduleForDate(dateObject);
+      // Get list of block names.
+      ArrayList<String> blockNames = schedule.blocksForDayType();
 
       // Find the index of the desired block within all the blocks.
-       int blockIndex = blockName.indexOf(blockName);
+       int blockIndex = blockNames.indexOf(blockName);
        if (blockIndex == -1) {
            // This block (e.g. A) does not occur on this date, so return null.
            return null;
@@ -394,32 +362,33 @@ public class ScheduleMaker {
        LocalTime endTime = thisBlock.endTime;
        return new ArrayList<LocalTime>(Arrays.asList(startTime, endTime));
   }
+    
+  
+    public static USSchedule getUSScheduleForDate(LocalDate date) {
+        DayOfWeek day = date.getDayOfWeek();
 
-  private static USSchedule getUSScheduleForDate(LocalDate date) {
-      DayOfWeek day = date.getDayOfWeek();
+        USSchedule schedule;
 
-      USSchedule schedule;
-
-      // Determine if this is an adjusted schedule day.
-       if (USSchedule.adjustedSchedules.containsKey(date)) {
-           String adjustedType = USSchedule.adjustedSchedules.get(date);
-           schedule = new USAdjusted1(date, true);
-       } else {
-           boolean flexDay = day == DayOfWeek.MONDAY || day == DayOfWeek.TUESDAY || day == DayOfWeek.THURSDAY;
-           if (flexDay) {
-               schedule = new USFlexDay(date, true);
-          } else if (day == DayOfWeek.FRIDAY) {
-               schedule = new USFriday(date, true);
-           } else {  // Wed schedule
-               schedule = new USWednesday(date, true);
-           }
-           if (schedule.getDayType() == -1) {
-               // Not a real school day.
-               return null;
-          }
-       }
-       return schedule;
-  }
+        // Determine if this is an adjusted schedule day.
+        if (USSchedule.adjustedSchedules.containsKey(date)) {
+            String adjustedType = USSchedule.adjustedSchedules.get(date);
+            schedule = new USAdjusted1(date, true);
+        } else {
+            boolean flexDay = day == DayOfWeek.MONDAY || day == DayOfWeek.TUESDAY || day == DayOfWeek.THURSDAY;
+            if (flexDay) {
+                schedule = new USFlexDay(date, true);
+            } else if (day == DayOfWeek.FRIDAY) {
+                schedule = new USFriday(date, true);
+            } else {  // Wed schedule
+                schedule = new USWednesday(date, true);
+            }
+            if (schedule.getDayType() == -1) {
+                // Not a real school day.
+                return null;
+            }
+        }
+        return schedule;
+    }
 
   public static ArrayList<ArrayList<LocalTime>> convertMilitaryToStandard (ArrayList<ArrayList<LocalTime>> militaryTimes ) {
        //ArrayList of ArrayLists to hold converted times (so that each sub ArrayList holds a start and end time of a free block)
