@@ -37,7 +37,6 @@ takes a list of LocalTime objecta and puts them in order because, again, compute
 
 
 #### Main Methods
-The main methods we used include generateListsOfObjects(), matchUp(), and writeIn(). 
 ##### generateListsOfObjects 
 
 ##### matchUp
