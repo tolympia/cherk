@@ -16,7 +16,17 @@ public class ScheduleMaker {
 
     generateListsOfObjects(files, examObjects, teacherObjects);
 
-    System.out.println(matchUp(teacherObjects, examObjects));
+    //System.out.println(matchUp(teacherObjects, examObjects));
+
+    ArrayList<String> frees = new ArrayList<String> (Arrays.asList("A", "B", "C", "D"));
+
+    ArrayList<ArrayList<LocalTime>> freesTimes = new ArrayList<ArrayList<LocalTime>>();
+       for (int i=0; i < frees.size() ; i++){
+           ArrayList<LocalTime> startAndEnd = getTimeFromBlockAndDate(frees.get(i), "05/03/2022");
+          freesTimes.add(startAndEnd);
+       }
+
+  System.out.println(freesTimes);
 
 
   }
@@ -109,11 +119,9 @@ public class ScheduleMaker {
     return headers;
   }
 
-  //to be implemented in matchUp()
-  //is this necessary? Isn't it easier to just remove a teacher the way it is currently being done in matchup
-  public static void removeTeacher(List<Teacher> teacherList, Teacher teacher) { 
-    teacherList.remove(teacher); 
-  }
+  // to be implemented in matchUp()
+  // is this necessary? Isn't it easier to just remove a teacher the way it is currently being done in matchup
+
 
   public static Map<String, List<String>> matchUp(List<Teacher> teacherList, List<APExam> examList){
     //initalize map to hold name of exam and list of proctors
@@ -317,11 +325,9 @@ public class ScheduleMaker {
   //   LocalDate dateObject = LocalDate.parse(date, formatter);
 
 
+  // }
 
-
-  //  }
-
-//*****MRS ZHUS CODE */
+//MS ZHUS CODE
   public static ArrayList<LocalTime> getTimeFromBlockAndDate(String blockName, String date) {
 
     //creating a date formatter to ensure strings are parsed correctly.
@@ -333,7 +339,11 @@ public class ScheduleMaker {
       // Get schedule for this date.
       USSchedule schedule = getUSScheduleForDate(dateObject);
       // Get list of block names.
-      ArrayList<String> blockNames = schedule.blocksForDayType();
+
+      USSchedule todaysSchedule = new USSchedule (dateObject );
+      ArrayList<String> blockNames = todaysSchedule.blocksForDayType();
+      
+      //schedule.blocksForDayType();
 
       // Find the index of the desired block within all the blocks.
        int blockIndex = blockNames.indexOf(blockName);
@@ -396,15 +406,24 @@ public class ScheduleMaker {
 
   public static ArrayList<ArrayList<LocalTime>> convertStandardtoMilitary(ArrayList<ArrayList<LocalTime>> standardTimes ) {
       //ArrayList of ArrayLists to hold converted times (so that each sub ArrayList holds a start and end time of a free block)
+
       ArrayList<ArrayList<LocalTime>> militaryTimes = new ArrayList<ArrayList<LocalTime>> (); 
+
       for (int i=0; i<standardTimes.size(); i++) {
+
            ArrayList<LocalTime> currArr = new ArrayList<LocalTime>(); 
-           for (int j=0; j<standardTimes.get(i).size(); j++) {
-              LocalTime time = standardTimes.get(i).get(j); 
+
+           for (int j=0; j< standardTimes.get(i).size(); j++) {
+
+          //for (int j=0; j< standardTimes.get(i).size(); j++) {
+
+              LocalTime time = (standardTimes.get(i)).get(j); 
               int hour = time.getHour(); 
+
               if (hour<7) { //ex. if time is 3:00 (during school)...
                   time.plusHours(12); //changes it to 15:00
                }
+
               currArr.add(time); 
           }
            militaryTimes.add(currArr); //fills new ArrayList of ArrayLists 
