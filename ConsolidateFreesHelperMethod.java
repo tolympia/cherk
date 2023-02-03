@@ -1,5 +1,8 @@
+import java.io.*;
+import java.lang.*;
+import java.util.*;
 import java.time.*;
-import java.util.*; 
+import java.time.format.DateTimeFormatter;
 
 public class ConsolidateFreesHelperMethod{
     public static void main(String[] args){
@@ -46,7 +49,7 @@ public class ConsolidateFreesHelperMethod{
 
         Teacher teacher1 = new Teacher (teacher);
 
-        System.out.println(consolidateFrees(teacher1, "31-01-2022"));//how do you format the date lol
+        System.out.println(consolidateFrees(teacher1, "02-01-2023"));//how do you format the date lol
 
 
 
@@ -56,10 +59,10 @@ public class ConsolidateFreesHelperMethod{
         
         List<String> frees = teacher.getFreePeriods(); //WHERE IS GETFREEPERIODS LOCATED
         List <String> freesOnDay = new ArrayList<String>();
-        if (getTimeFromBlockAndDate("A", date)!=null){
+        if ((getTimeFromBlockAndDate("A", date)!=null) && (frees.contains("A"))){
             freesOnDay.add("A");
         }
-        if (getTimeFromBlockAndDate("B", date)!=null){
+        if ((getTimeFromBlockAndDate("B", date)!=null) && (frees.contains("B"))){
             freesOnDay.add("B");
         }
         if (getTimeFromBlockAndDate("C", date)!=null){
@@ -79,11 +82,11 @@ public class ConsolidateFreesHelperMethod{
         } 
         //Adding all of the frees occur on that day
         
-        for (int i=0; i < frees.size(); i++){
-            if (!freesOnDay.contains(frees.get(i))){
-                frees.remove(frees.get(i));
-            }
-        }
+        // for (int i=0; i < frees.size(); i++){
+        //     if (!freesOnDay.contains(frees.get(i))){
+        //         frees.remove(frees.get(i));
+        //     }
+        // }
         //removing the frees that the teacher doesn't have 
 
         ArrayList<ArrayList<LocalTime>> freesTimes = new ArrayList<ArrayList<LocalTime>>();
@@ -103,7 +106,7 @@ public class ConsolidateFreesHelperMethod{
             LocalTime time1End = timeFrame1.get(1);
             LocalTime time2Start = timeFrame2.get(0);
 
-            ArrayList<String> newTimeBlock = new ArrayList<>();
+            ArrayList<LocalTime> newTimeBlock = new ArrayList<LocalTime>();
             if(time2Start.minusMinutes(11).isBefore(time1End)){ //if we want to consolidate adjacent blocks
                 newTimeBlock.add(timeFrame1.get(0));
                 newTimeBlock.add(timeFrame2.get(1));
@@ -155,17 +158,67 @@ public class ConsolidateFreesHelperMethod{
         }
     }
 
+    public static String dayType(LocalDate date){
+
+        DayOfWeek day = date.getDayOfWeek();
+
+        String s = "";
+
+        if (USSchedule.adjustedSchedules.containsKey(date)) {
+            s = "adjusted";
+        } 
+
+        else {
+            boolean flexDay = day == DayOfWeek.MONDAY || day == DayOfWeek.TUESDAY || day == DayOfWeek.THURSDAY;
+            if (flexDay) {
+                s = "flex";
+            } else if (day == DayOfWeek.FRIDAY) {
+                s = "friday";
+            } else {  // Wed schedule
+                s = "wednesday";
+            }
+            // if (schedule.getDayType() == -1) {
+            //     // Not a real school day.
+            //     s = "";
+            // }
+        }
+        return s;
+    }
+
 
 //*****MRS ZHUS CODE */
     public static ArrayList<LocalTime> getTimeFromBlockAndDate(String blockName, String date) {
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M/dd/yyyy");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
         formatter = formatter.withLocale( Locale.US );
         // Convert date to a Date object.
         LocalDate dateObject = LocalDate.parse(date, formatter);
         // Get schedule for this date.
-        USSchedule schedule = getUSScheduleForDate(dateObject);
+        USSchedule schedule;
         // Get list of block names.
+
+        String s = dayType(dateObject);
+
+        if (s.equals("adjusted")){
+            schedule = new USAdjusted1(dateObject , true);
+        }
+
+        else {
+            if (s.equals("flex")) {
+                schedule = new USFlexDay(dateObject, true);
+            } else if (s.equals("friday")) {
+                schedule = new USFriday(dateObject, true);
+            } else {  
+                schedule = new USWednesday(dateObject, true);
+            }
+
+            if (schedule.getDayType() == -1) {
+                // Not a real school day.
+                return null;
+            }
+        }
+
+
         ArrayList<String> blockNames = schedule.blocksForDayType();
 
         // Find the index of the desired block within all the blocks.

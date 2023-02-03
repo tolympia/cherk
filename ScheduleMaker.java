@@ -83,8 +83,13 @@ public class ScheduleMaker {
   
     //using ms. zhu's helper method to convert blocks to times
   public static ArrayList<LocalTime> blocksToTimes(String blockName, String date) {
+
+      DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+      formatter = formatter.withLocale( Locale.US );  
+      
+
         // Convert date to a Date object.
-        LocalDate dateObject = LocalDate.parse(date);
+        LocalDate dateObject = LocalDate.parse(date, formatter);
         // Get schedule for this date.
         USSchedule schedule = getUSScheduleForDate(dateObject);
         // Get list of block names.
@@ -336,17 +341,33 @@ public class ScheduleMaker {
 
       // Convert date to a Date object.
       LocalDate dateObject = LocalDate.parse(date, formatter);
-      // Get schedule for this date.
-      USSchedule schedule = getUSScheduleForDate(dateObject);
-      // Get list of block names.
+        // Get schedule for this date.
+       USSchedule schedule;
+        // Get list of block names.
 
-      USSchedule todaysSchedule = new USSchedule (dateObject );
-      ArrayList<String> blockNames = todaysSchedule.blocksForDayType();
-      
-      //schedule.blocksForDayType();
+        String s = ConsolidateFreesHelperMethod.dayType(dateObject);
+
+        if (s.equals("adjusted")){
+            schedule = new USAdjusted1(dateObject, true);
+        }
+
+        else {
+            if (s.equals("flex")) {
+                schedule = new USFlexDay(dateObject, true);
+            } else if (s.equals("friday")) {
+                schedule = new USFriday(dateObject, true);
+            } else {  
+                schedule = new USWednesday(dateObject, true);
+            }
+
+            if (schedule.getDayType() == -1) {
+                // Not a real school day.
+                return null;
+            }
+        }
 
       // Find the index of the desired block within all the blocks.
-       int blockIndex = blockNames.indexOf(blockName);
+       int blockIndex = blockName.indexOf(blockName);
        if (blockIndex == -1) {
            // This block (e.g. A) does not occur on this date, so return null.
            return null;
@@ -414,8 +435,6 @@ public class ScheduleMaker {
            ArrayList<LocalTime> currArr = new ArrayList<LocalTime>(); 
 
            for (int j=0; j< standardTimes.get(i).size(); j++) {
-
-          //for (int j=0; j< standardTimes.get(i).size(); j++) {
 
               LocalTime time = (standardTimes.get(i)).get(j); 
               int hour = time.getHour(); 
