@@ -159,6 +159,7 @@ public class ScheduleMaker {
       String endTime = examList.get(i).getEndTime();
       LocalTime outerTimeStart = LocalTime.parse(formatTime(startTime));
       LocalTime outerTimeEnd = LocalTime.parse(formatTime(endTime));
+      LocalTime totalExamTime = outerTimeEnd.minusMinutes(outerTimeStart); 
       //check and see if any of the teachers are in the same department as exam and remove if they do
       for(int j = teacherClone.size()-1; j >= 0; j--){
         List<String> departments = teacherClone.get(j).getDepartment();
@@ -178,12 +179,18 @@ public class ScheduleMaker {
         for(int x=0; x < combineFrees.size(); x++){
           LocalTime teacherBlockStart = combineFrees.get(x).get(0); //get start time of combined frees for given teacher
           LocalTime teacherBlockEnd = combineFrees.get(x).get(1);
+          LocalTime totalTeacherFreeTime = teacherBlockEnd.minusMinutes(teacherBlockStart); 
 
           if(containsTime(outerTimeStart, outerTimeEnd, teacherBlockStart, teacherBlockEnd)){
             proctors.add(teacherClone.get(r).getName());
+            if(totalTeacherFreeTime < totalExamTime){
+              //remove the time the teacher is free from the overall time of exam
+              totalExamTime = totalExamTime.minusMinutes(totalTeacherFreeTime);
+            }
           }
           //remove that time from total time of exam
-          //robyn to make remove time method
+          //condition to remove time from overall time
+          
         }
       }
       //add name of exam and proctors to map
