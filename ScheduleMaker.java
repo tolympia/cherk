@@ -12,9 +12,6 @@ public class ScheduleMaker {
 
   makeSchedule(files);
 
-
-
-
   }
 
   public static void makeSchedule(ArrayList<File> files)throws FileNotFoundException{
@@ -25,17 +22,6 @@ public class ScheduleMaker {
     generateListsOfObjects(files, examObjects, teacherObjects);
 
     ArrayList<String> teacherNames = new ArrayList<String>();
-
-    //  for (APExam exam : examObjects) {
-    //   System.out.println(exam);
-    // }
-    // for (Teacher teacher : teacherObjects) {
-    //   System.out.println(teacher);
-    // }
-
-    // for (int i = 0; i < teacherObjects.size(); i++){
-    //   teacherNames.add(teacherObjects.get(i).getName());
-    // }
 
     Map<String, List<String>> proctorsAndExams = new HashMap<String, List<String>>(); 
     proctorsAndExams = matchUp(teacherObjects, examObjects);
@@ -122,24 +108,6 @@ public class ScheduleMaker {
         
         //we need to figure out if we can use getUSScheduleForDate method 
     }
-    
-
-  // public static ArrayList<String> getColumn(File f, String category)
-  //   throws FileNotFoundException {
-  //   Scanner fileScan = new Scanner(f); //new scanner
-
-  //   String[] firstLineArr = fileScan.nextLine().split(","); //assumes first line is header, grabs it and splits it by comma
-
-  //   ArrayList<String> headers = new ArrayList<>(Arrays.asList(firstLineArr)); //make firstLineArr an array list
-
-  //   fileScan.close();
-
-  //   return headers;
-  // }
-
-  // to be implemented in matchUp()
-  // is this necessary? Isn't it easier to just remove a teacher the way it is currently being done in matchup
-
 
   public static Map<String, List<String>> matchUp(List<Teacher> teacherList, List<APExam> examList){
     //initalize map to hold name of exam and list of proctors
@@ -341,42 +309,24 @@ public class ScheduleMaker {
        return sortedTimes; 
    }
 
-//MS ZHUS CODE
+
+    //*****MRS ZHUS CODE */
   public static ArrayList<LocalTime> getTimeFromBlockAndDate(String blockName, String date) {
 
-    //creating a date formatter to ensure strings are parsed correctly.
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
-    formatter = formatter.withLocale( Locale.US );  
+      DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+      //formatter = formatter.withLocale( Locale.US );  
+      
 
-      // Convert date to a Date object.
-      LocalDate dateObject = LocalDate.parse(date, formatter);
-        // Get schedule for this date.
-       USSchedule schedule;
-        // Get list of block names.
+        // Convert date to a Date object.
+        LocalDate dateObject = LocalDate.parse(date, formatter);
 
-        String s = ConsolidateFreesHelperMethod.dayType(dateObject);
-
-        if (s.equals("adjusted")){
-            schedule = new USAdjusted1(dateObject, true);
-        }
-
-        else {
-            if (s.equals("flex")) {
-                schedule = new USFlexDay(dateObject, true);
-            } else if (s.equals("friday")) {
-                schedule = new USFriday(dateObject, true);
-            } else {  
-                schedule = new USWednesday(dateObject, true);
-            }
-
-            if (schedule.getDayType() == -1) {
-                // Not a real school day.
-                return null;
-            }
-        }
+      // Get schedule for this date.
+       USSchedule schedule = getUSScheduleForDate(dateObject);
+      // Get list of block names.
+      ArrayList<String> blockNames = schedule.blocksForDayType();
 
       // Find the index of the desired block within all the blocks.
-       int blockIndex = blockName.indexOf(blockName);
+       int blockIndex = blockNames.indexOf(blockName);
        if (blockIndex == -1) {
            // This block (e.g. A) does not occur on this date, so return null.
            return null;
@@ -387,32 +337,33 @@ public class ScheduleMaker {
        LocalTime endTime = thisBlock.endTime;
        return new ArrayList<LocalTime>(Arrays.asList(startTime, endTime));
   }
+    
+  
+    public static USSchedule getUSScheduleForDate(LocalDate date) {
+        DayOfWeek day = date.getDayOfWeek();
 
-  private static USSchedule getUSScheduleForDate(LocalDate date) {
-      DayOfWeek day = date.getDayOfWeek();
+        USSchedule schedule;
 
-      USSchedule schedule;
-
-      // Determine if this is an adjusted schedule day.
-       if (USSchedule.adjustedSchedules.containsKey(date)) {
-           String adjustedType = USSchedule.adjustedSchedules.get(date);
-           schedule = new USAdjusted1(date, true);
-       } else {
-           boolean flexDay = day == DayOfWeek.MONDAY || day == DayOfWeek.TUESDAY || day == DayOfWeek.THURSDAY;
-           if (flexDay) {
-               schedule = new USFlexDay(date, true);
-          } else if (day == DayOfWeek.FRIDAY) {
-               schedule = new USFriday(date, true);
-           } else {  // Wed schedule
-               schedule = new USWednesday(date, true);
-           }
-           if (schedule.getDayType() == -1) {
-               // Not a real school day.
-               return null;
-          }
-       }
-       return schedule;
-  }
+        // Determine if this is an adjusted schedule day.
+        if (USSchedule.adjustedSchedules.containsKey(date)) {
+            String adjustedType = USSchedule.adjustedSchedules.get(date);
+            schedule = new USAdjusted1(date, true);
+        } else {
+            boolean flexDay = day == DayOfWeek.MONDAY || day == DayOfWeek.TUESDAY || day == DayOfWeek.THURSDAY;
+            if (flexDay) {
+                schedule = new USFlexDay(date, true);
+            } else if (day == DayOfWeek.FRIDAY) {
+                schedule = new USFriday(date, true);
+            } else {  // Wed schedule
+                schedule = new USWednesday(date, true);
+            }
+            if (schedule.getDayType() == -1) {
+                // Not a real school day.
+                return null;
+            }
+        }
+        return schedule;
+    }
 
   public static ArrayList<ArrayList<LocalTime>> convertMilitaryToStandard (ArrayList<ArrayList<LocalTime>> militaryTimes ) {
        //ArrayList of ArrayLists to hold converted times (so that each sub ArrayList holds a start and end time of a free block)
