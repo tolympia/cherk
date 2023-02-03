@@ -175,10 +175,11 @@ public class ScheduleMaker {
         //convert strings to integers
           //how do i convert if its a range of times
         ArrayList<ArrayList<LocalTime>> combineFrees = consolidateFrees(teacherClone.get(i), date);
-        for(int x=0; x<combineFrees.size(); x++){
+        for(int x=0; x < combineFrees.size(); x++){
           LocalTime teacherBlockStart = combineFrees.get(x).get(0); //get start time of combined frees for given teacher
           LocalTime teacherBlockEnd = combineFrees.get(x).get(1);
           if(containsTime(outerTimeStart, outerTimeEnd, teacherBlockStart, teacherBlockEnd)){
+
             proctors.add(teacherClone.get(x).getName());
           }
           //remove that time from total time of exam
@@ -201,7 +202,6 @@ public class ScheduleMaker {
     p.println("AP Exam" + "Exam Date" + "Exam Start Time" + "Exam End Time" + "Proctors");
     //loop through map to print to csv
 
-    System.out.println("writein");
     System.out.println(proctorMap);
 
     System.out.println(examList.size());
@@ -212,8 +212,6 @@ public class ScheduleMaker {
       //how do i use .getDate() and .getTime() for specific AP exams
       
       List<String> proctorNames = proctorMap.get(exam.getName());
-
-      System.out.println("writein" + proctorNames);
 
       String proctors = arrayFormat(proctorNames);
       p.println(exam.getName() + exam.getDate() + exam.getStartTime() + exam.getEndTime() + proctors);
