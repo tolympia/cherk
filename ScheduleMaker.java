@@ -7,28 +7,32 @@ import java.time.format.DateTimeFormatter;
 public class ScheduleMaker {
 
   public static void main(String[] args) throws FileNotFoundException {
-    ArrayList<File> files = new ArrayList<File>(
-      Arrays.asList((new File(args[0])), (new File(args[1])))
-    );
+
+  ArrayList<File> files = new ArrayList<File>(Arrays.asList((new File(args[0])), (new File(args[1]))));
+
+  makeSchedule(files);
+
+
+
+
+  }
+
+  public static void makeSchedule(ArrayList<File> files)throws FileNotFoundException{
 
     ArrayList<APExam> examObjects = new ArrayList<>();
     ArrayList<Teacher> teacherObjects = new ArrayList<>();
 
     generateListsOfObjects(files, examObjects, teacherObjects);
 
-    //System.out.println(matchUp(teacherObjects, examObjects));
+    ArrayList<String> teacherNames = new ArrayList<String>();
 
-    ArrayList<String> frees = new ArrayList<String> (Arrays.asList("A", "B", "C", "D"));
+    for (int i = 0; i < teacherObjects.size(); i++){
+      teacherNames.add(teacherObjects.get(i).getName());
+    }
 
-    ArrayList<ArrayList<LocalTime>> freesTimes = new ArrayList<ArrayList<LocalTime>>();
-       for (int i=0; i < frees.size() ; i++){
-           ArrayList<LocalTime> startAndEnd = getTimeFromBlockAndDate(frees.get(i), "05/03/2022");
-          freesTimes.add(startAndEnd);
-       }
+    Map<String, List<String>> proctorsAndExams = new HashMap<String, List<String>>(); 
 
-  System.out.println(freesTimes);
-
-
+    writeIn(proctorsAndExams, examObjects);
   }
 
   public static void generateListsOfObjects(//takes in list of files and list of examObjects and teacherObjects to populate
@@ -111,18 +115,18 @@ public class ScheduleMaker {
     }
     
 
-  public static ArrayList<String> getColumns(File f)
-    throws FileNotFoundException {
-    Scanner fileScan = new Scanner(f); //new scanner
+  // public static ArrayList<String> getColumn(File f, String category)
+  //   throws FileNotFoundException {
+  //   Scanner fileScan = new Scanner(f); //new scanner
 
-    String[] firstLineArr = fileScan.nextLine().split(","); //assumes first line is header, grabs it and splits it by comma
+  //   String[] firstLineArr = fileScan.nextLine().split(","); //assumes first line is header, grabs it and splits it by comma
 
-    ArrayList<String> headers = new ArrayList<>(Arrays.asList(firstLineArr)); //make firstLineArr an array list
+  //   ArrayList<String> headers = new ArrayList<>(Arrays.asList(firstLineArr)); //make firstLineArr an array list
 
-    fileScan.close();
+  //   fileScan.close();
 
-    return headers;
-  }
+  //   return headers;
+  // }
 
   // to be implemented in matchUp()
   // is this necessary? Isn't it easier to just remove a teacher the way it is currently being done in matchup
@@ -181,7 +185,7 @@ public class ScheduleMaker {
 
   
 
-  public static void writeIn(Map<String, List<String>> proctorMap, List<APExam> examList) throws FileNotFoundException{
+  public static void writeIn (Map<String, List<String>> proctorMap, List<APExam> examList) throws FileNotFoundException{
     //create new file with printsteram
     PrintStream p = new PrintStream("ApExamProctorSchedule.csv");
     //print headers into the csv 
@@ -321,16 +325,6 @@ public class ScheduleMaker {
       System.out.println(sortedTimes); 
        return sortedTimes; 
    }
-
-  //  public static LocalDate formatDate(String date){
-
-  //   DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
-  //   formatter = formatter.withLocale( Locale.US );  
-
-  //   LocalDate dateObject = LocalDate.parse(date, formatter);
-
-
-  // }
 
 //MS ZHUS CODE
   public static ArrayList<LocalTime> getTimeFromBlockAndDate(String blockName, String date) {
