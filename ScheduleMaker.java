@@ -170,17 +170,17 @@ public class ScheduleMaker {
     //print headers into the csv 
     p.println("AP Exam," + "Exam Date," + "Exam Start Time," + "Exam End Time," + "Proctors");
     //loop through map to print to csv
-
-
     for(int i=0; i<examList.size(); i++){
+      //get AP exam object (to get date, time, and name)
       APExam exam = examList.get(i);
-      //how do i use .getDate() and .getTime() for specific AP exams
-      
+      //create list of proctor names (get value from map by using the exam name)      
       List<String> proctorNames = proctorMap.get(exam.getName());
-
+      //call formatArray helper method to get the correct formatting of proctor names to print to .csv
       String proctors = arrayFormat(proctorNames);
+      //print exam name, date, start time, end time, and proctor list (created with arrayFormat helper method)
       p.println(exam.getName() + "," + exam.getDate() + "," + exam.getStartTime() + "," + exam.getEndTime() + "," + proctors);
     }
+    //close printstream
     p.close();
   }
 
@@ -189,6 +189,7 @@ public class ScheduleMaker {
     String proctorNames = "";
     //loop through proctor list to format the list of proctors in order to better readability
     for(int i=0; i < proctors.size(); i++){
+      //add commas in between each element and concatenate to proctorNames var
       proctorNames += proctors.get(i) + ", ";
     }
     return proctorNames;
