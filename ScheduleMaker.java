@@ -112,6 +112,8 @@ public class ScheduleMaker {
   public static Map<String, List<String>> matchUp(List<Teacher> teacherList, List<APExam> examList){
     //initalize map to hold name of exam and list of proctors
     Map<String, List<String>> examSchedule = new HashMap<String, List<String>>();
+    System.out.println(examList);
+    System.out.println(teacherList);
     //loop through exam list
     for(int i=0; i<examList.size(); i++){
       //initalize empty ArrayList to hold the proctors for a specific exam
@@ -131,6 +133,7 @@ public class ScheduleMaker {
       //store start time of exam and end time of exam as LocalTime objects
       LocalTime outerTimeStart = LocalTime.parse(formatTime(startTime));
       LocalTime outerTimeEnd = LocalTime.parse(formatTime(endTime));
+      LocalTime totalExamTime = outerTimeEnd.minusMinutes(outerTimeStart); 
 
       //check and see if any of the teachers are in the same department as exam and remove if they do
         //loop through teacherClone list
@@ -147,6 +150,8 @@ public class ScheduleMaker {
           }
         }
       }
+
+      System.out.println(teacherClone);
       //loop through updated teacher list
       for(int r = 0; r<teacherClone.size(); r++){
         //if exam contains free blocks - assign teacher to exam in that time
@@ -154,19 +159,39 @@ public class ScheduleMaker {
           //how do i convert if its a range of times
         ArrayList<ArrayList<LocalTime>> combineFrees = consolidateFrees(teacherClone.get(i), date);
 
+        System.out.println(combineFrees);
+
+
         for(int x=0; x < combineFrees.size(); x++){
           LocalTime teacherBlockStart = combineFrees.get(x).get(0); //get start time of combined frees for given teacher
           LocalTime teacherBlockEnd = combineFrees.get(x).get(1);
+          LocalTime totalTeacherFreeTime = teacherBlockEnd.minusMinutes(teacherBlockStart); 
+
+          System.out.println(outerTimeStart);
+          System.out.println(outerTimeEnd);
+          System.out.println(teacherBlockStart);
+          System.out.println(teacherBlockEnd);
 
           if(containsTime(outerTimeStart, outerTimeEnd, teacherBlockStart, teacherBlockEnd)){
             proctors.add(teacherClone.get(r).getName());
+            if(totalTeacherFreeTime < totalExamTime){
+              //remove the time the teacher is free from the overall time of exam
+              totalExamTime = totalExamTime.minusMinutes(totalTeacherFreeTime);
+            }
           }
           //remove that time from total time of exam
+<<<<<<< HEAD
+          //condition to remove time from overall time
+          
+=======
           //robyn to make remove time method
+
+
+>>>>>>> 980258432693a0ecbe9f929ba906c11e9671da0d
         }
       }
       //add name of exam and proctors to map
-      System.out.println(proctors);
+      //System.out.println(proctors);
       examSchedule.put(examList.get(i).getName(), proctors);
     }
     return examSchedule;
@@ -207,7 +232,7 @@ public class ScheduleMaker {
   }
 
   public static boolean containsTime(LocalTime outerTimeStart, LocalTime outerTimeEnd, LocalTime innerTimeStart, LocalTime innerTimeEnd){
-
+    //if the first time block start is before or equal to seocnd time start and first time end is after or equal to second time end thenb return true
     if (outerTimeStart.isBefore(innerTimeStart) && outerTimeEnd.isAfter(innerTimeEnd)){
       return true;
     }
@@ -216,6 +241,7 @@ public class ScheduleMaker {
     }
   }
 
+  //formats time "7:59" as "07:59" which is the proper format for input for localTime objects
   public static String formatTime(String time){
     if (time.length()==5){
       return time;
@@ -228,8 +254,10 @@ public class ScheduleMaker {
 
   public static ArrayList<ArrayList<LocalTime>> consolidateFrees(Teacher teacher, String date){
         
-      List<String> frees = teacher.getFreePeriods(); //WHERE IS GETFREEPERIODS LOCATED
-      List <String> freesOnDay = new ArrayList<String>();
+      List<String> frees = teacher.getFreePeriods(); //getting the free periods of the teacher and storing them in frees
+
+      //getting the frees that occur on the input date 
+      List <String> freesOnDay = new ArrayList<String>();//storing them in an arraylist 
       if (getTimeFromBlockAndDate("A", date)!=null){
           freesOnDay.add("A");
        }
@@ -253,46 +281,41 @@ public class ScheduleMaker {
       } 
       //Adding all of the frees occur on that day
       
-      for (int i=0; i < frees.size(); i++){
+      for (int i=0; i < frees.size(); i++){//removing the frees that the teacher doesn't have 
           if (!freesOnDay.contains(frees.get(i))){
               frees.remove(frees.get(i));
            }
       }
-       //removing the frees that the teacher doesn't have 
 
-       ArrayList<ArrayList<LocalTime>> freesTimes = new ArrayList<ArrayList<LocalTime>>();
+       ArrayList<ArrayList<LocalTime>> freesTimes = new ArrayList<ArrayList<LocalTime>>(); 
+       //creating an arraylist of arraylists of localtime objects to store the starta nd end time of each free block the teacher has on that day
        for (int i=0; i < frees.size() ; i++){
            ArrayList<LocalTime> startAndEnd = getTimeFromBlockAndDate(frees.get(i), date);
           freesTimes.add(startAndEnd);
        }
-       //arraylist of arraylist of start and end times for the frees the teacher has that day
     
-       ArrayList<ArrayList<LocalTime>> timesInOrder = sort(freesTimes);//using robyn's sort elper methodsw
-       //sorting the blocks in order of occurrance by time
-       ArrayList<ArrayList<LocalTime>> consolidatedFrees = new ArrayList<ArrayList<LocalTime>>();
-      //the arraylist of arraylist of localtime objects that i will ultimately return
+       ArrayList<ArrayList<LocalTime>> timesInOrder = sort(freesTimes);//sorting free blocks the teacher has in order of time (because G can be before A)
+       ArrayList<ArrayList<LocalTime>> consolidatedFrees = new ArrayList<ArrayList<LocalTime>>();//the arraylist of arraylist of localtime objects that i will ultimately return
       for (int i=1; i<timesInOrder.size()-1; i++){
           ArrayList<LocalTime> timeFrame1 = timesInOrder.get(i-1);
-           ArrayList<LocalTime> timeFrame2 = timesInOrder.get(i);
-           LocalTime time1End = timeFrame1.get(1);
-           LocalTime time2Start = timeFrame2.get(0);
-
-           ArrayList<LocalTime> newTimeBlock = new ArrayList<>();
-           if(time2Start.minusMinutes(11).isBefore(time1End)){ //if we want to consolidate adjacent blocks
-               newTimeBlock.add(timeFrame1.get(0));
-               newTimeBlock.add(timeFrame2.get(1));
-           }
-           else{
-              newTimeBlock.add(timeFrame1.get(0)); //we want the first block to remain the same and now comapare the second block to the third
-               newTimeBlock.add(time1End);
-           }
-           consolidatedFrees.add(newTimeBlock);
-           //adding localtime objects for new consolidated time block to arralist
+          ArrayList<LocalTime> timeFrame2 = timesInOrder.get(i);
+          LocalTime time1End = timeFrame1.get(1);
+          LocalTime time2Start = timeFrame2.get(0);
+          //getting all of the localtime objects for start and end of two time blocks being compared
+          ArrayList<LocalTime> newTimeBlock = new ArrayList<>();//consolidated time block if consolidation needs to occur
+          if(time2Start.minusMinutes(11).isBefore(time1End)){ //if we want to consolidate adjacent blocks
+            newTimeBlock.add(timeFrame1.get(0));//new block start = first block start
+            newTimeBlock.add(timeFrame2.get(1));//new block end = second block end 
+          }
+          else{
+            newTimeBlock.add(timeFrame1.get(0)); //we want the first block to remain the same and now comapare the second block to the third
+            newTimeBlock.add(time1End);
+          }
+          consolidatedFrees.add(newTimeBlock);//adding localtime objects for new consolidated time block to arralist
        }
        return consolidatedFrees;
   }
 
-  
 
   public static ArrayList<ArrayList<LocalTime>> sort(ArrayList<ArrayList<LocalTime>> freesTimes){
        convertStandardtoMilitary(freesTimes); //converting standard time to military time so that 1:00 is after 11:00
@@ -317,7 +340,7 @@ public class ScheduleMaker {
       }
     
       convertMilitaryToStandard(sortedTimes); 
-      System.out.println(sortedTimes); 
+      //System.out.println(sortedTimes); 
        return sortedTimes; 
    }
 
