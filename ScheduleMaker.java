@@ -2,6 +2,7 @@ import java.io.*;
 import java.lang.*;
 import java.util.*;
 import java.time.*;
+import java.time.format.DateTimeFormatter;
 
 public class ScheduleMaker {
 
@@ -15,14 +16,7 @@ public class ScheduleMaker {
 
     generateListsOfObjects(files, examObjects, teacherObjects);
 
-    for (APExam exam : examObjects) {
-      System.out.println(exam);
-    }
-    for (Teacher teacher : teacherObjects) {
-      System.out.println(teacher);
-    }
-
-    System.out.println(((examObjects.get(0))).getName());
+    System.out.println(matchUp(teacherObjects, examObjects));
 
 
   }
@@ -286,6 +280,8 @@ public class ScheduleMaker {
        return consolidatedFrees;
   }
 
+  
+
   public static ArrayList<ArrayList<LocalTime>> sort(ArrayList<ArrayList<LocalTime>> freesTimes){
        convertStandardtoMilitary(freesTimes); 
 
@@ -313,12 +309,29 @@ public class ScheduleMaker {
        return sortedTimes; 
    }
 
+  //  public static LocalDate formatDate(String date){
+
+  //   DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+  //   formatter = formatter.withLocale( Locale.US );  
+
+  //   LocalDate dateObject = LocalDate.parse(date, formatter);
+
+
+
+
+  //  }
+
 //*****MRS ZHUS CODE */
   public static ArrayList<LocalTime> getTimeFromBlockAndDate(String blockName, String date) {
-       // Convert date to a Date object.
-       LocalDate dateObject = LocalDate.parse(date);
+
+    //creating a date formatter to ensure strings are parsed correctly.
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+    formatter = formatter.withLocale( Locale.US );  
+
+      // Convert date to a Date object.
+      LocalDate dateObject = LocalDate.parse(date, formatter);
       // Get schedule for this date.
-       USSchedule schedule = getUSScheduleForDate(dateObject);
+      USSchedule schedule = getUSScheduleForDate(dateObject);
       // Get list of block names.
       ArrayList<String> blockNames = schedule.blocksForDayType();
 

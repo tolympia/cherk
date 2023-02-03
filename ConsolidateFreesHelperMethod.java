@@ -158,8 +158,11 @@ public class ConsolidateFreesHelperMethod{
 
 //*****MRS ZHUS CODE */
     public static ArrayList<LocalTime> getTimeFromBlockAndDate(String blockName, String date) {
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M/dd/yyyy");
+        formatter = formatter.withLocale( Locale.US );
         // Convert date to a Date object.
-        LocalDate dateObject = LocalDate.parse(date);
+        LocalDate dateObject = LocalDate.parse(date, formatter);
         // Get schedule for this date.
         USSchedule schedule = getUSScheduleForDate(dateObject);
         // Get list of block names.
