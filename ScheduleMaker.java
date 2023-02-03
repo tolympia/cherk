@@ -26,13 +26,22 @@ public class ScheduleMaker {
 
     ArrayList<String> teacherNames = new ArrayList<String>();
 
-    for (int i = 0; i < teacherObjects.size(); i++){
-      teacherNames.add(teacherObjects.get(i).getName());
-    }
+    //  for (APExam exam : examObjects) {
+    //   System.out.println(exam);
+    // }
+    // for (Teacher teacher : teacherObjects) {
+    //   System.out.println(teacher);
+    // }
+
+    // for (int i = 0; i < teacherObjects.size(); i++){
+    //   teacherNames.add(teacherObjects.get(i).getName());
+    // }
 
     Map<String, List<String>> proctorsAndExams = new HashMap<String, List<String>>(); 
+    proctorsAndExams = matchUp(teacherObjects, examObjects);
 
     writeIn(proctorsAndExams, examObjects);
+
   }
 
   public static void generateListsOfObjects(//takes in list of files and list of examObjects and teacherObjects to populate
@@ -191,10 +200,21 @@ public class ScheduleMaker {
     //print headers into the csv 
     p.println("AP Exam" + "Exam Date" + "Exam Start Time" + "Exam End Time" + "Proctors");
     //loop through map to print to csv
+
+    System.out.println("writein");
+    System.out.println(proctorMap);
+
+    System.out.println(examList.size());
+
+
     for(int i=0; i<examList.size(); i++){
       APExam exam = examList.get(i);
       //how do i use .getDate() and .getTime() for specific AP exams
+      
       List<String> proctorNames = proctorMap.get(exam.getName());
+
+      System.out.println("writein" + proctorNames);
+
       String proctors = arrayFormat(proctorNames);
       p.println(exam.getName() + exam.getDate() + exam.getStartTime() + exam.getEndTime() + proctors);
     }
@@ -205,7 +225,7 @@ public class ScheduleMaker {
     //initalize an empty string to be returned
     String proctorNames = "";
     //loop through proctor list to format the list of proctors in order to better readability
-    for(int i=0; i<proctors.size(); i++){
+    for(int i=0; i < proctors.size(); i++){
       proctorNames += proctors.get(i) + ", ";
     }
     return proctorNames;
