@@ -1,11 +1,16 @@
 # CHERK readme
+---
 ## Introduction
 Each spring, the College Board administers a set of AP Exams to test student's knowledge in various subject areas. Here at GA, we offer many AP classes, and scheduling the exams is a difficult and tedious process. There are many moving parts, such as coordinating times proctors are free with the times of the exams. We wanted to help simplify this process, and we feel that our code can benefit multiple users. 
 
+---
 ## Process
-
+---
+---
 #### Arriving at our idea
 We originally brainstormed many possible ideas for our project, which were focused on the goal of improving an aspect of our school. Early ideas included a map app to help new students navigate our school and a carpool matchup program. However, we narrowed down our possible candidates to either helping college counselors schedule meetings or schedule AP exams for proctors who are available to proctor them. After looking at both possibilities, we realized that the AP exam schedule was a more difficult problem, as coordinating teachers' free blocks with AP Exam times is more difficult than simply matching up teachers and students by their free blocks. The AP Exam project would be a more appropriate and challenging project for five people, so we decided to go with that. 
+
+---
 
 #### Doing research
 To create an algorithm to solve our problem, it was necessary to do some research, to better understand the necessary information to complete this project. The first part of our research was an interview with the AP Exam coordinator at GA, Ms. Berman. While interviewing Ms. Berman, our group asked her a series of questions, including how long it takes her to create an AP exam proctor schedule, what she looks for when deciding who proctors each AP exam, what teachers can proctor what exams, and if teachers can switch who proctors an exam at a certain point. Once she answered each of the questions in detail, we were able to begin to come up with a plan for how we wanted our program to work. We determined that teachers often proctor exams during their free blocks and teachers can switch off proctoring exams. Subsequently, we were able to create an algorithm that takes in all the AP teachers and their free blocks in one file and all the AP exams with their date and time in another file and produces an exam proctoring schedule, that assigns teachers with free blocks that fall during the time of an exam to proctor them.  
@@ -19,9 +24,11 @@ We used a Google spreadsheet to manage our tasks. We thought of our code broadly
 #### Execution
 Once we had our algorithms down, we were able to code them quickly. However, when running them, we had many errors. A lot of them were problems with our syntax, and we had a lot of coding "typos". Those were pretty easy to fix, and once we resolved those issues we dealt with run-time errors, which are harder to fix as they involve trying to access a variable that might not exist, which forced us to read over our code carefully and conceptualize what was happening. This is where iterative design comes in. We would run our code and try to see exactly what line(s) of code were causing our errors. After the methods were coded, we would often use iterative design, or in other words, trial, and error, to see what parts worked and what didn't. For the parts that did not work, it was usually a simple fix but one that took some time to arrive at. Other times, the issue was larger and we might have to rewrite a couple of lines of code. If the entire method was unsalvagable, as a last resort we would go back to outlining a new algorithm. After our code ran successfully, we quickly went to work testing it with different inputs, to ensure our code was robust. This process took a while and was also iterative, as code that works for simple tests may not work with larger ones. Debugging these errors was difficult because it can be hard to see why some inputs work and not others. 
 
-
+---
 ### Program Goals/Design
 The primary goal of our project was to make Ms. Berman and our AP teachers' lives easier when it comes to scheduling proctors for AP exams. Our goal was to almost eliminate the tedious process that Ms. Berman undertakes every year when she matches AP teachers and their frees with when AP exams are. In an ordinary year, Ms. Berman would start with the AP exam time, look up the blocks that the AP Exam took place in, search through a list of AP teachers to find those who have the blocks free, and then reach out to the teacher to ensure they did not have a conflict during this time. Other things to consider were if the teacher had young kids and needed to pick them up in the afternoon if the teacher had already proctored another exam, and if the department they taught conflicted with the department that the AP Exam would fall under. We wanted to simplify this task by creating an AP Exam Schedule Maker to avoid the guess and check process by taking teacher's names, frees, and departments as well as the AP Exam schedule and returning the potential list of proctors for each exam that Ms. Berman could then use to determine who she would like to proctor.
+
+---
 ### Methods
 
 #### Helper Methods
