@@ -27,34 +27,29 @@ The primary goal of our project was to make Ms. Berman and our AP teachers' live
 #### Helper Methods
 
 ##### convertStandardtoMilitary and convertMilitaryToStandard
-helped us convert between 12 hour and 24 hour time. Our file contains time in the 12 hour format because that is what we use day-to-day, but converting it into military time makes it easier for our code to compare times are before and after each other. We intrinsically distinguish between a.m. and p.m., but our coumputers don't. 
+- helped us convert between 12 hour and 24 hour time. Our file contains time in the 12 hour format because that is what we use day-to-day, but converting it into military time makes it easier for our code to compare times are before and after each other. We intrinsically distinguish between a.m. and p.m., but our coumputers don't. 
 
 ##### sort
-takes a list of LocalTime objecta and puts them in order because, again, computers don't intrinsically know the order time occurs. 
-
+- takes a list of LocalTime objecta and puts them in order because, again, computers don't intrinsically know the order time occurs. 
 ##### generateListOfObjects
-
+- 
 ##### consolidateFrees
-CASS EXPLAIN THIS
-
+- CASS EXPLAIN THIS
 ##### containsTime
-CASS EXPLAIN THIS
-
+- CASS EXPLAIN THIS
 ##### getTimeFromBlockAndDate 
-CASS EXPLAIN THIS
-
+- CASS EXPLAIN THIS
 ##### getColumns
-
+- 
 ##### removeTeacher
-
+- 
 ##### arrayFormat
-This helper method is used in the main writeIn function, in order to correctly format an array to be printed. This function takes an an ArrayList of Strings and returns a String that contains all of the elements, each separated by a comma, in order to print it into the .csv of the exam proctor schedule in a more readable fashion. 
-
+- This helper method is used in the main writeIn function, in order to correctly format an array to be printed. This function takes an an ArrayList of Strings and returns a String that contains all of the elements, each separated by a comma, in order to print it into the .csv of the exam proctor schedule in a more readable fashion. 
 ##### freesTimes
-
+- 
 ##### getUSScheduleForDate
-CASS EXPlAIN THIS
-
+- CASS EXPlAIN THIS
+---
 #### Main Methods
 
 ##### matchUp
@@ -62,7 +57,6 @@ Using the output from generateListsOfObjects(), matchUp() was used in order to c
 
 ##### writeIn
 The final main method that was used was the WriteIn function. This takes in the map that is generated in the matchUp() function and the list of AP exams, and formats it correctly to be written into a .cvs, which will hold the exam name, date, and time, and will use the helper method arrayFormat to correctly format the list of exam proctors to be printed. 
-
 
 ### Challenges
 Throughout the course of our project, we certainly came across some challenges. Our first challenge that we faced early on was figuring out how to determine what time a teacher's free blocks fell on a given day to determine if they are available to be a proctor for an exam that day. Thankfully, Ms. Zhu had already written code to convert a block and date to a time on that date, so she allowed us to implement her code in our project; we explain this process in more detail below. Another challenge we faced throughout our project was familiarizing ourselves with the DateTime library, since we needed to use LocalTime objects to hold times. Cassidy did research and developed a strong understanding of the library, its methods, and its syntax and relayed this knowledge to the group to overcome this issue. An additional challenge we had to navigate was deciding if it was simpler to convert exam times to blocks or convert teacher free blocks to time to match teachers with exams to proctor. We broke down this problem down as a group and discussed the pros and cons of both ways. Ultimately, we decided that converting blocks to times, so that we were using LocalTime objects in our main matchUp function, was more affective because exam times dont correspond directly with block times. By using LocalTime objects, we also had the added benefit of being able to more easily sort blocks (corresponding to times) on a given day in ascending order.
