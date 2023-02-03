@@ -36,6 +36,8 @@ takes a list of LocalTime objecta and puts them in order because, again, compute
 
 ##### consolidateFrees
 
+##### containsTime
+
 ##### blocksToTimes
 
 ##### getColumns
