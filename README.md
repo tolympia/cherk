@@ -3,7 +3,6 @@
 Each spring, the College Board administers a set of AP Exams to test student's knowledge in various subject areas. Here at GA, we offer many AP classes, and scheduling the exams is a difficult and tedious process. There are many moving parts, such as coordinating times proctors are free with the times of the exams. We wanted to help simplify this process, and we feel that our code can benefit multiple users. 
 
 ## Process
-
 #### Arriving at our idea
 We originally brainstormed many possible ideas for our project, which were focused on the goal of improving an aspect of our school. Early ideas included a map app to help new students navigate our school and a carpool matchup program. However, we narrowed down our possible candidates to either helping college counselors schedule meetings or schedule AP exams for proctors who are available to proctor them. After looking at both possibilities, we realized that the AP exam schedule was a more difficult problem, as coordinating teachers' free blocks with AP Exam times is more difficult than simply matching up teachers and students by their free blocks. The AP Exam project would be a more appropriate and challenging project for five people, so we decided to go with that. 
 
@@ -22,6 +21,7 @@ Once we had our algorithms down, we were able to code them quickly. However, whe
 
 ### Program Goals/Design
 The primary goal of our project was to make Ms. Berman and our AP teachers' lives easier when it comes to scheduling proctors for AP exams. Our goal was to almost eliminate the tedious process that Ms. Berman undertakes every year when she matches AP teachers and their frees with when AP exams are. In an ordinary year, Ms. Berman would start with the AP exam time, look up the blocks that the AP Exam took place in, search through a list of AP teachers to find those who have the blocks free, and then reach out to the teacher to ensure they did not have a conflict during this time. Other things to consider were if the teacher had young kids and needed to pick them up in the afternoon if the teacher had already proctored another exam, and if the department they taught conflicted with the department that the AP Exam would fall under. We wanted to simplify this task by creating an AP Exam Schedule Maker to avoid the guess and check process by taking teacher's names, frees, and departments as well as the AP Exam schedule and returning the potential list of proctors for each exam that Ms. Berman could then use to determine who she would like to proctor.
+
 ### Methods
 
 #### Helper Methods
@@ -41,6 +41,7 @@ takes a list of LocalTime objecta and puts them in order because, again, compute
 
 
 ### Challenges
+Throughout the course of our project, we certainly came across some challenges. Our first challenge that we faced early on was figuring out how to determine what time a teacher's free blocks fell on a given day to determine if they are available to be a proctor for an exam that day. Thankfully, Ms. Zhu had already written code to convert a block and date to a time on that date, so she allowed us to implement her code in our project; we explain this process in more detail below. Another challenge we faced throughout our project was familiarizing ourselves with the DateTime library, since we needed to use LocalTime objects to hold times. Cassidy did research and developed a strong understanding of the library, its methods, and its syntax and relayed this knowledge to the group to overcome this issue. An additional challenge we had to navigate was deciding if it was simpler to convert exam times to blocks or convert teacher free blocks to time to match teachers with exams to proctor. We broke down this problem down as a group and discussed the pros and cons of both ways. Ultimately, we decided that converting blocks to times, so that we were using LocalTime objects in our main matchUp function, was more affective because exam times dont correspond directly with block times. By using LocalTime objects, we also had the added benefit of being able to more easily sort blocks (corresponding to times) on a given day in ascending order.
 
 #### Different Branches
 At the beginning of our programming portion, we ended up being on different branches of GitHub, with some of us on one branch and some on the other. This might be beneficial in other cases, but in our case, it is not. Being on different branches meant we were essentially in two different workplaces, and our files were in two separate places. Luckily, we managed to get on the same branch by having our teacher delete one branch and make the other branch the default branch, which allowed all of our files and commits to being seen in one place. 
