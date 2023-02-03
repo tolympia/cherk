@@ -186,17 +186,17 @@ public class ScheduleMaker {
     //print headers into the csv 
     p.println("AP Exam," + "Exam Date," + "Exam Start Time," + "Exam End Time," + "Proctors");
     //loop through map to print to csv
-
-
     for(int i=0; i<examList.size(); i++){
+      //get AP exam object (to get date, time, and name)
       APExam exam = examList.get(i);
-      //how do i use .getDate() and .getTime() for specific AP exams
-      
+      //create list of proctor names (get value from map by using the exam name)      
       List<String> proctorNames = proctorMap.get(exam.getName());
-
+      //call formatArray helper method to get the correct formatting of proctor names to print to .csv
       String proctors = arrayFormat(proctorNames);
+      //print exam name, date, start time, end time, and proctor list (created with arrayFormat helper method)
       p.println(exam.getName() + "," + exam.getDate() + "," + exam.getStartTime() + "," + exam.getEndTime() + "," + proctors);
     }
+    //close printstream
     p.close();
   }
 
@@ -205,6 +205,7 @@ public class ScheduleMaker {
     String proctorNames = "";
     //loop through proctor list to format the list of proctors in order to better readability
     for(int i=0; i < proctors.size(); i++){
+      //add commas in between each element and concatenate to proctorNames var
       proctorNames += proctors.get(i) + ", ";
     }
     return proctorNames;
@@ -299,25 +300,25 @@ public class ScheduleMaker {
   
 
   public static ArrayList<ArrayList<LocalTime>> sort(ArrayList<ArrayList<LocalTime>> freesTimes){
-       convertStandardtoMilitary(freesTimes); 
-
-      ArrayList<ArrayList<LocalTime>> sortedTimes = new ArrayList<ArrayList<LocalTime>>(); 
+       convertStandardtoMilitary(freesTimes); //converting standard time to military time so that 1:00 is after 11:00
+      ArrayList<ArrayList<LocalTime>> sortedTimes = new ArrayList<ArrayList<LocalTime>>(); //creating an arraylist of arraylists of localtime objects to hold sorted input
        
        while (freesTimes.size()>0) {
-          LocalTime minStart = freesTimes.get(0).get(0);
-          LocalTime minEnd = freesTimes.get(0).get(1);
+          LocalTime minStart = freesTimes.get(0).get(0);//getting current start time of current small arraylist
+          LocalTime minEnd = freesTimes.get(0).get(1);//getting current start time of current small arraylist
            for (int i = 0; i<freesTimes.size(); i++) {
+            //if the start of the first free is before the start of the next free then we want to make min start the smaller start and its associated end the smaller end 
+            //looping through until everything is sorted
                if (freesTimes.get(i).get(0).isBefore(minStart)) {
                    minStart = freesTimes.get(i).get(0); 
                   minEnd = freesTimes.get(i).get(1); 
               }
-                
           }
           ArrayList<LocalTime> min = new ArrayList<LocalTime>(); 
-          min.add(minStart); 
-          min.add(minEnd); 
-          sortedTimes.add(min); 
-          freesTimes.remove(min); 
+          min.add(minStart); //adding object to small arraylist
+          min.add(minEnd); //adding object to small arraylist
+          sortedTimes.add(min); //adding small arraylist (min) to larger arraylist
+          freesTimes.remove(min); //adjusting the freeTimes list for the loop
       }
     
       convertMilitaryToStandard(sortedTimes); 
@@ -326,13 +327,11 @@ public class ScheduleMaker {
    }
 
 
-    //*****MRS ZHUS CODE */
+    //**MRS ZHUS CODE EDITED BY CASS */
   public static ArrayList<LocalTime> getTimeFromBlockAndDate(String blockName, String date) {
 
       DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
       //formatter = formatter.withLocale( Locale.US );  
-      
-
         // Convert date to a Date object.
         LocalDate dateObject = LocalDate.parse(date, formatter);
 
