@@ -154,7 +154,6 @@ public class ScheduleMaker {
         //convert strings to integers
           //how do i convert if its a range of times
         ArrayList<ArrayList<LocalTime>> combineFrees = consolidateFrees(teacherClone.get(i), date);
-        System.out.println(combineFrees);
 
 
 
@@ -289,7 +288,7 @@ public class ScheduleMaker {
        }
     
        ArrayList<ArrayList<LocalTime>> timesInOrder = sort(freesTimes);//sorting free blocks the teacher has in order of time (because G can be before A)
-       System.out.println(timesInOrder);
+
        ArrayList<ArrayList<LocalTime>> consolidatedFrees = new ArrayList<ArrayList<LocalTime>>();//the arraylist of arraylist of localtime objects that i will ultimately return
       for (int i=0; i < timesInOrder.size(); i++){
 
@@ -314,7 +313,7 @@ public class ScheduleMaker {
          }
 
 
-          else{
+          else{//compare it to previous block
           //cur block time
           timeFrame1 = timesInOrder.get(i);
 
@@ -342,11 +341,13 @@ public class ScheduleMaker {
           }
        }
 
-       for (int i = 0; i < consolidatedFrees.size()-1; i ++){
-        if (consolidatedFrees.get(i).get(0).equals(consolidatedFrees.get(i+1).get(0))){
-          consolidatedFrees.remove(i);
+       for (int i = consolidatedFrees.size()-1; i > 0; i--){
+        if (consolidatedFrees.get(i).get(0).equals(consolidatedFrees.get(i-1).get(0))){
+          consolidatedFrees.remove(i-1);
         }
        }
+
+       System.out.println(consolidatedFrees);
        return consolidatedFrees;
   }
 
