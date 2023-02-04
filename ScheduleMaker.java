@@ -112,8 +112,7 @@ public class ScheduleMaker {
   public static Map<String, List<String>> matchUp(List<Teacher> teacherList, List<APExam> examList){
     //initalize map to hold name of exam and list of proctors
     Map<String, List<String>> examSchedule = new HashMap<String, List<String>>();
-    System.out.println(examList);
-    System.out.println(teacherList);
+
     //loop through exam list
     for(int i=0; i<examList.size(); i++){
       //initalize empty ArrayList to hold the proctors for a specific exam
@@ -146,20 +145,17 @@ public class ScheduleMaker {
           if(department == departments.get(c)){
             //remove teacher from list
             teacherClone.remove(j);
-            j--;
           }
         }
       }
-
-      System.out.println(teacherClone);
       //loop through updated teacher list
       for(int r = 0; r<teacherClone.size(); r++){
         //if exam contains free blocks - assign teacher to exam in that time
         //convert strings to integers
           //how do i convert if its a range of times
         ArrayList<ArrayList<LocalTime>> combineFrees = consolidateFrees(teacherClone.get(i), date);
-
         System.out.println(combineFrees);
+
 
 
         for(int x=0; x < combineFrees.size(); x++){
@@ -180,7 +176,6 @@ public class ScheduleMaker {
         }
       }
       //add name of exam and proctors to map
-      //System.out.println(proctors);
       examSchedule.put(examList.get(i).getName(), proctors);
     }
     return examSchedule;
@@ -263,35 +258,29 @@ public class ScheduleMaker {
 
       //getting the frees that occur on the input date 
       List <String> freesOnDay = new ArrayList<String>();//storing them in an arraylist 
-      if (getTimeFromBlockAndDate("A", date)!=null){
+      if ((getTimeFromBlockAndDate("A", date)!=null) && (frees.contains("A"))){
           freesOnDay.add("A");
        }
-       if (getTimeFromBlockAndDate("B", date)!=null){
+       if ((getTimeFromBlockAndDate("B", date)!=null) && (frees.contains("B"))){
            freesOnDay.add("B");
       }
-      if (getTimeFromBlockAndDate("C", date)!=null){
+      if ((getTimeFromBlockAndDate("C", date)!=null) && (frees.contains("C"))){
           freesOnDay.add("C");
       }
-      if (getTimeFromBlockAndDate("D", date)!=null){
+      if ((getTimeFromBlockAndDate("D", date)!=null) && (frees.contains("D"))){
           freesOnDay.add("D");
        }
-       if (getTimeFromBlockAndDate("E", date)!=null){
+       if ((getTimeFromBlockAndDate("E", date)!=null) && (frees.contains("E"))){
            freesOnDay.add("E");
        }
-       if (getTimeFromBlockAndDate("F", date)!=null){
+       if ((getTimeFromBlockAndDate("F", date)!=null) && (frees.contains("F"))){
           freesOnDay.add("F");
        }
-      if (getTimeFromBlockAndDate("G", date)!=null){
+      if ((getTimeFromBlockAndDate("G", date)!=null) && (frees.contains("G"))){
           freesOnDay.add("G");
       } 
-      //Adding all of the frees occur on that day
-      
-      for (int i=0; i < frees.size(); i++){//removing the frees that the teacher doesn't have 
-          if (!freesOnDay.contains(frees.get(i))){
-              frees.remove(frees.get(i));
-           }
-      }
 
+      
        ArrayList<ArrayList<LocalTime>> freesTimes = new ArrayList<ArrayList<LocalTime>>(); 
        //creating an arraylist of arraylists of localtime objects to store the starta nd end time of each free block the teacher has on that day
        for (int i=0; i < frees.size() ; i++){
@@ -300,23 +289,63 @@ public class ScheduleMaker {
        }
     
        ArrayList<ArrayList<LocalTime>> timesInOrder = sort(freesTimes);//sorting free blocks the teacher has in order of time (because G can be before A)
+       System.out.println(timesInOrder);
        ArrayList<ArrayList<LocalTime>> consolidatedFrees = new ArrayList<ArrayList<LocalTime>>();//the arraylist of arraylist of localtime objects that i will ultimately return
-      for (int i=1; i<timesInOrder.size()-1; i++){
-          ArrayList<LocalTime> timeFrame1 = timesInOrder.get(i-1);
-          ArrayList<LocalTime> timeFrame2 = timesInOrder.get(i);
-          LocalTime time1End = timeFrame1.get(1);
-          LocalTime time2Start = timeFrame2.get(0);
+      for (int i=0; i < timesInOrder.size(); i++){
+
+        ArrayList<LocalTime> timeFrame1;
+        ArrayList<LocalTime> timeFrame2;
+        LocalTime time1End;
+        LocalTime time2Start;
+
+
+         if (consolidatedFrees.size() != 0){//compare surrent block to consolidated frees block
+          timeFrame1 = consolidatedFrees.get(consolidatedFrees.size()-1);
+
+          //next free block time
+          timeFrame2 = timesInOrder.get(i);
+
+          //time first block ends
+          time1End = timeFrame1.get(1);
+
+          //time second block starts
+          time2Start = timeFrame2.get(0);
+
+         }
+
+
+          else{
+          //cur block time
+          timeFrame1 = timesInOrder.get(i);
+
+          //next free block time
+          timeFrame2 = timesInOrder.get(i+1);
+
+          //time first block ends
+          time1End = timeFrame1.get(1);
+
+          //time second block starts
+          time2Start = timeFrame2.get(0);
+         }
+
           //getting all of the localtime objects for start and end of two time blocks being compared
+
           ArrayList<LocalTime> newTimeBlock = new ArrayList<>();//consolidated time block if consolidation needs to occur
+
           if(time2Start.minusMinutes(11).isBefore(time1End)){ //if we want to consolidate adjacent blocks
             newTimeBlock.add(timeFrame1.get(0));//new block start = first block start
             newTimeBlock.add(timeFrame2.get(1));//new block end = second block end 
+            consolidatedFrees.add(newTimeBlock);
           }
           else{
-            newTimeBlock.add(timeFrame1.get(0)); //we want the first block to remain the same and now comapare the second block to the third
-            newTimeBlock.add(time1End);
+            consolidatedFrees.add(timesInOrder.get(i));
           }
-          consolidatedFrees.add(newTimeBlock);//adding localtime objects for new consolidated time block to arralist
+       }
+
+       for (int i = 0; i < consolidatedFrees.size()-1; i ++){
+        if (consolidatedFrees.get(i).get(0).equals(consolidatedFrees.get(i+1).get(0))){
+          consolidatedFrees.remove(i);
+        }
        }
        return consolidatedFrees;
   }
@@ -345,7 +374,6 @@ public class ScheduleMaker {
       }
     
       convertMilitaryToStandard(sortedTimes); 
-      //System.out.println(sortedTimes); 
        return sortedTimes; 
    }
 
