@@ -341,13 +341,11 @@ public class ScheduleMaker {
           }
        }
 
-       for (int i = consolidatedFrees.size()-1; i > 0; i--){
+       for (int i = consolidatedFrees.size()-1; i > 0; i--){//removes duplicate times
         if (consolidatedFrees.get(i).get(0).equals(consolidatedFrees.get(i-1).get(0))){
           consolidatedFrees.remove(i-1);
         }
        }
-
-       System.out.println(consolidatedFrees);
        return consolidatedFrees;
   }
 
