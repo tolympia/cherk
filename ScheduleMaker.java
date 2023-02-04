@@ -133,7 +133,7 @@ public class ScheduleMaker {
       //store start time of exam and end time of exam as LocalTime objects
       LocalTime outerTimeStart = LocalTime.parse(formatTime(startTime));
       LocalTime outerTimeEnd = LocalTime.parse(formatTime(endTime));
-      LocalTime totalExamTime = outerTimeEnd.minusMinutes(outerTimeStart); 
+      //LocalTime totalExamTime = outerTimeEnd.minusMinutes(outerTimeStart); 
 
       //check and see if any of the teachers are in the same department as exam and remove if they do
         //loop through teacherClone list
@@ -165,29 +165,18 @@ public class ScheduleMaker {
         for(int x=0; x < combineFrees.size(); x++){
           LocalTime teacherBlockStart = combineFrees.get(x).get(0); //get start time of combined frees for given teacher
           LocalTime teacherBlockEnd = combineFrees.get(x).get(1);
-          LocalTime totalTeacherFreeTime = teacherBlockEnd.minusMinutes(teacherBlockStart); 
-
-          System.out.println(outerTimeStart);
-          System.out.println(outerTimeEnd);
-          System.out.println(teacherBlockStart);
-          System.out.println(teacherBlockEnd);
+          //LocalTime totalTeacherFreeTime = teacherBlockEnd.minusMinutes(teacherBlockStart); 
 
           if(containsTime(outerTimeStart, outerTimeEnd, teacherBlockStart, teacherBlockEnd)){
             proctors.add(teacherClone.get(r).getName());
-            if(totalTeacherFreeTime < totalExamTime){
-              //remove the time the teacher is free from the overall time of exam
-              totalExamTime = totalExamTime.minusMinutes(totalTeacherFreeTime);
-            }
+            // if(totalTeacherFreeTime < totalExamTime){
+            //   //remove the time the teacher is free from the overall time of exam
+            //   totalExamTime = totalExamTime.minusMinutes(totalTeacherFreeTime);
+            // }
           }
           //remove that time from total time of exam
-<<<<<<< HEAD
           //condition to remove time from overall time
           
-=======
-          //robyn to make remove time method
-
-
->>>>>>> 980258432693a0ecbe9f929ba906c11e9671da0d
         }
       }
       //add name of exam and proctors to map
@@ -232,8 +221,24 @@ public class ScheduleMaker {
   }
 
   public static boolean containsTime(LocalTime outerTimeStart, LocalTime outerTimeEnd, LocalTime innerTimeStart, LocalTime innerTimeEnd){
-    //if the first time block start is before or equal to seocnd time start and first time end is after or equal to second time end thenb return true
-    if (outerTimeStart.isBefore(innerTimeStart) && outerTimeEnd.isAfter(innerTimeEnd)){
+
+    //outerTimeStart = start of exam
+    //outerTimeEnd = end of exam
+    //innerTimeStart = start of teacher block
+    //innerTimeEnd = end of teacher block
+
+    //first condition: if all the exam fits within the teachers free 
+    //second condition: if all the teacher's free fits within the exam
+    //third condition: if the teacher's free ends 30 mins after exam starts
+    //fourth condition: if the teacher's free starts 30 min before exam ends
+
+    if (
+      (outerTimeStart.isBefore(innerTimeStart) && outerTimeEnd.isAfter(innerTimeEnd)) || 
+      (innerTimeStart.isAfter(outerTimeStart) && innerTimeEnd.isBefore(outerTimeEnd)) ||
+      (outerTimeEnd.minusMinutes(30).isAfter(innerTimeStart))||
+      (innerTimeEnd.minusMinutes(30).isAfter(outerTimeStart))
+      )
+      {
       return true;
     }
     else{
