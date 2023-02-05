@@ -174,17 +174,14 @@ public class ScheduleMaker {
 
         }
       }
-      
+
       //add name of exam and proctors to map
       examSchedule.put(examList.get(i).getName(), proctors);
     }
     return examSchedule;
   }
 
-  public static void writeIn(
-    Map<String, List<String>> proctorMap,
-    List<APExam> examList
-  ) throws FileNotFoundException {
+  public static void writeIn(Map<String, List<String>> proctorMap, List<APExam> examList) throws FileNotFoundException {
     //create new file with printsteram
     PrintStream p = new PrintStream("ApExamProctorSchedule.csv");
     //print headers into the csv
@@ -195,7 +192,7 @@ public class ScheduleMaker {
       "Exam End Time," +
       "Proctors"
     );
-    //loop through map to print to csv
+    //loop through examList to get data to print to .csv
     for (int i = 0; i < examList.size(); i++) {
       //get AP exam object (to get date, time, and name)
       APExam exam = examList.get(i);
