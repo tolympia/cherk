@@ -41,8 +41,7 @@ Using a List of files and two Lists, one of Teacher objects and one of  Exam obj
 containsTime returns true if a teachers consolidated blocks are able to proctor an exam. It returns true if the teacher is able to proctor the entire exam or their entire free time is within the exam time frame. It also returns true it a teacher can proctor 30 mins or more in the beginning or the end of the exam. 
 ##### getTimeFromBlockAndDate 
 - CASS EXPLAIN THIS
-##### getColumns
-- 
+
 ##### arrayFormat
 - This helper method is used in the main writeIn function, in order to correctly format an array to be printed. This function takes an an ArrayList of Strings and returns a String that contains all of the elements, each separated by a comma, in order to print it into the .csv of the exam proctor schedule in a more readable fashion. 
 ##### freesTimes
