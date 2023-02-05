@@ -5,6 +5,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.time.temporal.*;
 
+//this is where all of the functionality of our code is. This contains all the methods for scanning the csv files, matching the teachers with exams, and writing it into a new csv file. It implements the input and output library and the date time library (which we use to convert teacher free blocks into times).  
+
 public class ScheduleMaker {
 
   public static void main(String[] args) throws FileNotFoundException {
