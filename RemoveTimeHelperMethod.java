@@ -7,14 +7,17 @@ public class RemoveTimeHelperMethod{
         //need exam object 
         //total time of exam
         
+        APExam sampleExam = new APExam(Arrays.asList("AP World History","May 1 2023", "9:00", "12:00", "History"));
+        System.out.println(sampleExam.getName());
+        
     }
 
     public static int removeTime(APExam examObject){
         //total time of exam
-        int totalExamTime = examObject.getEndTime() - examObject.getStartTime();
+        //nt totalExamTime = examObject.getEndTime() - examObject.getStartTime();
     }
 
-    public static Map<String, List<String>> matchUp(List<Teacher> teacherList, List<APExam> examList){
+    /*public static Map<String, List<String>> matchUp(List<Teacher> teacherList, List<APExam> examList){
     //initalize map to hold name of exam and list of proctors
     Map<String, List<String>> examSchedule = new HashMap<String, List<String>>();
     //loop through exam list
@@ -75,5 +78,5 @@ public class RemoveTimeHelperMethod{
     return examSchedule;
   }
 
-    //going to need to see how rest of match up forms to get a better idea of how to implement this
+    //going to need to see how rest of match up forms to get a better idea of how to implement this*/
 }
