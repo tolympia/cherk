@@ -141,15 +141,11 @@ public class ScheduleMaker {
       //loop through teacherClone list
       for (int j = teacherClone.size() - 1; j >= 0; j--) {
         //get list of departments (teacher could be in more than one department) - need to check each
-        List<String> departments = teacherClone.get(j).getDepartment();
-        //loop through department list
-        for (int c = 0; c < departments.size(); c++) {
-          //if department of teacher matches the department of exam
-          if (department.equals(departments.get(c))) {
-            //remove teacher from list
-            teacherClone.remove(j);
-          }
+
+        if ((teacherClone.get(j).getDepartment()).contains(department)){
+          teacherClone.remove(j);
         }
+
       }
 
       //loop through updated teacher list
