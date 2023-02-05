@@ -140,8 +140,7 @@ public class ScheduleMaker {
       //check and see if any of the teachers are in the same department as exam and remove if they do
       //loop through teacherClone list
       for (int j = teacherClone.size() - 1; j >= 0; j--) {
-        //get list of departments (teacher could be in more than one department) - need to check each
-
+        //get list of departments (teacher could be in more than one department) - check each with .contains()
         if ((teacherClone.get(j).getDepartment()).contains(department)){
           teacherClone.remove(j);
         }
@@ -152,18 +151,14 @@ public class ScheduleMaker {
       for (int r = teacherClone.size() - 1; r >= 0 ; r--) {
         //if exam contains free blocks - assign teacher to exam in that time
         //convert strings to integers
-        //how do i convert if its a range of times
+
+        //combining adjacent free blocks and sorting them in the order of the given
         ArrayList<ArrayList<LocalTime>> combineFrees = sort(consolidateFrees(teacherClone.get(r), date));
 
         for (int x = 0; x < combineFrees.size(); x++) {
+          //go through each consolidated block of a teacher and compare it to the exam time
           LocalTime teacherBlockStart = combineFrees.get(x).get(0); //get start time of combined frees for given teacher
-          LocalTime teacherBlockEnd = combineFrees.get(x).get(1);
-          //LocalTime totalTeacherFreeTime = teacherBlockEnd.minusMinutes(teacherBlockStart);
-  
-        //System.out.println(examList.get(i));
-        System.out.println(combineFrees.get(x));
-
-        System.out.println(outerTimeStart + "  " + outerTimeEnd + "  " + teacherBlockStart + "  " + teacherBlockEnd);
+          LocalTime teacherBlockEnd = combineFrees.get(x).get(1);//end of the consolidated block
 
           if (
             containsTime(
@@ -173,18 +168,8 @@ public class ScheduleMaker {
               teacherBlockEnd
             )
           ) {
-
-            System.out.println(examList.get(i));
-
             proctors.add(teacherClone.get(r).getName());
-            // if(totalTeacherFreeTime < totalExamTime){
-            //   //remove the time the teacher is free from the overall time of exam
-            //   totalExamTime = totalExamTime.minusMinutes(totalTeacherFreeTime);
-            // }
-            //teacherClone.remove(r);
           }
-          //remove that time from total time of exam
-          //condition to remove time from overall time
 
         }
       }
@@ -250,22 +235,17 @@ public class ScheduleMaker {
     LocalTime teacherStart,
     LocalTime teacherEnd
   ) {
-    //outerTimeStart = start of exam
-    //outerTimeEnd = end of exam
-    //innerTimeStart = start of teacher block
-    //innerTimeEnd = end of teacher block
-
     //first condition: if all the exam fits within the teachers free
     //second condition: if all the teacher's free fits within the exam
     //third condition: if the teacher's free ends 30 mins after exam starts
     //fourth condition: if the teacher's free starts 30 min before exam ends
 
-    if (
+    if (//if the entire exam is within a teachers freeblock
       (
         (examStart.isAfter(teacherStart) &&
         examEnd.isBefore(teacherEnd))
       ) ||
-      (
+      (//if the entire freeblock is within the exam block
         (teacherStart.isAfter(examStart) &&
         teacherEnd.isBefore(examEnd))
       ) 
@@ -273,14 +253,14 @@ public class ScheduleMaker {
       return true;
     } 
 
-    if ((teacherEnd.isAfter(examStart)) && (teacherEnd.isBefore(examEnd))){
+    if ((teacherEnd.isAfter(examStart)) && (teacherEnd.isBefore(examEnd))){//if the end of the teachers free block is more than 30 mins into the exam
       if (ChronoUnit.MINUTES.between(examStart, teacherEnd) >= 30){
       return true;
       }
       return false;
     }
 
-    if ((teacherStart.isAfter(examStart)) && (teacherEnd.isBefore(examEnd))){
+    if ((teacherStart.isAfter(examStart)) && (teacherEnd.isBefore(examEnd))){//if the start of the teachers free block is more than 30 mins at the end of the exam
       if (ChronoUnit.MINUTES.between(teacherStart, examEnd) >= 30){
       return true;
       }
