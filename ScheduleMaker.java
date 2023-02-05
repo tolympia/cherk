@@ -332,8 +332,6 @@ public class ScheduleMaker {
       }
     }
 
-
-
     ArrayList<ArrayList<LocalTime>> timesInOrder = sort(freesTimes); //sorting free blocks the teacher has in order of time (because G can be before A)
  
     ArrayList<ArrayList<LocalTime>> consolidatedFrees = new ArrayList<ArrayList<LocalTime>>(); //the arraylist of arraylist of localtime objects that i will ultimately return
@@ -348,33 +346,23 @@ public class ScheduleMaker {
 
       if (consolidatedFrees.size() != 0) { //compare current block to consolidated frees block
         timeFrame1 = consolidatedFrees.get(consolidatedFrees.size() - 1);
-
-        //next free block time
-        timeFrame2 = timesInOrder.get(i);
-
-        //time first block ends
-        time1End = timeFrame1.get(1);
-
-        //time second block starts
-        time2Start = timeFrame2.get(0);
-      } else { //compare it to previous block
-        //cur block time
-        timeFrame1 = timesInOrder.get(i);
-
-        //next free block time
-        if (i != timesInOrder.size()-1){
+        timeFrame2 = timesInOrder.get(i);//next free block time
+        time1End = timeFrame1.get(1);//time first block ends
+        time2Start = timeFrame2.get(0);//time second block starts
+      } 
+      else { //compare it to previous block
+        
+        timeFrame1 = timesInOrder.get(i);//cur block time
+        
+        if (i != timesInOrder.size()-1){//next free block time
         timeFrame2 = timesInOrder.get(i + 1);
         }
 
         else{
           timeFrame2 = timesInOrder.get(i);//if it's the last block in the list, find the time the last block ends as opposed to the time the second block starts
         }
-
-        //time first block ends
-        time1End = timeFrame1.get(1);
-
-        //time second block starts
-        time2Start = timeFrame2.get(0);
+        time1End = timeFrame1.get(1);//time first block ends
+        time2Start = timeFrame2.get(0);//time second block starts
       }
 
       //getting all of the localtime objects for start and end of two time blocks being compared
