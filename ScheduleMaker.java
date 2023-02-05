@@ -19,16 +19,20 @@ public class ScheduleMaker {
 
   public static void makeSchedule(ArrayList<File> files)
     throws FileNotFoundException {
+    
+    //declare new ALs, one to hold exam objects and the other to hold teacher objects
     ArrayList<APExam> examObjects = new ArrayList<>();
     ArrayList<Teacher> teacherObjects = new ArrayList<>();
 
-
+    //initalizing the examObjcts and teacherObjects (using file given in parameter)
     generateListsOfObjects(files, examObjects, teacherObjects);
 
+    //declaring a map to hold the name of the ap exam as key and list of proctors as value 
     Map<String, List<String>> proctorsAndExams = new HashMap<String, List<String>>();
+    //initalizing map using matchUp method
     proctorsAndExams = matchUp(teacherObjects, examObjects);
 
-
+    //using writeIn method to write to the .csv
     writeIn(proctorsAndExams, examObjects);
   }
 
