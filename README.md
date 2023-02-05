@@ -41,8 +41,6 @@ The primary goal of our project was to make Ms. Berman and our AP teachers' live
 - CASS EXPLAIN THIS
 ##### getColumns
 - 
-##### removeTeacher
-- 
 ##### arrayFormat
 - This helper method is used in the main writeIn function, in order to correctly format an array to be printed. This function takes an an ArrayList of Strings and returns a String that contains all of the elements, each separated by a comma, in order to print it into the .csv of the exam proctor schedule in a more readable fashion. 
 ##### freesTimes
