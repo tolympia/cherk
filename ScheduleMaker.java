@@ -5,6 +5,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.time.temporal.*;
 
+//this is where all of the functionality of our code is. This contains all the methods for scanning the csv files, matching the teachers with exams, and writing it into a new csv file. It implements the input and output library and the date time library (which we use to convert teacher free blocks into times).  
+
 public class ScheduleMaker {
 
   public static void main(String[] args) throws FileNotFoundException {
@@ -17,16 +19,20 @@ public class ScheduleMaker {
 
   public static void makeSchedule(ArrayList<File> files)
     throws FileNotFoundException {
+    
+    //declare new ALs, one to hold exam objects and the other to hold teacher objects
     ArrayList<APExam> examObjects = new ArrayList<>();
     ArrayList<Teacher> teacherObjects = new ArrayList<>();
 
-
+    //initalizing the examObjcts and teacherObjects (using file given in parameter)
     generateListsOfObjects(files, examObjects, teacherObjects);
 
+    //declaring a map to hold the name of the ap exam as key and list of proctors as value 
     Map<String, List<String>> proctorsAndExams = new HashMap<String, List<String>>();
+    //initalizing map using matchUp method
     proctorsAndExams = matchUp(teacherObjects, examObjects);
 
-
+    //using writeIn method to write to the .csv
     writeIn(proctorsAndExams, examObjects);
   }
 
@@ -105,13 +111,10 @@ public class ScheduleMaker {
     LocalTime startTime = thisBlock.startTime;
     LocalTime endTime = thisBlock.endTime;
     return new ArrayList<LocalTime>(Arrays.asList(startTime, endTime));
-    //we need to figure out if we can use getUSScheduleForDate method
+    
   }
 
-  public static Map<String, List<String>> matchUp(
-    List<Teacher> teacherList,
-    List<APExam> examList
-  ) {
+  public static Map<String, List<String>> matchUp(List<Teacher> teacherList, List<APExam> examList) {
     //initalize map to hold name of exam and list of proctors
     Map<String, List<String>> examSchedule = new HashMap<String, List<String>>();
 
@@ -126,7 +129,7 @@ public class ScheduleMaker {
       for (int y = 0; y < teacherList.size(); y++) {
         teacherClone.add(teacherList.get(y));
       }
-      //store department, date and start time/ end time of current exam
+      //store department, date and start time/ end time of current exam in vars
       String department = examList.get(i).getDepartment();
       String date = examList.get(i).getDate();
       String startTime = examList.get(i).getStartTime();
@@ -135,7 +138,6 @@ public class ScheduleMaker {
       //store start time of exam and end time of exam as LocalTime objects, converting it to military time
       LocalTime outerTimeStart = convertStandardtoMilitary(LocalTime.parse(formatTime(startTime)));
       LocalTime outerTimeEnd = convertStandardtoMilitary(LocalTime.parse(formatTime(endTime)));
-      //LocalTime totalExamTime = outerTimeEnd.minusMinutes(outerTimeStart);
 
       //check and see if any of the teachers are in the same department as exam and remove if they do
       //loop through teacherClone list
@@ -149,17 +151,16 @@ public class ScheduleMaker {
 
       //loop through updated teacher list
       for (int r = teacherClone.size() - 1; r >= 0 ; r--) {
-        //if exam contains free blocks - assign teacher to exam in that time
-        //convert strings to integers
-
-        //combining adjacent free blocks and sorting them in the order of the given
+        //combining adjacent free blocks and sorting them in the order of the given - storing as AL of AL of LocalTime (represents one teachers frees)
         ArrayList<ArrayList<LocalTime>> combineFrees = sort(consolidateFrees(teacherClone.get(r), date));
 
+        //loop through combineFrees AL to find start and end time of each individual free of one teacher
         for (int x = 0; x < combineFrees.size(); x++) {
-          //go through each consolidated block of a teacher and compare it to the exam time
+          //get teacher free start and end times and save to LocalTime vars
           LocalTime teacherBlockStart = combineFrees.get(x).get(0); //get start time of combined frees for given teacher
           LocalTime teacherBlockEnd = combineFrees.get(x).get(1);//end of the consolidated block
 
+          //if the exam contains the teacher's free - add that teacher as a proctor of the exam
           if (
             containsTime(
               outerTimeStart,
@@ -168,21 +169,20 @@ public class ScheduleMaker {
               teacherBlockEnd
             )
           ) {
-            proctors.add(teacherClone.get(r).getName());
+            proctors.add(teacherClone.get(r).getName());//this ArrayList will contain all of the teachers that have some part of the exam time free
+            //accounts for fact that not all teachers will have the whole time free and you might need multiple. gives Ms. Berman options and allows her to add "human touch" that program is unable to
           }
 
         }
       }
+
       //add name of exam and proctors to map
       examSchedule.put(examList.get(i).getName(), proctors);
     }
     return examSchedule;
   }
 
-  public static void writeIn(
-    Map<String, List<String>> proctorMap,
-    List<APExam> examList
-  ) throws FileNotFoundException {
+  public static void writeIn(Map<String, List<String>> proctorMap, List<APExam> examList) throws FileNotFoundException {
     //create new file with printsteram
     PrintStream p = new PrintStream("ApExamProctorSchedule.csv");
     //print headers into the csv
@@ -193,7 +193,7 @@ public class ScheduleMaker {
       "Exam End Time," +
       "Proctors"
     );
-    //loop through map to print to csv
+    //loop through examList to get data to print to .csv
     for (int i = 0; i < examList.size(); i++) {
       //get AP exam object (to get date, time, and name)
       APExam exam = examList.get(i);
@@ -241,14 +241,12 @@ public class ScheduleMaker {
     //fourth condition: if the teacher's free starts 30 min before exam ends
 
     if (//if the entire exam is within a teachers freeblock
-      (
         (examStart.isAfter(teacherStart) &&
         examEnd.isBefore(teacherEnd))
-      ) ||
-      (//if the entire freeblock is within the exam block
+      ||
+        //if the entire freeblock is within the exam block
         (teacherStart.isAfter(examStart) &&
-        teacherEnd.isBefore(examEnd))
-      ) 
+        teacherEnd.isBefore(examEnd)) 
     ) {
       return true;
     } 
@@ -326,8 +324,6 @@ public class ScheduleMaker {
       }
     }
 
-
-
     ArrayList<ArrayList<LocalTime>> timesInOrder = sort(freesTimes); //sorting free blocks the teacher has in order of time (because G can be before A)
  
     ArrayList<ArrayList<LocalTime>> consolidatedFrees = new ArrayList<ArrayList<LocalTime>>(); //the arraylist of arraylist of localtime objects that i will ultimately return
@@ -342,33 +338,23 @@ public class ScheduleMaker {
 
       if (consolidatedFrees.size() != 0) { //compare current block to consolidated frees block
         timeFrame1 = consolidatedFrees.get(consolidatedFrees.size() - 1);
-
-        //next free block time
-        timeFrame2 = timesInOrder.get(i);
-
-        //time first block ends
-        time1End = timeFrame1.get(1);
-
-        //time second block starts
-        time2Start = timeFrame2.get(0);
-      } else { //compare it to previous block
-        //cur block time
-        timeFrame1 = timesInOrder.get(i);
-
-        //next free block time
-        if (i != timesInOrder.size()-1){
+        timeFrame2 = timesInOrder.get(i);//next free block time
+        time1End = timeFrame1.get(1);//time first block ends
+        time2Start = timeFrame2.get(0);//time second block starts
+      } 
+      else { //compare it to previous block
+        
+        timeFrame1 = timesInOrder.get(i);//cur block time
+        
+        if (i != timesInOrder.size()-1){//next free block time
         timeFrame2 = timesInOrder.get(i + 1);
         }
 
         else{
           timeFrame2 = timesInOrder.get(i);//if it's the last block in the list, find the time the last block ends as opposed to the time the second block starts
         }
-
-        //time first block ends
-        time1End = timeFrame1.get(1);
-
-        //time second block starts
-        time2Start = timeFrame2.get(0);
+        time1End = timeFrame1.get(1);//time first block ends
+        time2Start = timeFrame2.get(0);//time second block starts
       }
 
       //getting all of the localtime objects for start and end of two time blocks being compared

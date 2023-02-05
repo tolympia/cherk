@@ -2,6 +2,8 @@ import java.io.*;
 import java.lang.*;
 import java.util.*;
 
+//we use this file to make Teacher instances that contain their name, department, and free periods, and we use these instance variables in our final code to match the teachers to exams. We get the values of the instance variables by scanning a csv file that contains the necessary information. 
+
 public class Teacher extends ScheduleMaker {
     //initalize instance variables for class including name, department, how many exams proctored, and what their free blocsk are
     private String name; 

@@ -2,6 +2,8 @@ import java.io.*;
 import java.lang.*;
 import java.util.*;
 
+//we use this file to create instances of of AP Exam objects. Their instance variables are used to determine which teachers are able to procter them, and their values are obtained by scaning a file with the necessary info. 
+
 public class APExam extends ScheduleMaker {
     //instance variables
     private String name; //private or public
