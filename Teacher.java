@@ -6,12 +6,7 @@ public class Teacher extends ScheduleMaker {
     //initalize instance variables for class including name, department, how many exams proctored, and what their free blocsk are
     private String name; 
     private List<String> department; 
-    private List<String> freePeriods; 
-    private int examsProctored; 
-    private static int maxNumProctored = 0;
-    //private int differenceFromMax;
-
-
+    private List<String> freePeriods;
 
     //4 argument constructor to create basic teacher objects
     public Teacher (ArrayList<ArrayList<String>> instanceVars) {
@@ -37,29 +32,6 @@ public class Teacher extends ScheduleMaker {
         return freePeriods; 
     }
 
-    public int getNumExamsProctored() {
-        return examsProctored; 
-    }
-
-    public int getDifferenceFromMax() {
-        return maxNumProctored - examsProctored; 
-    }
-
-
-
-    public void incrementNumExamsProctored() {
-        examsProctored++; 
-        if (this.examsProctored > maxNumProctored){
-
-            maxNumProctored = this.examsProctored;
-
-        }
-
-    }
-
-
-
-
     //function to set the name of a teacher to instance variable
     public void setName (String newName) {
         this.name = newName; 
@@ -81,7 +53,6 @@ public class Teacher extends ScheduleMaker {
         toRet += "Name: " + name + "\n"; 
         toRet += "Department: " + department + "\n";
         toRet += "free periods: " + freePeriods + "\n";
-        toRet += "exams proctored: " + examsProctored + "\n";
         return toRet; 
     }
 

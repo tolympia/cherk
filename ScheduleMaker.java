@@ -35,7 +35,7 @@ public class ScheduleMaker {
     List<APExam> examObjects,
     List<Teacher> teacherObjects
   ) throws FileNotFoundException {
-    for (int j = 0; j < f.size(); j++) {
+    for (int j = 0; j < f.size(); j++) {//does this process for each file in the List
       Scanner fileScan = new Scanner(f.get(j));
       fileScan.nextLine();//don't want the first line of columns
 
@@ -44,34 +44,36 @@ public class ScheduleMaker {
 
         ArrayList<ArrayList<String>> instanceVarValues = new ArrayList<ArrayList<String>>();//2d array, each array in the 2d array corresponds to a column of the file
 
+        //mainly paying attention to indexes of commas and quotations
+
         for (int i = 0; i < line.length() - 1; i++) {//iterating through string
-          if (line.charAt(i) == '"') {//if the current char is a quote, take the entire substring that is within the quotes, spllit it by the commas, and make an array
-            int nextQuote = line.indexOf("\"", i + 1);
+          if (line.charAt(i) == '"') {//if the current char is a quote, take the entire substring that is within the quotes, split it by the commas, and make an array
+            int nextQuote = line.indexOf("\"", i + 1);//finding the index of the next quote
             instanceVarValues.add(
               new ArrayList<String>(
-                Arrays.asList(line.substring(i + 1, nextQuote).split(","))
+                Arrays.asList(line.substring(i + 1, nextQuote).split(","))//split the substringg into a list by the commas
               )
             );
             i = nextQuote + 1; //"moving" i to the end of the quote
           } 
-          else {//if there are no commas, just add the substring between the cirrent comma and nextComma to the 2d array as a one element array list. 
-            int nextComma = line.indexOf(",", i + 1);
+          else {//if there are no commas, just add the substring between the current comma and nextComma to the 2d array as a one element array list. 
+            int nextComma = line.indexOf(",", i + 1);//index of the next comma
 
             if (nextComma == -1) {
-              nextComma = line.length();//if we have reached the last comma in the string, then just substring to the end of the array
+              nextComma = line.length();//if we have reached the last comma in the string, then just substring to the end of the line
             }
 
             instanceVarValues.add(
-              new ArrayList<String>(Arrays.asList(line.substring(i, nextComma))));
+              new ArrayList<String>(Arrays.asList(line.substring(i, nextComma))));//adding this list to the 2d list (this array will only have one index, and that's ok, the contructor will handle it
             i = nextComma;//put i at the index of the next comma
           }
         }
 
         if (((f.get(j)).getName()).contains("eacher")) {//if the file contains "eacher", I am assuming it is the file for teacher frees, and will add to the teacher array list
-          teacherObjects.add(new Teacher(instanceVarValues));
+          teacherObjects.add(new Teacher(instanceVarValues));//adding an anonymous object to the teacherObjects List, the constructor is meant to handle a 2d list
         } 
         else {//adding to the exam arraylist
-          examObjects.add(new APExam(instanceVarValues));
+          examObjects.add(new APExam(instanceVarValues));////adding an anonymous object to the examObjects List, the constructor is meant to handle a 2d list
         }
       }
       fileScan.close();
@@ -297,7 +299,6 @@ public class ScheduleMaker {
         LocalTime time1End;
         LocalTime time2Start;
 
-
          if (consolidatedFrees.size() != 0){//compare surrent block to consolidated frees block
           timeFrame1 = consolidatedFrees.get(consolidatedFrees.size()-1);
 
@@ -311,7 +312,6 @@ public class ScheduleMaker {
           time2Start = timeFrame2.get(0);
 
          }
-
 
           else{//compare it to previous block
           //cur block time
