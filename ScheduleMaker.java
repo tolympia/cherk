@@ -3,6 +3,7 @@ import java.lang.*;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.time.temporal.*;
 
 public class ScheduleMaker {
 
@@ -19,12 +20,12 @@ public class ScheduleMaker {
     ArrayList<APExam> examObjects = new ArrayList<>();
     ArrayList<Teacher> teacherObjects = new ArrayList<>();
 
-    generateListsOfObjects(files, examObjects, teacherObjects);
 
-    ArrayList<String> teacherNames = new ArrayList<String>();
+    generateListsOfObjects(files, examObjects, teacherObjects);
 
     Map<String, List<String>> proctorsAndExams = new HashMap<String, List<String>>();
     proctorsAndExams = matchUp(teacherObjects, examObjects);
+
 
     writeIn(proctorsAndExams, examObjects);
   }
@@ -121,6 +122,7 @@ public class ScheduleMaker {
       //initalize a cloned teacher list
       ArrayList<Teacher> teacherClone = new ArrayList<Teacher>();
       //loop to add all elements from teacher list to teacherClone list
+
       for (int y = 0; y < teacherList.size(); y++) {
         teacherClone.add(teacherList.get(y));
       }
@@ -149,20 +151,22 @@ public class ScheduleMaker {
           }
         }
       }
+
+      //System.out.println(teacherClone);
       //loop through updated teacher list
-      for (int r = 0; r < teacherClone.size(); r++) {
+      for (int r = teacherClone.size() - 1; r >= 0 ; r--) {
         //if exam contains free blocks - assign teacher to exam in that time
         //convert strings to integers
         //how do i convert if its a range of times
-        ArrayList<ArrayList<LocalTime>> combineFrees = consolidateFrees(
-          teacherClone.get(i),
-          date
-        );
+        ArrayList<ArrayList<LocalTime>> combineFrees = sort(consolidateFrees(teacherClone.get(r), date));
+
+        System.out.println(combineFrees.size());
 
         for (int x = 0; x < combineFrees.size(); x++) {
           LocalTime teacherBlockStart = combineFrees.get(x).get(0); //get start time of combined frees for given teacher
           LocalTime teacherBlockEnd = combineFrees.get(x).get(1);
           //LocalTime totalTeacherFreeTime = teacherBlockEnd.minusMinutes(teacherBlockStart);
+
 
           if (
             containsTime(
@@ -172,11 +176,13 @@ public class ScheduleMaker {
               teacherBlockEnd
             )
           ) {
+            System.out.println("true");
             proctors.add(teacherClone.get(r).getName());
             // if(totalTeacherFreeTime < totalExamTime){
             //   //remove the time the teacher is free from the overall time of exam
             //   totalExamTime = totalExamTime.minusMinutes(totalTeacherFreeTime);
             // }
+            //teacherClone.remove(r);
           }
           //remove that time from total time of exam
           //condition to remove time from overall time
@@ -240,10 +246,10 @@ public class ScheduleMaker {
   }
 
   public static boolean containsTime(
-    LocalTime outerTimeStart,
-    LocalTime outerTimeEnd,
-    LocalTime innerTimeStart,
-    LocalTime innerTimeEnd
+    LocalTime examStart,
+    LocalTime examEnd,
+    LocalTime teacherStart,
+    LocalTime teacherEnd
   ) {
     //outerTimeStart = start of exam
     //outerTimeEnd = end of exam
@@ -257,15 +263,15 @@ public class ScheduleMaker {
 
     if (
       (
-        outerTimeStart.isBefore(innerTimeStart) &&
-        outerTimeEnd.isAfter(innerTimeEnd)
+        (examStart.isAfter(teacherStart) &&
+        examEnd.isBefore(teacherEnd))
       ) ||
       (
-        innerTimeStart.isAfter(outerTimeStart) &&
-        innerTimeEnd.isBefore(outerTimeEnd)
+        (teacherStart.isAfter(examStart) &&
+        teacherEnd.isBefore(examEnd))
       ) ||
-      (outerTimeEnd.minusMinutes(30).isAfter(innerTimeStart)) ||
-      (innerTimeEnd.minusMinutes(30).isAfter(outerTimeStart))
+      ((examStart.until(teacherEnd, ChronoUnit.MINUTES) >= 30) && (teacherStart.isBefore(examStart))  && (teacherEnd.isBefore(examEnd)))||//stay for at least 30 mins at end
+      ((teacherStart.until(examEnd, ChronoUnit.MINUTES) >= 30) && (teacherEnd.isAfter(examEnd)) && (teacherStart.isBefore(examEnd)))//stay for at least 3o mins in beginning
     ) {
       return true;
     } else {
@@ -314,25 +320,34 @@ public class ScheduleMaker {
     }
 
     ArrayList<ArrayList<LocalTime>> freesTimes = new ArrayList<ArrayList<LocalTime>>();
+
     //creating an arraylist of arraylists of localtime objects to store the starta nd end time of each free block the teacher has on that day
     for (int i = 0; i < frees.size(); i++) {
       ArrayList<LocalTime> startAndEnd = getTimeFromBlockAndDate(
         frees.get(i),
         date
       );
+
+      if (startAndEnd != null){
       freesTimes.add(startAndEnd);
+      }
     }
 
-    ArrayList<ArrayList<LocalTime>> timesInOrder = sort(freesTimes); //sorting free blocks the teacher has in order of time (because G can be before A)
 
+
+    ArrayList<ArrayList<LocalTime>> timesInOrder = sort(freesTimes); //sorting free blocks the teacher has in order of time (because G can be before A)
+ 
     ArrayList<ArrayList<LocalTime>> consolidatedFrees = new ArrayList<ArrayList<LocalTime>>(); //the arraylist of arraylist of localtime objects that i will ultimately return
+
+    if(timesInOrder != null){
     for (int i = 0; i < timesInOrder.size(); i++) {
+
       ArrayList<LocalTime> timeFrame1;
       ArrayList<LocalTime> timeFrame2;
       LocalTime time1End;
       LocalTime time2Start;
 
-      if (consolidatedFrees.size() != 0) { //compare surrent block to consolidated frees block
+      if (consolidatedFrees.size() != 0) { //compare current block to consolidated frees block
         timeFrame1 = consolidatedFrees.get(consolidatedFrees.size() - 1);
 
         //next free block time
@@ -348,7 +363,13 @@ public class ScheduleMaker {
         timeFrame1 = timesInOrder.get(i);
 
         //next free block time
+        if (i != timesInOrder.size()-1){
         timeFrame2 = timesInOrder.get(i + 1);
+        }
+
+        else{
+          timeFrame2 = timesInOrder.get(i);//if it's the last block in the list, find the time the last block ends as opposed to the time the second block starts
+        }
 
         //time first block ends
         time1End = timeFrame1.get(1);
@@ -380,6 +401,8 @@ public class ScheduleMaker {
         consolidatedFrees.remove(i - 1);
       }
     }
+    }
+    System.out.println(consolidatedFrees);
     return consolidatedFrees;
   }
 
@@ -408,6 +431,7 @@ public class ScheduleMaker {
     }
 
     convertMilitaryToStandard(sortedTimes);
+
     return sortedTimes;
   }
 
@@ -473,6 +497,7 @@ public class ScheduleMaker {
   ) {
     //ArrayList of ArrayLists to hold converted times (so that each sub ArrayList holds a start and end time of a free block)
     ArrayList<ArrayList<LocalTime>> standardTimes = new ArrayList<ArrayList<LocalTime>>();
+
     for (int i = 0; i < militaryTimes.size(); i++) {
       ArrayList<LocalTime> currArr = new ArrayList<LocalTime>();
       for (int j = 0; j < militaryTimes.get(i).size(); j++) {
