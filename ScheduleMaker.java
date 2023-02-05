@@ -145,7 +145,7 @@ public class ScheduleMaker {
         //loop through department list
         for (int c = 0; c < departments.size(); c++) {
           //if department of teacher matches the department of exam
-          if (department == departments.get(c)) {
+          if (department.equals(departments.get(c))) {
             //remove teacher from list
             teacherClone.remove(j);
           }
