@@ -34,7 +34,7 @@ The primary goal of our project was to make Ms. Berman and our AP teachers' live
 
 #### generateListsOfObjects
 Using a List of files and two Lists, one of Teacher objects and one of  Exam objects, this method goes through the file line by line and adds Teacher and Exam objects to the teacher and exam lists. The teacher and exam objects make it easy for us to hold and access information. We first created a for loop because we wanted the code in the method to run multiple times, one for each file in the list of files We then made a while loop that iterated through each line of text in the file, and a 2d array list of strings called instanceVariables that we would later pass into either a teacher or exam constructor. We substring-ed through each line of the file and performed different actions depending on the format of the string. Commas in the file separated the different categories of information we needed as instance variables, and quotations enclosed the categories that could have more than one option, such as the department a teacher was in or their free blocks. If a substring contained quotations, we split it up into an ArrayList of multiple indices, and if not, we made a one-element array list; regardless we added this ArrayList to our instanceVariables ArrayList that we passed into a teacher or exam object constructor as we finished iterating through each line. 
-- 
+
 ##### consolidateFrees
 - CASS EXPLAIN THIS
 ##### containsTime
