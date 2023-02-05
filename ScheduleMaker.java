@@ -132,9 +132,9 @@ public class ScheduleMaker {
       String startTime = examList.get(i).getStartTime();
       String endTime = examList.get(i).getEndTime();
 
-      //store start time of exam and end time of exam as LocalTime objects
-      LocalTime outerTimeStart = LocalTime.parse(formatTime(startTime));
-      LocalTime outerTimeEnd = LocalTime.parse(formatTime(endTime));
+      //store start time of exam and end time of exam as LocalTime objects, converting it to military time
+      LocalTime outerTimeStart = convertStandardtoMilitary(LocalTime.parse(formatTime(startTime)));
+      LocalTime outerTimeEnd = convertStandardtoMilitary(LocalTime.parse(formatTime(endTime)));
       //LocalTime totalExamTime = outerTimeEnd.minusMinutes(outerTimeStart);
 
       //check and see if any of the teachers are in the same department as exam and remove if they do
@@ -152,7 +152,6 @@ public class ScheduleMaker {
         }
       }
 
-      //System.out.println(teacherClone);
       //loop through updated teacher list
       for (int r = teacherClone.size() - 1; r >= 0 ; r--) {
         //if exam contains free blocks - assign teacher to exam in that time
@@ -160,13 +159,15 @@ public class ScheduleMaker {
         //how do i convert if its a range of times
         ArrayList<ArrayList<LocalTime>> combineFrees = sort(consolidateFrees(teacherClone.get(r), date));
 
-        System.out.println(combineFrees.size());
-
         for (int x = 0; x < combineFrees.size(); x++) {
           LocalTime teacherBlockStart = combineFrees.get(x).get(0); //get start time of combined frees for given teacher
           LocalTime teacherBlockEnd = combineFrees.get(x).get(1);
           //LocalTime totalTeacherFreeTime = teacherBlockEnd.minusMinutes(teacherBlockStart);
+  
+        //System.out.println(examList.get(i));
+        System.out.println(combineFrees.get(x));
 
+        System.out.println(outerTimeStart + "  " + outerTimeEnd + "  " + teacherBlockStart + "  " + teacherBlockEnd);
 
           if (
             containsTime(
@@ -176,7 +177,9 @@ public class ScheduleMaker {
               teacherBlockEnd
             )
           ) {
-            System.out.println("true");
+
+            System.out.println(examList.get(i));
+
             proctors.add(teacherClone.get(r).getName());
             // if(totalTeacherFreeTime < totalExamTime){
             //   //remove the time the teacher is free from the overall time of exam
@@ -269,12 +272,26 @@ public class ScheduleMaker {
       (
         (teacherStart.isAfter(examStart) &&
         teacherEnd.isBefore(examEnd))
-      ) ||
-      ((examStart.until(teacherEnd, ChronoUnit.MINUTES) >= 30) && (teacherStart.isBefore(examStart))  && (teacherEnd.isBefore(examEnd)))||//stay for at least 30 mins at end
-      ((teacherStart.until(examEnd, ChronoUnit.MINUTES) >= 30) && (teacherEnd.isAfter(examEnd)) && (teacherStart.isBefore(examEnd)))//stay for at least 3o mins in beginning
+      ) 
     ) {
       return true;
-    } else {
+    } 
+
+    if ((teacherEnd.isAfter(examStart)) && (teacherEnd.isBefore(examEnd))){
+      if (ChronoUnit.MINUTES.between(examStart, teacherEnd) >= 30){
+      return true;
+      }
+      return false;
+    }
+
+    if ((teacherStart.isAfter(examStart)) && (teacherEnd.isBefore(examEnd))){
+      if (ChronoUnit.MINUTES.between(teacherStart, examEnd) >= 30){
+      return true;
+      }
+      return false;
+    }
+    
+    else {
       return false;
     }
   }
@@ -402,7 +419,6 @@ public class ScheduleMaker {
       }
     }
     }
-    System.out.println(consolidatedFrees);
     return consolidatedFrees;
   }
 
@@ -514,6 +530,8 @@ public class ScheduleMaker {
     return standardTimes;
   }
 
+
+
   public static ArrayList<ArrayList<LocalTime>> convertStandardtoMilitary(
     ArrayList<ArrayList<LocalTime>> standardTimes
   ) {
@@ -537,5 +555,20 @@ public class ScheduleMaker {
       militaryTimes.add(currArr); //fills new ArrayList of ArrayLists
     }
     return militaryTimes;
+  }
+
+
+   public static LocalTime convertStandardtoMilitary(LocalTime standardTime) {
+    //ArrayList of ArrayLists to hold converted times (so that each sub ArrayList holds a start and end time of a free block)
+
+    LocalTime militaryTime = standardTime;
+
+        int hour = standardTime.getHour();
+
+        if (hour < 7) { //ex. if time is 3:00 (during school)...
+          militaryTime = standardTime.plusHours(12); //changes it to 15:00
+        }     
+    
+    return militaryTime;
   }
 }
