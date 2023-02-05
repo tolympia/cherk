@@ -1,6 +1,6 @@
 # CHERK readme
 ## Introduction
-Each spring, the College Board administers a set of AP Exams to test student's knowledge in various subject areas. Here at GA, we offer many AP classes, and scheduling the exams is a difficult and tedious process. There are many moving parts, such as coordinating times proctors are free with the times of the exams. We wanted to help simplify this process, and we feel that our code can benefit multiple users. 
+Each spring, the College Board administers a set of AP Exams to test student's knowledge in various subject areas. Here at GA, we offer many AP classes, and scheduling the exams is a difficult and tedious process. There are many moving parts, such as coordinating times proctors are free with the times of the exams. We wanted to help simplify this process, and we feel that our code can benefit multiple users. Our code reads in two files, one of exams and one of teachers, and assigns a list of potential proctors for each exam based on their time availability and department.
 
 ## Process
 #### Arriving at our idea
