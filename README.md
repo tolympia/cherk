@@ -38,7 +38,7 @@ Using a List of files and two Lists, one of Teacher objects and one of  Exam obj
 ##### consolidateFrees
 - CASS EXPLAIN THIS
 ##### containsTime
-- CASS EXPLAIN THIS
+containsTime returns true if a teachers consolidated blocks are able to proctor an exam. It returns true if the teacher is able to proctor the entire exam or their entire free time is within the exam time frame. It also returns true it a teacher can proctor 30 mins or more in the beginning or the end of the exam. 
 ##### getTimeFromBlockAndDate 
 - CASS EXPLAIN THIS
 ##### getColumns
