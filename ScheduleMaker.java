@@ -169,7 +169,7 @@ public class ScheduleMaker {
               teacherBlockEnd
             )
           ) {
-            proctors.add(teacherClone.get(r).getName());
+            proctors.add(teacherClone.get(r).getName());//this ArrayList will contain all of the teachers that have some part of the exam time free
           }
 
         }
