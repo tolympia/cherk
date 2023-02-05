@@ -2,6 +2,7 @@ import java.util.*;
 import java.time.*;
 
 public class RemoveTimeHelperMethod{
+  //NOT NEEDED ANYMORE
     public static void main(String[] args){
         //take overall exam time, and once a time has been matched, remove it from overall time
         //need exam object 
