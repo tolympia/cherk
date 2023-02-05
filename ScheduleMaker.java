@@ -111,7 +111,7 @@ public class ScheduleMaker {
     LocalTime startTime = thisBlock.startTime;
     LocalTime endTime = thisBlock.endTime;
     return new ArrayList<LocalTime>(Arrays.asList(startTime, endTime));
-    //we need to figure out if we can use getUSScheduleForDate method
+    
   }
 
   public static Map<String, List<String>> matchUp(List<Teacher> teacherList, List<APExam> examList) {
