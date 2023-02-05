@@ -170,6 +170,7 @@ public class ScheduleMaker {
             )
           ) {
             proctors.add(teacherClone.get(r).getName());//this ArrayList will contain all of the teachers that have some part of the exam time free
+            //accounts for fact that not all teachers will have the whole time free and you might need multiple. gives Ms. Berman options and allows her to add "human touch" that program is unable to
           }
 
         }
