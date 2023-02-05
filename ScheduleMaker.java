@@ -240,14 +240,12 @@ public class ScheduleMaker {
     //fourth condition: if the teacher's free starts 30 min before exam ends
 
     if (//if the entire exam is within a teachers freeblock
-      (
         (examStart.isAfter(teacherStart) &&
         examEnd.isBefore(teacherEnd))
-      ) ||
-      (//if the entire freeblock is within the exam block
+      ||
+        //if the entire freeblock is within the exam block
         (teacherStart.isAfter(examStart) &&
-        teacherEnd.isBefore(examEnd))
-      ) 
+        teacherEnd.isBefore(examEnd)) 
     ) {
       return true;
     } 
