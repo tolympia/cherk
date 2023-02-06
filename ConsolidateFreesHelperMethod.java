@@ -98,28 +98,29 @@ public class ConsolidateFreesHelperMethod{
 
     public static ArrayList<ArrayList<LocalTime>> sort(ArrayList<ArrayList<LocalTime>> freesTimes){
 
-        convertStandardtoMilitary(freesTimes); 
+        convertStandardtoMilitary(freesTimes); //converts times to military/24hr times so that afternoon times will be sorted correctly  
 
-        ArrayList<ArrayList<LocalTime>> sortedTimes = new ArrayList<ArrayList<LocalTime>>(); 
+        ArrayList<ArrayList<LocalTime>> sortedTimes = new ArrayList<ArrayList<LocalTime>>(); //to be filled w sorted times
         
-        while (freesTimes.size()>0) {
-            LocalTime minStart = freesTimes.get(0).get(0);
-            LocalTime minEnd = freesTimes.get(0).get(1);
+        //each iteration of the loop finds the earliest time in freesTimes 
+        while (freesTimes.size()>0) { //repeat while there are still times to add to sortedTimes
+            LocalTime minStart = freesTimes.get(0).get(0); //assigns the first start time in list as the current earliest time 
+            LocalTime minEnd = freesTimes.get(0).get(1); //gets corresponding end time 
             for (int i = 0; i<freesTimes.size(); i++) {
-                if (freesTimes.get(i).get(0).isBefore(minStart)) {
-                    minStart = freesTimes.get(i).get(0); 
-                    minEnd = freesTimes.get(i).get(1); 
+                if (freesTimes.get(i).get(0).isBefore(minStart)) { //if the current start time is ealier than the current earliest (minStart) start time
+                    minStart = freesTimes.get(i).get(0); //replaces minStart with current start time 
+                    minEnd = freesTimes.get(i).get(1); //replaces minEnd with current end time 
                 }
                 
             }
-            ArrayList<LocalTime> min = new ArrayList<LocalTime>(); 
+            ArrayList<LocalTime> min = new ArrayList<LocalTime>(); //creates arrayList to hold minStart and minEnd
             min.add(minStart); 
             min.add(minEnd); 
-            sortedTimes.add(min); 
-            freesTimes.remove(min); 
+            sortedTimes.add(min); //adds the arrayList holding the minStart and minEnd times to the end of the sortedTimes list 
+            freesTimes.remove(min); //removes this arrayList of start time and end time from freeTimes so that it can find new min time in next iteration of the loop
         }
     
-        convertMilitaryToStandard(sortedTimes); 
+        convertMilitaryToStandard(sortedTimes); //converts times back to standard time 
 
         return sortedTimes; 
     }
