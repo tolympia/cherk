@@ -381,7 +381,6 @@ public class ScheduleMaker {
       }
     }
     }
-    System.out.println(consolidatedFrees);
     return consolidatedFrees;
   }
 
