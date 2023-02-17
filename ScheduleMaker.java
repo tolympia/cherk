@@ -162,14 +162,9 @@ public class ScheduleMaker {
 
           //if the exam contains the teacher's free - add that teacher as a proctor of the exam
           if (
-            containsTime(
-              outerTimeStart,
-              outerTimeEnd,
-              teacherBlockStart,
-              teacherBlockEnd
-            )
+            !(containsTime(outerTimeStart, outerTimeEnd, teacherBlockStart,teacherBlockEnd).contains("cannot proctor"))
           ) {
-            proctors.add(teacherClone.get(r).getName());//this ArrayList will contain all of the teachers that have some part of the exam time free
+            proctors.add(teacherClone.get(r).getName() + " " + (containsTime(outerTimeStart, outerTimeEnd, teacherBlockStart,teacherBlockEnd)));//this ArrayList will contain all of the teachers that have some part of the exam time free
             //accounts for fact that not all teachers will have the whole time free and you might need multiple. gives Ms. Berman options and allows her to add "human touch" that program is unable to
           }
 
@@ -229,44 +224,52 @@ public class ScheduleMaker {
     return proctorNames;
   }
 
-  public static boolean containsTime(
+  public static String containsTime(
     LocalTime examStart,
     LocalTime examEnd,
     LocalTime teacherStart,
     LocalTime teacherEnd
   ) {
+
+    
     //first condition: if all the exam fits within the teachers free
     //second condition: if all the teacher's free fits within the exam
     //third condition: if the teacher's free ends 30 mins after exam starts
     //fourth condition: if the teacher's free starts 30 min before exam ends
 
-    if (//if the entire exam is within a teachers freeblock
+    if //if the entire exam is within a teachers freeblock
         (examStart.isAfter(teacherStart) &&
-        examEnd.isBefore(teacherEnd))
-      ||
+        examEnd.isBefore(teacherEnd)){
+
+          return "can stay for entire exam";
+
+        }
+    else if
         //if the entire freeblock is within the exam block
         (teacherStart.isAfter(examStart) &&
-        teacherEnd.isBefore(examEnd)) 
-    ) {
-      return true;
-    } 
+        teacherEnd.isBefore(examEnd)) {
+
+          return "can stay from " + convertMilitaryToStandard(teacherStart).toString() + " to " + convertMilitaryToStandard(teacherEnd).toString();
+
+        }
+    
 
     if ((teacherEnd.isAfter(examStart)) && (teacherEnd.isBefore(examEnd))){//if the end of the teachers free block is more than 30 mins into the exam
       if (ChronoUnit.MINUTES.between(examStart, teacherEnd) >= 30){
-      return true;
+      return "can stay from " + convertMilitaryToStandard(examStart).toString() + " to " + convertMilitaryToStandard(teacherEnd).toString();
       }
-      return false;
+      return "cannot proctor";
     }
 
     if ((teacherStart.isAfter(examStart)) && (teacherEnd.isBefore(examEnd))){//if the start of the teachers free block is more than 30 mins at the end of the exam
       if (ChronoUnit.MINUTES.between(teacherStart, examEnd) >= 30){
-      return true;
+      return "can stay from " + convertMilitaryToStandard(teacherStart).toString() + " to " + convertMilitaryToStandard(examEnd).toString();
       }
-      return false;
+      return "cannot proctor";
     }
     
     else {
-      return false;
+      return "cannot proctor";
     }
   }
 
@@ -492,6 +495,18 @@ public class ScheduleMaker {
     return standardTimes;
   }
 
+   public static LocalTime convertMilitaryToStandard(LocalTime time) {
+
+    LocalTime altTime = time.minusHours(12);
+    //LocalTime regTime = time;
+        int hour = time.getHour();
+        if (hour > 12) { //ex. if time is 14:30...
+          return altTime;
+        }
+
+    return time;
+  }
+
 
 
   public static ArrayList<ArrayList<LocalTime>> convertStandardtoMilitary(
@@ -521,7 +536,7 @@ public class ScheduleMaker {
 
 
    public static LocalTime convertStandardtoMilitary(LocalTime standardTime) {
-    //ArrayList of ArrayLists to hold converted times (so that each sub ArrayList holds a start and end time of a free block)
+
 
     LocalTime militaryTime = standardTime;
 
